@@ -1,38 +1,38 @@
 object Form1: TForm1
   Left = 2170
-  Height = 240
+  Height = 269
   Top = 42
   Width = 578
   Caption = 'Form1'
-  ClientHeight = 240
+  ClientHeight = 269
   ClientWidth = 578
   OnCreate = FormCreate
-  LCLVersion = '2.0.12.0'
+  LCLVersion = '3.0.0.3'
   object Edit1: TEdit
     Left = 56
     Height = 25
     Top = 37
     Width = 80
+    TabOrder = 0
+    Text = 'Edit1'
     OnChange = Edit1Change
     OnKeyUp = Edit1KeyUp
     OnMouseEnter = Edit1MouseEnter
-    TabOrder = 0
-    Text = 'Edit1'
   end
   object Edit2: TEdit
     Left = 56
     Height = 25
     Top = 72
     Width = 80
+    TabOrder = 1
+    Text = 'Edit2'
     OnChange = Edit1Change
     OnKeyUp = Edit1KeyUp
     OnMouseEnter = Edit1MouseEnter
-    TabOrder = 1
-    Text = 'Edit2'
   end
   object Memo1: TMemo
     Left = 184
-    Height = 240
+    Height = 269
     Top = 0
     Width = 394
     Align = alRight
