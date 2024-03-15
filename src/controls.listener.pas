@@ -13,7 +13,7 @@ type
     TControlListenerProc   = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject);
     TControlListenerMethod = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject) of object;
 
-    TListenerSignalType = (
+    TInvokeType = (
                             qAsync,     // Queues the listeners to Application.QueueAsyncCall();
                             qThreads,   // Runs the methods in individual threads;
                             qSerial     // Runs in a blocking loop
@@ -28,10 +28,10 @@ type
 	  meth: TControlListenerMethod;
       params: TJSONObject;
       freeParams: boolean;
-      sigType: TListenerSignalType;
+      sigType: TInvokeType;
 	public
-	  procedure add(constref _proc: TControlListenerProc; const _sigType: TListenerSignalType = qAsync); overload;
-	  procedure add(constref _meth: TControlListenerMethod; const _sigType: TListenerSignalType = qAsync); overload;
+	  procedure add(constref _proc: TControlListenerProc; const _sigType: TInvokeType = qAsync); overload;
+	  procedure add(constref _meth: TControlListenerMethod; const _sigType: TInvokeType = qAsync); overload;
 	  procedure do_(constref _sender: TControl; const _event: string; constref _params: TJSONObject; const _freeParams: Boolean = true);
 	end;
 
@@ -48,20 +48,36 @@ type
         function addListener(
                         const _event: string;
                         const _handler: TControlListenerMethod;
-                        const _sigType: TListenerSignalType = qAsync;
+                        const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
 
         function addListener(
                         const _event: string;
                         const _handler: TControlListenerProc;
-                        const _sigType: TListenerSignalType = qAsync;
+                        const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
 
         procedure signal(const _event: string; constref _params: TJSONObject=nil; _freeParams: Boolean = true);
         function signals: TStringArray;
+
+        //function async(_p: TProcedure; _invoke: TInvokeType = qAsync): int64;
+        //function async(_p: TProcedureOfObject; _invoke: TInvokeType = qAsync): int64;
+        //function async(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64;
+        //function async(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64;
+        //function async(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
+        //
+        //function await(_p: TProcedure; _invoke: TInvokeType = qAsync): int64;
+        //function await(_p: TProcedureOfObject; _invoke: TInvokeType = qAsync): int64;
+        //function await(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64;
+        //function await(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64;
+        //function await(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
+
 	end;
 
     TListenerSignalMode = (lmSingleton, lmDynamic);
+
+
+
 
 var
     ListenerSignalMode: TListenerSignalMode = lmSingleton;
@@ -174,7 +190,7 @@ end;
 function TControlListenerHelper.addListener(
                 const _event: string;
                 const _handler: TControlListenerMethod;
-                const _sigType: TListenerSignalType;
+                const _sigType: TInvokeType;
                 const _ignoreduplicates: boolean
 	): TControl;
 var
@@ -189,7 +205,7 @@ end;
 function TControlListenerHelper.addListener(
         const _event: string;
 	    const _handler: TControlListenerProc;
-        const _sigType: TListenerSignalType;
+        const _sigType: TInvokeType;
         const _ignoreduplicates: boolean
 	): TControl;
 var
@@ -211,20 +227,24 @@ var
    _tmpParams: TJSONObject = nil;
 begin
     _l := listener(_event);
+    if _l.Count>0 then begin
 
-
-    if _l.Count >0 then begin // Do this only if there are listeners
         if assigned(_params) then begin
-            _tmpParams:= _params.Clone as TJSONObject // Always call the listener procedure with a cloned param object (memory safety).
+	        _tmpParams:= _params.Clone as TJSONObject // Always call the listener procedure with a cloned param object (memory safety).
         end;
 
-        for i := 0 to pred(_l.Count) do begin
-            _l.Items[i].do_(self, _event, _tmpParams, true {force params to be freed})
-    	end;
-    end;
+        try
+		    for i := 0 to pred(_l.Count) do begin
+		        _l.Items[i].do_(self, _event, _tmpParams, false {do not free params because will be freed after the for loop.})
+			end;
+		finally
+	        _tmpParams.Free; // Free the clone of _params
+		end;
 
-    // Always free parameters, irrespective of whether there were event handlers or not
-    if _freeParams then _params.Free;
+	    // Always free parameters, irrespective of whether there were event handlers or not
+	    if _freeParams then _params.Free;
+
+	end;
 end;
 
 function TControlListenerHelper.signals: TStringArray;
@@ -240,13 +260,13 @@ end;
 { TControlListener }
 
 
-procedure TControlListener.add(constref _proc: TControlListenerProc; const _sigType: TListenerSignalType = qAsync);
+procedure TControlListener.add(constref _proc: TControlListenerProc; const _sigType: TInvokeType = qAsync);
 begin
     proc:= _proc;
     meth:= nil;
 end;
 
-procedure TControlListener.add(constref _meth: TControlListenerMethod; const _sigType: TListenerSignalType = qAsync);
+procedure TControlListener.add(constref _meth: TControlListenerMethod; const _sigType: TInvokeType = qAsync);
 begin
     meth:= _meth;
     proc:=  nil;
