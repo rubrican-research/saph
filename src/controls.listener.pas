@@ -35,7 +35,8 @@ type
     // In the implementation of the procedure, you have access to:
     //      _sender:    This is the Control that sent the signal - the control on which addListener was called
     //      _event:     The event. Text.   You can implement a case structure to handle multiple events.
-    //      _params:    Parameters as a JSONObject. DO NOT free the object inside the listener. It will be done in the listener.
+    //      _params:    Parameters as a JSONObject. DO NOT free the object inside your listener procedure!!
+    //                  The runner with free it after the procedure is called.
     TControlListenerProc        = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject);
     TControlListenerMethod      = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject) of object;
 
