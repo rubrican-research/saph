@@ -54,11 +54,11 @@ edtDOB.addListener('change', @HighlightSiblings, qThreads);  // Same Date of Bir
 edtDOB.addListener('change', @QueueFreeBirthdayCake, qThreads);  // Same Date of Birth edit box, the change will be listened by QueueFreeBirthdayCake()
 ```
 ## Multiple listeners in one line
-For the case where you need to assign multiple listeners for the same event you can now use the following procedure call:
+For the case where you need to assign multiple listeners for the same event you can now declare listeners like this:
 ```
     with Edit1 do begin
         addListener('change', [@L1Change, @L2Change, @L3Change, @L4Change], qThreads);
-	end;
+    end;
 ```
 ## Parameters for Event Listeners
 Parameters are sent via a JSONObject when signaling the event. This means that you can design complex logic around event signals.
