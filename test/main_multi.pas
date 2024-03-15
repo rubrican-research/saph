@@ -54,10 +54,9 @@ end;
 
 procedure _a(constref _l: TLabel; constref _p: TJSONObject);
 begin
-  if assigned(_p) then begin
-      _l.Caption := _p.get('text', '');
-  end;
-
+    if assigned(_p) then begin
+        _l.Caption := _p.get('text', '');
+    end;
 end;
 
 procedure TForm1.L1Change(const _sender: TControl; const _event: string;

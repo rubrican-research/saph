@@ -142,17 +142,17 @@ end;
 procedure TListenerProcRunner.doRun;
 begin
     if assigned(listener) then with listener do begin
-	    if assigned(meth) then
+
+        if assigned(meth) then
 	        meth(sender, event, params)
 	    else if assigned(proc) then
 	        proc(sender, event, params);
 
-	    if freeParams then
-            params.Free;
+	    if freeParams then params.Free;
+
     end;
 
-    if myFreeOnDone then
-        Free; // Destroy itself
+    if myFreeOnDone then Free; // Destroy itself
 end;
 
 
@@ -227,24 +227,14 @@ var
    _tmpParams: TJSONObject = nil;
 begin
     _l := listener(_event);
-    if _l.Count>0 then begin
-
+    for i := 0 to pred(_l.Count) do begin
         if assigned(_params) then begin
 	        _tmpParams:= _params.Clone as TJSONObject // Always call the listener procedure with a cloned param object (memory safety).
         end;
-
-        try
-		    for i := 0 to pred(_l.Count) do begin
-		        _l.Items[i].do_(self, _event, _tmpParams, false {do not free params because will be freed after the for loop.})
-			end;
-		finally
-	        _tmpParams.Free; // Free the clone of _params
-		end;
-
-	    // Always free parameters, irrespective of whether there were event handlers or not
-	    if _freeParams then _params.Free;
-
+        _l.Items[i].do_(self, _event, _tmpParams, true {free params because it will be cloned before next call})
 	end;
+    // Always free parameters, irrespective of whether there were event handlers or not
+    if _freeParams then _params.Free;
 end;
 
 function TControlListenerHelper.signals: TStringArray;
