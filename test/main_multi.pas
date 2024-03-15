@@ -40,10 +40,7 @@ implementation
 procedure TForm1.FormCreate(Sender: TObject);
 begin
     with Edit1 do begin
-        addListener('change', @L1Change, qThreads);
-        addListener('change', @L2Change, qThreads);
-        addListener('change', @L3Change, qThreads);
-        addListener('change', @L4Change, qThreads);
+        addListener('change', [@L1Change, @L2Change, @L3Change, @L4Change], qThreads);
 	end;
 end;
 

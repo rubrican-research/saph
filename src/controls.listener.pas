@@ -1,4 +1,23 @@
 unit Controls.Listener;
+{
+(c) Rubrican Research.
+https://github.com/rubrican-research/saph
+
+This library is released under the MIT License.
+
+to freely define event listeners - which is text based, case-sensitive - on any control.
+This is implemented as a Type Helper on TControl.
+
+Implement event listeners in your units with the following signature
+    procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject);
+
+Then, for any control in that unit (form, button, editbox etc.) you can now assign an event listener as follows:
+    edtName.addListener('change', @FormChange);   // Where FormChange is a general listener for all changes to data on the from
+    edtDOB.addListener('change', @FormChange);    // EditBox for Date of Birth - change is listened by FormChange
+    edtDOB.addListener('change', @CalculateAge);  // Same Date of Birth edit box, the change will be listened by CalculateAge
+}
+
+
 
 {$mode objfpc}{$H+}
 {$modeswitch advancedrecords}
@@ -10,8 +29,21 @@ uses
     Classes, SysUtils, Controls, Forms, fpjson, fgl;
 
 type
-    TControlListenerProc   = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject);
-    TControlListenerMethod = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject) of object;
+    // These are Event Listeners.
+    // Implement procedures with this signaturs in the main program and then assign them to the event
+    // using addListener.
+    // In the implementation of the procedure, you have access to:
+    //      _sender:    This is the Control that sent the signal - the control on which addListener was called
+    //      _event:     The event. Text.   You can implement a case structure to handle multiple events.
+    //      _params:    Parameters as a JSONObject. DO NOT free the object inside the listener. It will be done in the listener.
+    TControlListenerProc        = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject);
+    TControlListenerMethod      = procedure (const _sender: TControl; const _event: string; constref _params: TJSONObject) of object;
+
+    // Syntax sugar. To assign multiple listeners in one go.
+    TArrayControlListenerProc   = array of TControlListenerProc;
+    TArrayControlListenerMethod = array of TControlListenerMethod;
+
+
 
     TInvokeType = (
                             qAsync,     // Queues the listeners to Application.QueueAsyncCall();
@@ -50,6 +82,12 @@ type
                         const _handler: TControlListenerMethod;
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
+        function addListener(
+                        const _event: string;
+                        const _handlers: TArrayControlListenerMethod;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+
 
         function addListener(
                         const _event: string;
@@ -57,9 +95,17 @@ type
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
 
+        function addListener(
+                        const _event: string;
+                        const _handlers: TArrayControlListenerProc;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+
         procedure signal(const _event: string; constref _params: TJSONObject=nil; _freeParams: Boolean = true);
         function signals: TStringArray;
 
+        // TODO -- still evaluating if this is a good idea.
+        //-------------------------------------------------
         //function async(_p: TProcedure; _invoke: TInvokeType = qAsync): int64;
         //function async(_p: TProcedureOfObject; _invoke: TInvokeType = qAsync): int64;
         //function async(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64;
@@ -202,6 +248,16 @@ begin
     Result:= Self;
 end;
 
+function TControlListenerHelper.addListener(const _event: string;
+	const _handlers: TArrayControlListenerMethod; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+	_handler: TControlListenerMethod;
+begin
+    for _handler in _handlers do
+        addListener(_event, _handler, _sigType,_ignoreduplicates);
+end;
+
 function TControlListenerHelper.addListener(
         const _event: string;
 	    const _handler: TControlListenerProc;
@@ -215,6 +271,16 @@ begin
     _L.add(_handler);
     listener(_event).Add(_L);
     Result:= Self;
+end;
+
+function TControlListenerHelper.addListener(const _event: string;
+	const _handlers: TArrayControlListenerProc; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+	_handler: TControlListenerProc;
+begin
+    for _handler in _handlers do
+        addListener(_event, _handler, _sigType,_ignoreduplicates);
 end;
 
 procedure TControlListenerHelper.signal(
