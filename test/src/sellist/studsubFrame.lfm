@@ -1,0 +1,54 @@
+object FRStudSub: TFRStudSub
+  Left = 0
+  Height = 117
+  Top = 0
+  Width = 487
+  ChildSizing.VerticalSpacing = 10
+  ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+  ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
+  ChildSizing.Layout = cclLeftToRightThenTopToBottom
+  ChildSizing.ControlsPerLine = 1
+  ClientHeight = 117
+  ClientWidth = 487
+  TabOrder = 0
+  DesignLeft = 656
+  DesignTop = 239
+  object lblStudSub: TLabel
+    Left = 10
+    Height = 21
+    Top = 10
+    Width = 467
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 10
+    BorderSpacing.Right = 10
+    Caption = 'Subject #'
+    Color = clGradientActiveCaption
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -16
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object Label2: TLabel
+    Left = 10
+    Height = 17
+    Top = 44
+    Width = 467
+    BorderSpacing.Left = 10
+    BorderSpacing.Top = 13
+    BorderSpacing.Right = 10
+    Caption = 'Name'
+  end
+  object cmbSubjects: TComboBox
+    Left = 10
+    Height = 25
+    Top = 71
+    Width = 467
+    ItemHeight = 17
+    TabOrder = 0
+    OnChange = cmbSubjectsChange
+    OnEnter = cmbSubjectsEnter
+  end
+end

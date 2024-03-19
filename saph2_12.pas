@@ -8,7 +8,7 @@ unit saph2_12;
 interface
 
 uses
-    Controls.Listener, LazarusPackageIntf;
+    Controls.Listener, saph.lists, LazarusPackageIntf;
 
 implementation
 

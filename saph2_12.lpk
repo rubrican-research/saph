@@ -9,14 +9,18 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="src"/>
-        <UnitOutputDirectory Value="lib\2.0.12\$(TargetCPU)-$(TargetOS)\"/>
+        <UnitOutputDirectory Value="lib\2.0.12\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
     </CompilerOptions>
-    <Files Count="1">
+    <Files Count="2">
       <Item1>
         <Filename Value="src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
       </Item1>
+      <Item2>
+        <Filename Value="src\saph.lists.pas"/>
+        <UnitName Value="saph.lists"/>
+      </Item2>
     </Files>
     <RequiredPkgs Count="2">
       <Item1>

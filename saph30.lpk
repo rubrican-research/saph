@@ -9,7 +9,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="src"/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)\"/>
+        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <CodeGeneration>
         <SmartLinkUnit Value="True"/>
@@ -23,6 +23,10 @@
       <Item>
         <Filename Value="src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
+      </Item>
+      <Item>
+        <Filename Value="src\saph.lists.pas"/>
+        <UnitName Value="saph.lists"/>
       </Item>
     </Files>
     <RequiredPkgs>

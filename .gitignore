@@ -71,3 +71,5 @@ modules/
 bin/
 lib/
 backup/
+*.res
+*.res

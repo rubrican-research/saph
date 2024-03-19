@@ -59,12 +59,14 @@ type
       event: string;
 	  proc: TControlListenerProc;
 	  meth: TControlListenerMethod;
+      notify: TNotifyEvent;
       params: TJSONObject;
       freeParams: boolean;
       sigType: TInvokeType;
 	public
 	  procedure add(constref _proc: TControlListenerProc; const _sigType: TInvokeType = qAsync); overload;
 	  procedure add(constref _meth: TControlListenerMethod; const _sigType: TInvokeType = qAsync); overload;
+      procedure add(constref _notify: TNotifyEvent; const _sigType: TInvokeType = qAsync); overload;
 	  procedure do_(constref _sender: TControl; const _event: string; constref _params: TJSONObject; const _freeParams: Boolean = true);
 	end;
 
@@ -89,7 +91,6 @@ type
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
 
-
         function addListener(
                         const _event: string;
                         const _handler: TControlListenerProc;
@@ -101,6 +102,20 @@ type
                         const _handlers: TArrayControlListenerProc;
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
+
+        function addListener(
+                        const _event: string;
+                        const _handler: TNotifyEvent;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+
+        function addListener(
+                        const _event: string;
+                        const _handlers: array of TNotifyEvent;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+
+
 
         procedure signal(const _event: string; constref _params: TJSONObject=nil; _freeParams: Boolean = true);
         function signals: TStringArray;
@@ -192,11 +207,14 @@ begin
 
         if assigned(meth) then
 	        meth(sender, event, params)
+
 	    else if assigned(proc) then
-	        proc(sender, event, params);
+	        proc(sender, event, params)
+
+	    else if assigned(notify) then
+	        notify(sender);
 
 	    if freeParams then params.Free;
-
     end;
 
     if myFreeOnDone then Free; // Destroy itself
@@ -234,6 +252,7 @@ begin
     end;
 end;
 
+//Listener Method
 function TControlListenerHelper.addListener(
                 const _event: string;
                 const _handler: TControlListenerMethod;
@@ -244,11 +263,12 @@ var
    _L : TControlListener;
 begin
     _L := TControlListener.Create;
-    _L.add(_handler);
+    _L.add(_handler, _sigType);
     listener(_event).Add(_L);
     Result:= Self;
 end;
 
+//Listener Method
 function TControlListenerHelper.addListener(const _event: string;
 	const _handlers: TArrayControlListenerMethod; const _sigType: TInvokeType;
 	const _ignoreduplicates: boolean): TControl;
@@ -259,6 +279,7 @@ begin
         addListener(_event, _handler, _sigType,_ignoreduplicates);
 end;
 
+//Listener Proc
 function TControlListenerHelper.addListener(
         const _event: string;
 	    const _handler: TControlListenerProc;
@@ -269,16 +290,41 @@ var
    _L : TControlListener;
 begin
     _L := TControlListener.Create;
-    _L.add(_handler);
+    _L.add(_handler, _sigType);
     listener(_event).Add(_L);
     Result:= Self;
 end;
 
+//Listener Proc
 function TControlListenerHelper.addListener(const _event: string;
 	const _handlers: TArrayControlListenerProc; const _sigType: TInvokeType;
 	const _ignoreduplicates: boolean): TControl;
 var
 	_handler: TControlListenerProc;
+begin
+    for _handler in _handlers do
+        addListener(_event, _handler, _sigType,_ignoreduplicates);
+end;
+
+// TNotifyEvent
+function TControlListenerHelper.addListener(const _event: string;
+	const _handler: TNotifyEvent; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+   _L : TControlListener;
+begin
+    _L := TControlListener.Create;
+    _L.add(_handler, _sigType);
+    listener(_event).Add(_L);
+    Result:= Self;
+end;
+
+// TNotifyEvent
+function TControlListenerHelper.addListener(const _event: string;
+	const _handlers: array of TNotifyEvent; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+	_handler: TNotifyEvent;
 begin
     for _handler in _handlers do
         addListener(_event, _handler, _sigType,_ignoreduplicates);
@@ -321,12 +367,22 @@ procedure TControlListener.add(constref _proc: TControlListenerProc; const _sigT
 begin
     proc:= _proc;
     meth:= nil;
+    notify:= nil;
 end;
 
 procedure TControlListener.add(constref _meth: TControlListenerMethod; const _sigType: TInvokeType = qAsync);
 begin
     meth:= _meth;
     proc:=  nil;
+    notify:= nil;
+end;
+
+procedure TControlListener.add(constref _notify: TNotifyEvent;
+	const _sigType: TInvokeType);
+begin
+    notify:= _notify;
+    proc:= nil;
+    meth:= nil;
 end;
 
 

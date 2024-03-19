@@ -1,0 +1,54 @@
+object FSubject: TFSubject
+  Left = 3677
+  Height = 733
+  Top = 34
+  Width = 662
+  Caption = 'Subjects'
+  ClientHeight = 733
+  ClientWidth = 662
+  OnCreate = FormCreate
+  LCLVersion = '3.0.0.3'
+  object Panel1: TPanel
+    Left = 0
+    Height = 50
+    Top = 0
+    Width = 662
+    Align = alTop
+    TabOrder = 0
+  end
+  object Panel2: TPanel
+    Left = 0
+    Height = 50
+    Top = 683
+    Width = 662
+    Align = alBottom
+    ClientHeight = 50
+    ClientWidth = 662
+    TabOrder = 1
+    object Button1: TButton
+      Left = 11
+      Height = 28
+      Top = 10
+      Width = 83
+      Caption = '+ Subject'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+  end
+  object sbSubjects: TScrollBox
+    Left = 0
+    Height = 636
+    Top = 50
+    Width = 662
+    HorzScrollBar.Page = 1
+    VertScrollBar.Page = 1
+    Align = alTop
+    Anchors = [akTop, akLeft, akRight, akBottom]
+    ChildSizing.VerticalSpacing = 13
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    TabOrder = 2
+  end
+end

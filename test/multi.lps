@@ -12,7 +12,7 @@
         <WindowIndex Value="-1"/>
         <TopLine Value="-1"/>
         <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="30"/>
+        <UsageCount Value="60"/>
       </Unit>
       <Unit>
         <Filename Value="main_multi.pas"/>
@@ -20,20 +20,19 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="11"/>
-        <CursorPos X="106" Y="23"/>
-        <UsageCount Value="30"/>
+        <CursorPos Y="42"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="245"/>
-        <CursorPos X="67" Y="252"/>
-        <UsageCount Value="15"/>
+        <TopLine Value="10"/>
+        <CursorPos Y="54"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -41,20 +40,20 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1054"/>
         <CursorPos Y="1085"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\interfaces\win32\win32callback.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2058"/>
         <CursorPos Y="2089"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="6"/>
       </Unit>
     </Units>
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
-    <JumpHistory HistoryIndex="25">
+    <JumpHistory HistoryIndex="27">
       <Position>
         <Filename Value="main_multi.pas"/>
         <Caret Line="65" Column="12" TopLine="16"/>
@@ -159,21 +158,18 @@
         <Filename Value="main_multi.pas"/>
         <Caret Line="43" Column="74" TopLine="20"/>
       </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="23" Column="106" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\controls.listener.pas"/>
+        <Caret Line="251" Column="5" TopLine="245"/>
+      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints>
-      <Item>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="..\src\controls.listener.pas"/>
-        <Line Value="239"/>
-      </Item>
-    </BreakPoints>
-  </Debugging>
 </CONFIG>

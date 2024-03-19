@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units Count="17">
+      <Unit0>
+        <Filename Value="selList.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="-1"/>
+        <WindowIndex Value="-1"/>
+        <TopLine Value="-1"/>
+        <CursorPos X="-1" Y="-1"/>
+        <UsageCount Value="49"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main_sellist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="27"/>
+        <CursorPos Y="62"/>
+        <UsageCount Value="49"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <TopLine Value="99"/>
+        <CursorPos Y="142"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="R:\Apps\Lazarus\2.0.12\fpc\3.2.0\source\packages\fcl-base\src\contnrs.pp"/>
+        <UnitName Value="Contnrs"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="298"/>
+        <CursorPos X="14" Y="331"/>
+        <UsageCount Value="7"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="R:\Apps\Lazarus\2.0.12\lcl\stdctrls.pp"/>
+        <UnitName Value="StdCtrls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="488"/>
+        <CursorPos X="23" Y="522"/>
+        <UsageCount Value="7"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="R:\Apps\Lazarus\2.0.12\fpc\3.2.0\source\rtl\inc\objpash.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="172"/>
+        <CursorPos X="23" Y="206"/>
+        <UsageCount Value="7"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="R:\Apps\Lazarus\2.0.12\fpc\3.2.0\source\rtl\objpas\fgl.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="61"/>
+        <UsageCount Value="13"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="..\..\sugar\src\mod\sugar.collections.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="28"/>
+        <UsageCount Value="13"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\include\customlistbox.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="637"/>
+        <CursorPos X="3" Y="639"/>
+        <UsageCount Value="12"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\packages\fcl-base\src\contnrs.pp"/>
+        <UnitName Value="Contnrs"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1801"/>
+        <CursorPos X="3" Y="1841"/>
+        <UsageCount Value="22"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\packages\fcl-base\src\avl_tree.pp"/>
+        <UnitName Value="AVL_Tree"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="12"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\components\lazutils\avglvltree.pas"/>
+        <UnitName Value="AvgLvlTree"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="6"/>
+        <CursorPos X="3" Y="38"/>
+        <UsageCount Value="12"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\components\lazutils\laz_avl_tree.pp"/>
+        <UnitName Value="Laz_AVL_Tree"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="27"/>
+        <CursorPos X="3" Y="56"/>
+        <UsageCount Value="12"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="479"/>
+        <CursorPos X="3" Y="510"/>
+        <UsageCount Value="12"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="165"/>
+        <CursorPos X="3" Y="196"/>
+        <UsageCount Value="12"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\rtl\inc\objpash.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="174"/>
+        <CursorPos X="23" Y="206"/>
+        <UsageCount Value="12"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\interfaces\win32\win32listsl.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="197"/>
+        <CursorPos X="23" Y="214"/>
+        <UsageCount Value="10"/>
+      </Unit16>
+    </Units>
+    <JumpHistory Count="29" HistoryIndex="28">
+      <Position1>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="107" Column="5" TopLine="87"/>
+      </Position1>
+      <Position2>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="161" Column="16" TopLine="99"/>
+      </Position2>
+      <Position3>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="100" Column="5" TopLine="96"/>
+      </Position3>
+      <Position4>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="139" Column="5" TopLine="113"/>
+      </Position4>
+      <Position5>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="105" TopLine="96"/>
+      </Position5>
+      <Position6>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="101" Column="8" TopLine="92"/>
+      </Position6>
+      <Position7>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="159" Column="42" TopLine="110"/>
+      </Position7>
+      <Position8>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="106" Column="6" TopLine="53"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="270" Column="6" TopLine="232"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="80" Column="25" TopLine="38"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="271" Column="5" TopLine="241"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="79" Column="23" TopLine="49"/>
+      </Position12>
+      <Position13>
+        <Filename Value="main_sellist.pas"/>
+      </Position13>
+      <Position14>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="117" Column="33" TopLine="86"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="255" Column="5" TopLine="244"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="37" Column="28"/>
+      </Position16>
+      <Position17>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="138" Column="6" TopLine="58"/>
+      </Position17>
+      <Position18>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="137" Column="6" TopLine="74"/>
+      </Position18>
+      <Position19>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="136" Column="6" TopLine="73"/>
+      </Position19>
+      <Position20>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="135" Column="6" TopLine="72"/>
+      </Position20>
+      <Position21>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="134" Column="6" TopLine="71"/>
+      </Position21>
+      <Position22>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="133" Column="6" TopLine="70"/>
+      </Position22>
+      <Position23>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="132" Column="6" TopLine="69"/>
+      </Position23>
+      <Position24>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="131" Column="6" TopLine="68"/>
+      </Position24>
+      <Position25>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="130" Column="6" TopLine="67"/>
+      </Position25>
+      <Position26>
+        <Filename Value="main_sellist.pas"/>
+        <Caret Line="129" Column="6" TopLine="66"/>
+      </Position26>
+      <Position27>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="138" Column="19" TopLine="93"/>
+      </Position27>
+      <Position28>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="130" Column="31" TopLine="99"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\src\saph.lists.pas"/>
+        <Caret Line="142" TopLine="99"/>
+      </Position29>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
