@@ -13,8 +13,8 @@ object FRSubject: TFRSubject
   OnEnter = FrameEnter
   OnExit = FrameExit
   TabOrder = 0
-  DesignLeft = 976
-  DesignTop = 174
+  DesignLeft = 457
+  DesignTop = 518
   object lblSubNum: TLabel
     Left = 10
     Height = 21

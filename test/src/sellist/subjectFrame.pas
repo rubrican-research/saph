@@ -19,25 +19,25 @@ type
 		Memo1: TMemo;
 		procedure FrameEnter(Sender: TObject);
 		procedure FrameExit(Sender: TObject);
-
     private
         count: integer; static;
         i: integer;
 		function getDescription: string;
+		function getSelected: boolean;
 		function getSubName: string;
         function getSubNum: integer;
 		procedure setDescription(const _value: string);
+		procedure setSelected(const _value: boolean);
 		procedure setSubName(const _value: string);
 		procedure setSubNum(const _value: integer);
 
     public
         constructor Create(TheOwner: TComponent); override;
-
     public
-        property subNum: integer read getSubNum write setSubNum;
-        property subName: string read getSubName write setSubName;
-        property Description: string read getDescription write setDescription;
-
+        property subNum:        integer read getSubNum      write setSubNum;
+        property subName:       string  read getSubName     write setSubName;
+        property Description:   string  read getDescription write setDescription;
+        property selected:      boolean read getSelected    write setSelected;
     end;
 
 implementation
@@ -56,17 +56,22 @@ end;
 
 procedure TFRSubject.FrameEnter(Sender: TObject);
 begin
-    Color := clGradientActiveCaption;
+    Selected:= True;
 end;
 
 procedure TFRSubject.FrameExit(Sender: TObject);
 begin
-    Color := clDefault;
+    Selected:= False;
 end;
 
 function TFRSubject.getDescription: string;
 begin
     Result:= Memo1.Text;
+end;
+
+function TFRSubject.getSelected: boolean;
+begin
+
 end;
 
 function TFRSubject.getSubName: string;
@@ -77,6 +82,14 @@ end;
 procedure TFRSubject.setDescription(const _value: string);
 begin
     Memo1.Text:= _value;
+end;
+
+procedure TFRSubject.setSelected(const _value: boolean);
+begin
+    case _value of
+    	True:  Color := clGradientActiveCaption;
+        False: Color := clDefault;
+    end;
 end;
 
 procedure TFRSubject.setSubName(const _value: string);

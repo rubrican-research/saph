@@ -15,9 +15,9 @@ type
 
     TFRStudSubList = specialize TSelectList<TFRStudSub>;
 
-	{ TForm1 }
+	{ TMainForm }
 
-    TForm1 = class(TForm)
+    TMainForm = class(TForm)
 		Button1: TButton;
 		Button2: TButton;
 		Button3: TButton;
@@ -35,16 +35,18 @@ type
         selStudentFrame: TFRStudent;
         myStudSubList: TFRStudSubList;
 		function newFRStudent: TFRStudent;
-  function newSubSelect: TFRStudSub;
+        function newSubSelect: TFRStudSub;
         procedure selectStudent(const _sender: TControl; const _event: string; constref _params: TJSONObject);
         procedure clearStudent(_sender: TObject);
+        procedure deleteStudSub(_sender: TObject);
+
 
     public
 
     end;
 
 var
-    Form1: TForm1;
+    MainForm: TMainForm;
 
 implementation
 
@@ -53,14 +55,14 @@ implementation
 uses
     subjectForm;
 
-{ TForm1 }
+{ TMainForm }
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TMainForm.FormCreate(Sender: TObject);
 begin
     myStudSubList := TFRStudSubList.Create(True);
 end;
 
-function TForm1.newFRStudent: TFRStudent;
+function TMainForm.newFRStudent: TFRStudent;
 begin
     Result:= TFRStudent.Create(Self);
     with Result do begin
@@ -70,7 +72,7 @@ begin
 	end;
 
 end;
-procedure TForm1.Button1Click(Sender: TObject);
+procedure TMainForm.Button1Click(Sender: TObject);
 begin
     newFRStudent.SetFocus;
 //
@@ -82,35 +84,37 @@ begin
 //    sbStudents.ScrollInView(selStudentFrame);
 
 end;
-function  TForm1.newSubSelect: TFRStudSub;
+function  TMainForm.newSubSelect: TFRStudSub;
 begin
     Result:= TFRStudSub.Create(Self);
     with Result do begin
         if assigned(selStudentFrame) then
             subjectList := selStudentFrame.subjectList;
+        addListener('delete', @deleteStudSub);
 	end;
     sbSub.InsertControl(Result);
     myStudSubList.add(Result);
+    Result.studSubNum:= myStudSubList.allCount;
 end;
 
-procedure TForm1.Button2Click(Sender: TObject);
+procedure TMainForm.Button2Click(Sender: TObject);
 begin
     // Select Subject
     if assigned(selStudentFrame) then
         sbSub.ScrollInView(newSubSelect);
 end;
 
-procedure TForm1.Button3Click(Sender: TObject);
+procedure TMainForm.Button3Click(Sender: TObject);
 begin
     FSubject.ShowModal;
 end;
 
-procedure TForm1.FormDestroy(Sender: TObject);
+procedure TMainForm.FormDestroy(Sender: TObject);
 begin
     myStudSubList.Free;
 end;
 
-procedure TForm1.selectStudent(const _sender: TControl; const _event: string;
+procedure TMainForm.selectStudent(const _sender: TControl; const _event: string;
 	constref _params: TJSONObject);
 var
 	_subSel: TFRStudSub;
@@ -123,9 +127,8 @@ begin
         if assigned(selStudentFrame) then selStudentFrame.selected:=False;
         selStudentFrame := TFRStudent(_sender);
         selStudentFrame.selected:=True;
-
         sbStudents.ScrollInView(selStudentFrame);
-
+        sbSub.BeginUpdateBounds;
         myStudSubList.Clear(true);
 	    with selStudentFrame do begin
 	        if assigned(subjectList) then begin
@@ -135,13 +138,22 @@ begin
 			    end;
 	        end;
 		end;
+        sbSub.EndUpdateBounds;
         selStudentFrame.SetFocus;
 	end;
 end;
 
-procedure TForm1.clearStudent(_sender: TObject);
+procedure TMainForm.clearStudent(_sender: TObject);
 begin
 
+end;
+
+procedure TMainForm.deleteStudSub(_sender: TObject);
+begin
+    if assigned(selStudentFrame) then begin
+        selStudentFrame.subjectList.selected[TFRStudSub(_sender).subjectObj] := false;
+        myStudSubList.remove(TFRStudSub(_sender));
+	end;
 end;
 
 end.

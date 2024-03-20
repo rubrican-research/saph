@@ -69,11 +69,16 @@ end;
 function TFSubject.newSubject: TFRSubject;
 begin
     Result := TFRSubject.Create(Self);
+
     with Result do
     begin
         Parent := sbSubjects;
     end;
+
+    if Visible then Result.SetFocus;
+    sbSubjects.ScrollInView(Result);
     SubjectList.add(Result);
+
 end;
 
 

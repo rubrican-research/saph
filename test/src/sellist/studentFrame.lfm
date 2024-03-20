@@ -31,6 +31,7 @@ object FRStudent: TFRStudent
     Font.Style = [fsBold]
     ParentColor = False
     ParentFont = False
+    Transparent = False
   end
   object Label2: TLabel
     Left = 10
@@ -41,6 +42,7 @@ object FRStudent: TFRStudent
     BorderSpacing.Top = 13
     BorderSpacing.Right = 10
     Caption = 'Name'
+    ParentColor = False
   end
   object edtName: TEdit
     Left = 10

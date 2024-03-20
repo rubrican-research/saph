@@ -1,4 +1,4 @@
-program sellist;
+program sellist2_12;
 
 {$mode objfpc}{$H+}
 
@@ -7,7 +7,9 @@ uses
     cthreads,
     {$ENDIF}{$ENDIF}
     Interfaces, // this includes the LCL widgetset
-    Forms, mainSellist, studentFrame, subjectForm, subjectFrame, studsubFrame;
+    Forms, mainSellist, studentFrame, subjectForm, subjectFrame, studsubFrame
+
+    { you can add units after this };
 
 {$R *.res}
 
@@ -15,8 +17,8 @@ begin
     RequireDerivedFormResource:=True;
     Application.Scaled:=True;
     Application.Initialize;
-	Application.CreateForm(TMainForm, MainForm);
-	Application.CreateForm(TFSubject, FSubject);
+    Application.CreateForm(TForm1, Form1);
+    Application.CreateForm(TFSubject, FSubject);
     Application.Run;
 end.
 

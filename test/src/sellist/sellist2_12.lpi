@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
   <ProjectOptions>
-    <Version Value="12"/>
+    <Version Value="11"/>
     <PathDelim Value="\"/>
     <General>
-      <Flags>
-        <CompatibilityMode Value="True"/>
-      </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="sellist"/>
+      <MainUnit Value="0"/>
+      <Title Value="sellist2_12"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
@@ -26,75 +24,86 @@
     </PublishOptions>
     <RunParams>
       <FormatVersion Value="2"/>
+      <Modes Count="0"/>
     </RunParams>
     <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="saph30"/>
+        <PackageName Value="fp_sugar2_12"/>
       </Item1>
       <Item2>
-        <PackageName Value="fp_sugar"/>
+        <PackageName Value="saph2_12"/>
       </Item2>
       <Item3>
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="6">
+    <Units Count="11">
       <Unit0>
-        <Filename Value="sellist.lpr"/>
+        <Filename Value="sellist2_12.lpr"/>
         <IsPartOfProject Value="True"/>
       </Unit0>
       <Unit1>
-        <Filename Value="mainSellist.pas"/>
+        <Filename Value="mainSellist.lfm"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="MainForm"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
       </Unit1>
       <Unit2>
+        <Filename Value="mainSellist.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="Form1"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="studentFrame.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit3>
+      <Unit4>
         <Filename Value="studentFrame.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FRStudent"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="subjectForm.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FSubject"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="subjectFrame.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FRSubject"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
       </Unit4>
       <Unit5>
+        <Filename Value="studsubFrame.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit5>
+      <Unit6>
         <Filename Value="studsubFrame.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="FRStudSub"/>
         <HasResources Value="True"/>
-        <ResourceBaseClass Value="Frame"/>
-      </Unit5>
+      </Unit6>
+      <Unit7>
+        <Filename Value="subjectForm.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="subjectForm.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="subjectFrame.lfm"/>
+        <IsPartOfProject Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="subjectFrame.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+      </Unit10>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="selList"/>
+      <Filename Value="bin\sellist2_12"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
-      <Debugging>
-        <DebugInfoType Value="dsDwarf3"/>
-        <UseHeaptrc Value="True"/>
-      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

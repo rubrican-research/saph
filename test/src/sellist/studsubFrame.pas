@@ -5,7 +5,8 @@ unit studsubFrame;
 interface
 
 uses
-    Classes, SysUtils, Forms, Controls, StdCtrls, subjectForm, subjectFrame;
+    Classes, SysUtils, Forms, Controls, StdCtrls, Menus, Controls.Listener, subjectForm,
+	subjectFrame;
 
 type
 
@@ -15,8 +16,11 @@ type
 		cmbSubjects: TComboBox;
 		Label2: TLabel;
 		lblStudSub: TLabel;
+		MenuItem1: TMenuItem;
+		PopupMenu1: TPopupMenu;
 		procedure cmbSubjectsChange(Sender: TObject);
 		procedure cmbSubjectsEnter(Sender: TObject);
+		procedure MenuItem1Click(Sender: TObject);
     private
       count: integer; static;
       mySubjectList: TSubjectList;
@@ -35,9 +39,10 @@ type
       constructor Create(TheOwner: TComponent); override;
       destructor Destroy; override;
 
-      property studSubNum : integer read getStudSubNum write setStudSubNum;
+      property studSubNum  : integer read getStudSubNum write setStudSubNum;
       property subjectList : TSubjectList read getSubjectList write setSubjectList;
-      property subject    : string read getSubject write setSubject;
+      property subject     : string read getSubject write setSubject;
+      property subjectObj  : TFRSubject read mySelSubject;
 
     end;
 
@@ -71,6 +76,11 @@ end;
 procedure TFRStudSub.cmbSubjectsEnter(Sender: TObject);
 begin
     RefreshSubList;
+end;
+
+procedure TFRStudSub.MenuItem1Click(Sender: TObject);
+begin
+    signal('delete');
 end;
 
 function TFRStudSub.getSubjectList: TSubjectList;

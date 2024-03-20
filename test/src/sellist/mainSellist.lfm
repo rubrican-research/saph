@@ -1,19 +1,20 @@
-object Form1: TForm1
-  Left = 2860
-  Height = 731
-  Top = 28
-  Width = 812
-  Caption = 'Form1'
-  ClientHeight = 731
-  ClientWidth = 812
+object MainForm: TMainForm
+  Left = 2418
+  Height = 765
+  Top = 18
+  Width = 785
+  Caption = 'Test Select List'
+  ClientHeight = 765
+  ClientWidth = 785
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  Position = poScreenCenter
   LCLVersion = '3.0.0.3'
   object sbStudents: TScrollBox
     Left = 0
-    Height = 631
+    Height = 665
     Top = 50
-    Width = 222
+    Width = 238
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alLeft
@@ -22,23 +23,30 @@ object Form1: TForm1
     ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
+    Color = cl3DLight
+    ParentBackground = False
+    ParentColor = False
     TabOrder = 0
   end
   object Panel1: TPanel
     Left = 0
     Height = 50
     Top = 0
-    Width = 812
+    Width = 785
     Align = alTop
     ClientHeight = 50
-    ClientWidth = 812
+    ClientWidth = 785
     TabOrder = 1
     object Button3: TButton
-      Left = 704
+      Left = 621
       Height = 33
+      Hint = 'Manage a master list of subjects that you can later select for each student.'
       Top = 8
       Width = 99
+      Anchors = [akRight, akBottom]
       Caption = 'Subjects...'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       OnClick = Button3Click
     end
@@ -46,36 +54,43 @@ object Form1: TForm1
   object Panel2: TPanel
     Left = 0
     Height = 50
-    Top = 681
-    Width = 812
+    Top = 715
+    Width = 785
     Align = alBottom
     ClientHeight = 50
-    ClientWidth = 812
+    ClientWidth = 785
     TabOrder = 2
     object Button1: TButton
       Left = 8
       Height = 32
+      Hint = 'Add a student to the list'
       Top = 8
       Width = 91
       Caption = '+ Student'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 0
       OnClick = Button1Click
     end
     object Button2: TButton
-      Left = 608
+      Left = 597
       Height = 32
+      Hint = 'Add a subject selection. When you click on the drop down, you only see previously unselected entries.'
       Top = 8
       Width = 123
+      Anchors = [akRight, akBottom]
       Caption = '+ Select subject'
+      ParentShowHint = False
+      ShowHint = True
       TabOrder = 1
       OnClick = Button2Click
     end
   end
   object sbSub: TScrollBox
-    Left = 222
-    Height = 631
+    Left = 238
+    Height = 665
     Top = 50
-    Width = 524
+    Width = 481
     HorzScrollBar.Page = 1
     VertScrollBar.Page = 1
     Align = alLeft
@@ -88,8 +103,8 @@ object Form1: TForm1
     TabOrder = 3
   end
   object Panel3: TPanel
-    Left = 746
-    Height = 631
+    Left = 719
+    Height = 665
     Top = 50
     Width = 66
     Align = alClient
