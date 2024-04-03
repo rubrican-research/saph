@@ -1,7 +1,7 @@
 # Saph: Lazarus package for complex GUI
 This is a library to make coding complex GUIs in Lazarus easier. Broad functional goals:
 
-### Event listeners
+### [Event listeners](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
 The ability to add multiple event listeners to any LCL control (objects will be supported in a future upgrade)and signal the event as needed.
 
 ### Manage multiple selections
