@@ -55,6 +55,7 @@ type
 	{ TControlListener }
     TControlListener = class
 	private
+	  myEnabled: boolean;
       sender: TControl;
       event: string;
 	  proc: TControlListenerProc;
@@ -64,10 +65,13 @@ type
       freeParams: boolean;
       sigType: TInvokeType;
 	public
+      constructor Create;
 	  procedure add(constref _proc: TControlListenerProc; const _sigType: TInvokeType = qAsync); overload;
 	  procedure add(constref _meth: TControlListenerMethod; const _sigType: TInvokeType = qAsync); overload;
       procedure add(constref _notify: TNotifyEvent; const _sigType: TInvokeType = qAsync); overload;
 	  procedure do_(constref _sender: TControl; const _event: string; constref _params: TJSONObject; const _freeParams: Boolean = true);
+    public
+      property enabled: boolean read myEnabled write myEnabled;
 	end;
 
 	TControlListenerProcList   = specialize TFPGObjectList<TControlListener>;             // List of listeners
@@ -115,42 +119,42 @@ type
                         const _handlers: array of TNotifyEvent;
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
-        // TODO
-        procedure rmListeners(const _event: string);
-        procedure rmListener(const _event: string; const _handler: TControlListenerMethod); overload;
-        procedure rmListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload;
-        procedure rmListener(const _event: string; const _handler: TControlListenerProc); overload;
-        procedure rmListener(const _event: string; const _handlers: TArrayControlListenerProc); overload;
-        procedure rmListener(const _event: string; const _handler: TNotifyEvent); overload;
-        procedure rmListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
+        // TODO - not implemented
+        procedure rmListeners(const _event: string); unimplemented;
+        procedure rmListener(const _event: string; const _handler: TControlListenerMethod); overload; unimplemented;
+        procedure rmListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload; unimplemented;
+        procedure rmListener(const _event: string; const _handler: TControlListenerProc); overload; unimplemented;
+        procedure rmListener(const _event: string; const _handlers: TArrayControlListenerProc); overload; unimplemented;
+        procedure rmListener(const _event: string; const _handler: TNotifyEvent); overload; unimplemented;
+        procedure rmListener(const _event: string; const _handlers: array of TNotifyEvent); overload; unimplemented;
 
-        function isListener(const _event: string; const _handler: TControlListenerMethod): boolean; overload;
-        function isListener(const _event: string; const _handler: TControlListenerProc): boolean; overload;
-        function isListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
-
-        function isEnabledListeners(const _event: string): boolean;
-        function isEnabledListener(const _event: string; const _handler: TControlListenerMethod): boolean; overload;
-        function isEnabledListener(const _event: string; const _handlers: TArrayControlListenerMethod): boolean; overload;
-        function isEnabledListener(const _event: string; const _handler: TControlListenerProc): boolean; overload;
-        function isEnabledListener(const _event: string; const _handlers: TArrayControlListenerProc): boolean; overload;
-        function isEnabledListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
-        function isEnabledListener(const _event: string; const _handlers: array of TNotifyEvent): boolean; overload;
-
-        procedure enableListeners(const _event: string);
-        procedure enableListener(const _event: string; const _handler: TControlListenerMethod); overload;
-        procedure enableListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload;
-        procedure enableListener(const _event: string; const _handler: TControlListenerProc); overload;
-        procedure enableListener(const _event: string; const _handlers: TArrayControlListenerProc); overload;
-        procedure enableListener(const _event: string; const _handler: TNotifyEvent); overload;
-        procedure enableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
-
-        procedure disableListeners(const _event: string);
-        procedure disableListener(const _event: string; const _handler: TControlListenerMethod); overload;
-        procedure disableListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload;
-        procedure disableListener(const _event: string; const _handler: TControlListenerProc); overload;
-        procedure disableListener(const _event: string; const _handlers: TArrayControlListenerProc); overload;
-        procedure disableListener(const _event: string; const _handler: TNotifyEvent); overload;
-        procedure disableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
+        //function isListener(const _event: string; const _handler: TControlListenerMethod): boolean; overload;
+        //function isListener(const _event: string; const _handler: TControlListenerProc): boolean; overload;
+        //function isListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
+        //
+        //function isEnabledListeners(const _event: string): boolean;
+        //function isEnabledListener(const _event: string; const _handler: TControlListenerMethod): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handlers: TArrayControlListenerMethod): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handler: TControlListenerProc): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handlers: TArrayControlListenerProc): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handlers: array of TNotifyEvent): boolean; overload;
+        //
+        //procedure enableListeners(const _event: string);
+        //procedure enableListener(const _event: string; const _handler: TControlListenerMethod); overload;
+        //procedure enableListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload;
+        //procedure enableListener(const _event: string; const _handler: TControlListenerProc); overload;
+        //procedure enableListener(const _event: string; const _handlers: TArrayControlListenerProc); overload;
+        //procedure enableListener(const _event: string; const _handler: TNotifyEvent); overload;
+        //procedure enableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
+        //
+        //procedure disableListeners(const _event: string);
+        //procedure disableListener(const _event: string; const _handler: TControlListenerMethod); overload;
+        //procedure disableListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload;
+        //procedure disableListener(const _event: string; const _handler: TControlListenerProc); overload;
+        //procedure disableListener(const _event: string; const _handlers: TArrayControlListenerProc); overload;
+        //procedure disableListener(const _event: string; const _handler: TNotifyEvent); overload;
+        //procedure disableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
 
         // Invokes listeners
         procedure signal(const _event: string; constref _params: TJSONObject=nil; _freeParams: Boolean = true);
@@ -410,148 +414,6 @@ begin
 
 end;
 
-function TControlListenerHelper.isListener(const _event: string;
-	const _handler: TControlListenerMethod): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isListener(const _event: string;
-	const _handler: TControlListenerProc): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isListener(const _event: string;
-	const _handler: TNotifyEvent): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListeners(const _event: string
-	): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListener(const _event: string;
-	const _handler: TControlListenerMethod): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListener(const _event: string;
-	const _handlers: TArrayControlListenerMethod): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListener(const _event: string;
-	const _handler: TControlListenerProc): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListener(const _event: string;
-	const _handlers: TArrayControlListenerProc): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListener(const _event: string;
-	const _handler: TNotifyEvent): boolean;
-begin
-
-end;
-
-function TControlListenerHelper.isEnabledListener(const _event: string;
-	const _handlers: array of TNotifyEvent): boolean;
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListeners(const _event: string);
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListener(const _event: string;
-	const _handler: TControlListenerMethod);
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListener(const _event: string;
-	const _handlers: TArrayControlListenerMethod);
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListener(const _event: string;
-	const _handler: TControlListenerProc);
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListener(const _event: string;
-	const _handlers: TArrayControlListenerProc);
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListener(const _event: string;
-	const _handler: TNotifyEvent);
-begin
-
-end;
-
-procedure TControlListenerHelper.enableListener(const _event: string;
-	const _handlers: array of TNotifyEvent);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListeners(const _event: string);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListener(const _event: string;
-	const _handler: TControlListenerMethod);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListener(const _event: string;
-	const _handlers: TArrayControlListenerMethod);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListener(const _event: string;
-	const _handler: TControlListenerProc);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListener(const _event: string;
-	const _handlers: TArrayControlListenerProc);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListener(const _event: string;
-	const _handler: TNotifyEvent);
-begin
-
-end;
-
-procedure TControlListenerHelper.disableListener(const _event: string;
-	const _handlers: array of TNotifyEvent);
-begin
-
-end;
-
 procedure TControlListenerHelper.signal(
             const _event: string;
             constref _params: TJSONObject; _freeParams: Boolean
@@ -584,6 +446,11 @@ end;
 
 { TControlListener }
 
+constructor TControlListener.Create;
+begin
+    inherited Create;
+    myEnabled:= true;
+end;
 
 procedure TControlListener.add(constref _proc: TControlListenerProc; const _sigType: TInvokeType = qAsync);
 begin
@@ -617,6 +484,9 @@ var
 	_runner: TListenerProcRunner;
 
 begin
+
+    if not enabled then exit;
+
     sender      := _sender;
     event       := _event;
     params      := _params;

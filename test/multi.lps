@@ -20,17 +20,16 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <TopLine Value="11"/>
-        <CursorPos Y="42"/>
+        <IsVisibleTab Value="True"/>
+        <CursorPos X="15" Y="34"/>
         <UsageCount Value="60"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="10"/>
         <CursorPos Y="54"/>
         <UsageCount Value="30"/>
         <Loaded Value="True"/>
@@ -53,7 +52,7 @@
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
-    <JumpHistory HistoryIndex="27">
+    <JumpHistory HistoryIndex="26">
       <Position>
         <Filename Value="main_multi.pas"/>
         <Caret Line="65" Column="12" TopLine="16"/>
@@ -109,10 +108,6 @@
       <Position>
         <Filename Value="..\src\controls.listener.pas"/>
         <Caret Line="97" Column="21" TopLine="68"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="169" Column="16" TopLine="202"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
