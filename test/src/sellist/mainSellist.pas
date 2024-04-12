@@ -39,8 +39,6 @@ type
         procedure selectStudent(const _sender: TControl; const _event: string; constref _params: TJSONObject);
         procedure clearStudent(_sender: TObject);
         procedure deleteStudSub(_sender: TObject);
-
-
     public
 
     end;

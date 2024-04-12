@@ -1,12 +1,13 @@
 object FSubject: TFSubject
-  Left = 3677
+  Left = 432
   Height = 733
-  Top = 34
+  Top = 401
   Width = 662
   Caption = 'Subjects'
   ClientHeight = 733
   ClientWidth = 662
   OnCreate = FormCreate
+  Position = poMainFormCenter
   LCLVersion = '3.0.0.3'
   object Panel1: TPanel
     Left = 0

@@ -4,14 +4,13 @@
     <PathDelim Value="\"/>
     <Version Value="12"/>
     <BuildModes Active="Default"/>
-    <Units Count="32">
+    <Units Count="35">
       <Unit0>
         <Filename Value="sellist.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="-1"/>
         <CursorPos X="79" Y="10"/>
-        <UsageCount Value="72"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="76"/>
       </Unit0>
       <Unit1>
         <Filename Value="mainSellist.pas"/>
@@ -19,11 +18,10 @@
         <ComponentName Value="MainForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="96"/>
-        <CursorPos X="42" Y="155"/>
-        <UsageCount Value="72"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="17"/>
+        <CursorPos X="4" Y="46"/>
+        <UsageCount Value="76"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit1>
@@ -33,10 +31,10 @@
         <ComponentName Value="FRStudent"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="67"/>
         <CursorPos X="5" Y="69"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit2>
@@ -46,10 +44,10 @@
         <ComponentName Value="FSubject"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="22"/>
-        <CursorPos Y="72"/>
-        <UsageCount Value="43"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="10"/>
+        <CursorPos X="5" Y="46"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit3>
@@ -59,10 +57,10 @@
         <ComponentName Value="FRSubject"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="52"/>
         <CursorPos X="35" Y="91"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit4>
@@ -72,18 +70,18 @@
         <ComponentName Value="FRStudSub"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="8"/>
-        <TopLine Value="11"/>
-        <CursorPos X="16" Y="45"/>
-        <UsageCount Value="43"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="80"/>
+        <CursorPos X="19" Y="83"/>
+        <UsageCount Value="47"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\..\src\saph.lists.pas"/>
-        <TopLine Value="291"/>
-        <CursorPos X="5" Y="296"/>
-        <UsageCount Value="37"/>
+        <TopLine Value="250"/>
+        <CursorPos X="44" Y="253"/>
+        <UsageCount Value="38"/>
         <Loaded Value="True"/>
       </Unit6>
       <Unit7>
@@ -131,11 +129,10 @@
       <Unit13>
         <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\packages\fcl-base\src\contnrs.pp"/>
         <UnitName Value="Contnrs"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1839"/>
         <CursorPos X="3" Y="1841"/>
-        <UsageCount Value="27"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="28"/>
       </Unit13>
       <Unit14>
         <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\packages\fcl-base\src\avl_tree.pp"/>
@@ -190,11 +187,9 @@
       <Unit21>
         <Filename Value="..\..\..\src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
-        <EditorIndex Value="3"/>
-        <TopLine Value="270"/>
-        <CursorPos X="34" Y="334"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="31" Y="250"/>
+        <UsageCount Value="23"/>
       </Unit21>
       <Unit22>
         <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\controls.pp"/>
@@ -206,11 +201,10 @@
       </Unit22>
       <Unit23>
         <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\include\wincontrol.inc"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="6623"/>
         <CursorPos Y="6655"/>
-        <UsageCount Value="18"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
       </Unit23>
       <Unit24>
         <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
@@ -265,134 +259,131 @@
       </Unit30>
       <Unit31>
         <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\include\customform.inc"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="354"/>
         <CursorPos X="31" Y="396"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="13"/>
       </Unit31>
+      <Unit32>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\packages\fcl-xml\src\xmlreader.pp"/>
+        <UnitName Value="XmlReader"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="10"/>
+        <UsageCount Value="11"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="R:\Apps\Lazarus\3.0.0\fpc\3.2.2\source\packages\fcl-xml\src\xmlutils.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="250"/>
+        <UsageCount Value="11"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="..\..\..\..\sugar\src\mod\sugar.logger.pas"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="312"/>
+        <CursorPos X="18" Y="348"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit34>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="24" HistoryIndex="23">
       <Position1>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="111" Column="5" TopLine="79"/>
-      </Position1>
-      <Position2>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="129" Column="9" TopLine="79"/>
-      </Position2>
-      <Position3>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="94" Column="25" TopLine="79"/>
-      </Position3>
-      <Position4>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="60" Column="5" TopLine="28"/>
-      </Position4>
-      <Position5>
-        <Filename Value="subjectForm.pas"/>
-        <Caret Line="13" Column="53" TopLine="4"/>
-      </Position5>
-      <Position6>
-        <Filename Value="subjectForm.pas"/>
-        <Caret Line="58" Column="5" TopLine="4"/>
-      </Position6>
-      <Position7>
-        <Filename Value="subjectForm.pas"/>
-        <Caret Line="71" Column="5" TopLine="22"/>
-      </Position7>
-      <Position8>
-        <Filename Value="subjectFrame.pas"/>
-        <Caret Line="42" Column="71"/>
-      </Position8>
-      <Position9>
-        <Filename Value="subjectFrame.pas"/>
-        <Caret Line="77" Column="5" TopLine="52"/>
-      </Position9>
-      <Position10>
-        <Filename Value="subjectFrame.pas"/>
-        <Caret Line="20" Column="12"/>
-      </Position10>
-      <Position11>
-        <Filename Value="subjectFrame.pas"/>
-        <Caret Line="56" TopLine="7"/>
-      </Position11>
-      <Position12>
-        <Filename Value="subjectFrame.pas"/>
-        <Caret Line="40" Column="9" TopLine="7"/>
-      </Position12>
-      <Position13>
-        <Filename Value="subjectFrame.pas"/>
-        <Caret Line="59" Column="5" TopLine="7"/>
-      </Position13>
-      <Position14>
         <Filename Value="subjectForm.pas"/>
         <Caret Line="77" Column="9" TopLine="22"/>
-      </Position14>
-      <Position15>
+      </Position1>
+      <Position2>
         <Filename Value="studsubFrame.pas"/>
         <Caret Line="109" TopLine="69"/>
+      </Position2>
+      <Position3>
+        <Filename Value="studsubFrame.pas"/>
+        <Caret Line="110" TopLine="70"/>
+      </Position3>
+      <Position4>
+        <Filename Value="studsubFrame.pas"/>
+        <Caret Line="117" TopLine="72"/>
+      </Position4>
+      <Position5>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="87" Column="32" TopLine="61"/>
+      </Position5>
+      <Position6>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="41" Column="32" TopLine="6"/>
+      </Position6>
+      <Position7>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="155" Column="48" TopLine="96"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\..\..\src\saph.lists.pas"/>
+        <Caret Line="296" Column="5" TopLine="291"/>
+      </Position8>
+      <Position9>
+        <Filename Value="studsubFrame.pas"/>
+        <Caret Line="82" Column="5" TopLine="50"/>
+      </Position9>
+      <Position10>
+        <Filename Value="studsubFrame.pas"/>
+        <Caret Line="80" Column="54" TopLine="50"/>
+      </Position10>
+      <Position11>
+        <Filename Value="studsubFrame.pas"/>
+        <Caret Line="8" Column="75"/>
+      </Position11>
+      <Position12>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="154" Column="9" TopLine="96"/>
+      </Position12>
+      <Position13>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="155" Column="50" TopLine="96"/>
+      </Position13>
+      <Position14>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="141" Column="20" TopLine="96"/>
+      </Position14>
+      <Position15>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="154" Column="77" TopLine="96"/>
       </Position15>
       <Position16>
         <Filename Value="studsubFrame.pas"/>
-        <Caret Line="110" TopLine="70"/>
+        <Caret Line="45" Column="16" TopLine="11"/>
       </Position16>
       <Position17>
-        <Filename Value="studsubFrame.pas"/>
-        <Caret Line="117" TopLine="72"/>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="155" Column="48" TopLine="96"/>
       </Position17>
       <Position18>
         <Filename Value="mainSellist.pas"/>
-        <Caret Line="87" Column="32" TopLine="61"/>
+        <Caret Line="89" Column="20" TopLine="75"/>
       </Position18>
       <Position19>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="41" Column="32" TopLine="6"/>
+        <Filename Value="studsubFrame.pas"/>
+        <Caret Line="23" Column="27" TopLine="17"/>
       </Position19>
       <Position20>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="155" Column="48" TopLine="96"/>
+        <Filename Value="..\..\..\src\saph.lists.pas"/>
+        <Caret Line="296" Column="5" TopLine="129"/>
       </Position20>
       <Position21>
         <Filename Value="..\..\..\src\saph.lists.pas"/>
-        <Caret Line="296" Column="5" TopLine="291"/>
+        <Caret Line="89" Column="25" TopLine="49"/>
       </Position21>
       <Position22>
-        <Filename Value="studsubFrame.pas"/>
-        <Caret Line="82" Column="5" TopLine="50"/>
+        <Filename Value="mainSellist.pas"/>
+        <Caret Line="28" Column="21"/>
       </Position22>
       <Position23>
-        <Filename Value="studsubFrame.pas"/>
-        <Caret Line="80" Column="54" TopLine="50"/>
+        <Filename Value="subjectForm.pas"/>
+        <Caret Line="30" Column="5" TopLine="10"/>
       </Position23>
       <Position24>
-        <Filename Value="studsubFrame.pas"/>
-        <Caret Line="8" Column="75"/>
+        <Filename Value="subjectForm.pas"/>
+        <Caret Line="46" Column="5" TopLine="10"/>
       </Position24>
-      <Position25>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="154" Column="9" TopLine="96"/>
-      </Position25>
-      <Position26>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="155" Column="50" TopLine="96"/>
-      </Position26>
-      <Position27>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="141" Column="20" TopLine="96"/>
-      </Position27>
-      <Position28>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="154" Column="77" TopLine="96"/>
-      </Position28>
-      <Position29>
-        <Filename Value="studsubFrame.pas"/>
-        <Caret Line="45" Column="16" TopLine="11"/>
-      </Position29>
-      <Position30>
-        <Filename Value="mainSellist.pas"/>
-        <Caret Line="155" Column="48" TopLine="96"/>
-      </Position30>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>

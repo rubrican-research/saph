@@ -1,6 +1,8 @@
 unit main;
 
 {$mode objfpc}{$H+}
+{$modeswitch FUNCTIONREFERENCES}
+{$modeswitch ANONYMOUSFUNCTIONS}
 
 interface
 

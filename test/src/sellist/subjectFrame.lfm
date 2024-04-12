@@ -45,17 +45,22 @@ object FRSubject: TFRSubject
   end
   object edtName: TEdit
     Left = 10
-    Height = 25
+    Height = 33
     Top = 71
     Width = 463
     BorderSpacing.Left = 10
     BorderSpacing.Right = 10
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -19
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
     TabOrder = 0
   end
   object lblDesc: TLabel
     Left = 10
     Height = 17
-    Top = 109
+    Top = 117
     Width = 463
     BorderSpacing.Left = 10
     BorderSpacing.Top = 13
@@ -65,7 +70,7 @@ object FRSubject: TFRSubject
   object Memo1: TMemo
     Left = 10
     Height = 65
-    Top = 136
+    Top = 144
     Width = 463
     Constraints.MinHeight = 65
     TabOrder = 1
