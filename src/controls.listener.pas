@@ -76,14 +76,22 @@ type
 
 	TControlListenerProcList   = specialize TFPGObjectList<TControlListener>;             // List of listeners
     TControlListenerCollection = specialize TFPGMap<string, TControlListenerProcList>;    // Map of Event and List of listener procedures
-    TListenerList              = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control Name and List of Event Listeners
+
+    TListenerListBase           = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control Name and List of Event Listeners
+
+	{ TListenerList }
+
+    TListenerList = class(TListenerListBase)
+        procedure Clear; reintroduce;
+        destructor Destroy; override;
+	end;
 
 	{ TControlListenerHelper }
 
     TControlListenerHelper = class helper for TControl
 
-        function listeners: TControlListenerCollection;
-        function listener(const _event: string): TControlListenerProcList;
+        function listeners: TControlListenerCollection;                     // Returns the list of listeners for this particular object!
+        function listener(const _event: string): TControlListenerProcList;  // Returns the proc list for this particular event
 
         function addListener(
                         const _event: string;
@@ -120,6 +128,7 @@ type
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
         // TODO - not implemented
+        procedure rmListeners; // Removes all listeners
         procedure rmListeners(const _event: string); unimplemented;
         procedure rmListener(const _event: string; const _handler: TControlListenerMethod); overload; unimplemented;
         procedure rmListener(const _event: string; const _handlers: TArrayControlListenerMethod); overload; unimplemented;
@@ -185,6 +194,7 @@ type
 
 var
     ListenerSignalMode: TListenerSignalMode = lmSingleton;
+    //ListenerSignalMode: TListenerSignalMode = lmDynamic;
 implementation
 
 type
@@ -196,21 +206,59 @@ type
     // See doRun();
     TListenerProcRunner = class
     private
+
         myFreeOnDone: boolean;
         listener: TControlListener;
         procedure doRun;    // Can be called in a thread as well.
         procedure doRunAsync(_param: PtrInt);
     public
+        Enabled: boolean;
         procedure runAsync (_listener: TControlListener);
         procedure runThread(_listener: TControlListener);
         procedure runSerial(_listener: TControlListener);
         constructor Create(_freeOnDone: boolean = false);
+
 	end;
 
  var
      // See Initialization section
     myListenerList : TListenerList;
     myRunner: TListenerProcRunner;
+
+procedure clearMyListenerList;
+begin
+    while myListenerList.Count>0 do begin               // Loop of control event listeners
+        while myListenerList.Data[0].Count > 0 do begin // Loop of event listeners
+            myListenerList.Data[0].Data[0].Free;        // TControlListenerProcList
+            myListenerList.Data[0].Delete(0);
+        end;
+        myListenerList.Data[0].Free;
+        myListenerList.Delete(0);
+    end;
+end;
+
+{ TListenerList }
+
+procedure TListenerList.Clear;
+begin
+    while Count> 0 do // Loop of control event listeners
+    begin
+        while Data[0].Count > 0 do begin // Loop of event listeners
+            Data[0].Data[0].Free;        // TControlListenerProcList
+            Data[0].Delete(0);
+        end;
+    	Data[0].Free;
+        Delete(0);
+	end;
+end;
+
+destructor TListenerList.Destroy;
+begin
+    Clear;
+	inherited Destroy;
+end;
+
+
 
 { TListenerProcRunner }
 
@@ -235,6 +283,7 @@ constructor TListenerProcRunner.Create(_freeOnDone: boolean);
 begin
     inherited Create;
     myFreeOnDone := _freeOnDone;
+    Enabled      := true;
 end;
 
 procedure TListenerProcRunner.doRunAsync(_param: PtrInt);
@@ -244,20 +293,40 @@ begin
 end;
 
 procedure TListenerProcRunner.doRun;
+var
+	a: String;
 begin
-    if assigned(listener) then with listener do begin
+    {
+        Because this version has not implemented freeing listeners when the object is freed
+        which then causes the proc address to point to invalid memory
+        catch the exception and then disable this listener.
+    }
 
-        if assigned(meth) then
-	        meth(sender, event, params)
+    if enabled then
+	    if assigned(listener) then with listener do begin
+	        try
+		        if assigned(meth) then
+	                try
+			            meth(sender, event, params)
+					except
+	                    meth := nil;
+					end
 
-	    else if assigned(proc) then
-	        proc(sender, event, params)
+			    else if assigned(proc) then
+			        proc(sender, event, params)
 
-	    else if assigned(notify) then
-	        notify(sender);
+			    else if assigned(notify) then
+			        notify(sender);
 
-	    if freeParams then params.Free;
-    end;
+                if freeParams then params.Free;
+			except
+	            on E:Exception do begin
+                    // procedure is probably pointing to freed memory
+                    // Don't run this listener anymore.
+	                Enabled := false;
+	            end;
+			end;
+	    end;
 
     if myFreeOnDone then Free; // Destroy itself
 end;
@@ -266,10 +335,20 @@ end;
 
 { TControlListenerHelper }
 
+
 function TControlListenerHelper.listeners: TControlListenerCollection;
 var
    _i: integer;
 begin
+    {
+        Listeners is a list of listener objects.
+        Each control has its own Listeners collection.
+        Because type helpers cannot have fields, the list is stored in
+        the implementation global variable as a key map.
+
+        Key is the hex representation of the "self" pointer.
+    }
+
     // _i := myListenerList.IndexOf(Self.Name);
     _i := myListenerList.IndexOf(PtrUint(Self).ToHexString(16));
     if _i >= 0 then
@@ -371,6 +450,21 @@ var
 begin
     for _handler in _handlers do
         addListener(_event, _handler, _sigType,_ignoreduplicates);
+end;
+
+procedure TControlListenerHelper.rmListeners;
+var
+	_i: Integer;
+begin
+    _i := myListenerList.IndexOf(PtrUint(Self).ToHexString(16));
+    if _i > -1 then begin
+	    while myListenerList.Data[_i].Count > 0 do begin // Loop of event listeners
+	        myListenerList.Data[_i].Data[0].Free;        // TControlListenerProcList
+	        myListenerList.Data[_i].Delete(0);
+	    end;
+	    myListenerList.Data[_i].Free;
+	    myListenerList.Delete(_i);
+	end;
 end;
 
 procedure TControlListenerHelper.rmListeners(const _event: string);
@@ -509,18 +603,7 @@ initialization
     myRunner        := TListenerProcRunner.Create; // Don't free on done;
 
 finalization
-
-    while myListenerList.Count>0 do begin               // Loop of control event listeners
-        while myListenerList.Data[0].Count > 0 do begin // Loop of event listeners
-            myListenerList.Data[0].Data[0].Free;        // TControlListenerProcList
-            myListenerList.Data[0].Delete(0);
-        end;
-        myListenerList.Data[0].Free;
-        myListenerList.Delete(0);
-    end;
-
     myListenerList.Free;
     myRunner.Free;
-
 end.
 
