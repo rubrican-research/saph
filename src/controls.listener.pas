@@ -98,6 +98,13 @@ type
                         const _handler: TControlListenerMethod;
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
+        {Array of events -> single listener Method}
+        function addListener(
+                        const _events: TStringArray;
+                        const _handler: TControlListenerMethod;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+        {Array of Listener Methods}
         function addListener(
                         const _event: string;
                         const _handlers: TArrayControlListenerMethod;
@@ -110,6 +117,13 @@ type
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
 
+        {Array of events -> single listener Proc}
+        function addListener(
+                        const _events: TStringArray;
+                        const _handler: TControlListenerProc;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+        {Array of Listener Procs}
         function addListener(
                         const _event: string;
                         const _handlers: TArrayControlListenerProc;
@@ -122,6 +136,14 @@ type
                         const _sigType: TInvokeType = qAsync;
                         const _ignoreduplicates: boolean = true) : TControl; overload;
 
+        {Array of events -> single listener Notify Event}
+        function addListener(
+                        const _events: TStringArray;
+                        const _handler: TNotifyEvent;
+                        const _sigType: TInvokeType = qAsync;
+                        const _ignoreduplicates: boolean = true) : TControl; overload;
+
+        {Array of Notify Events}
         function addListener(
                         const _event: string;
                         const _handlers: array of TNotifyEvent;
@@ -384,10 +406,23 @@ function TControlListenerHelper.addListener(
 var
    _L : TControlListener;
 begin
-    _L := TControlListener.Create;
-    _L.add(_handler, _sigType);
-    listener(_event).Add(_L);
-    Result:= Self;
+    if assigned(_handler) then begin
+        _L := TControlListener.Create;
+        _L.add(_handler, _sigType);
+        listener(_event).Add(_L);
+	end;
+	Result:= Self;
+end;
+
+function TControlListenerHelper.addListener(const _events: TStringArray;
+	const _handler: TControlListenerMethod; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+	_event: String;
+begin
+    for _event in _events do
+            addListener(_event, _handler, _sigType, _ignoreduplicates);
+    Result := Self;
 end;
 
 //Listener Method
@@ -399,6 +434,7 @@ var
 begin
     for _handler in _handlers do
         addListener(_event, _handler, _sigType,_ignoreduplicates);
+    Result := Self;
 end;
 
 //Listener Proc
@@ -411,10 +447,23 @@ function TControlListenerHelper.addListener(
 var
    _L : TControlListener;
 begin
-    _L := TControlListener.Create;
-    _L.add(_handler, _sigType);
-    listener(_event).Add(_L);
-    Result:= Self;
+    if assigned(_handler) then begin
+        _L := TControlListener.Create;
+        _L.add(_handler, _sigType);
+        listener(_event).Add(_L);
+	end;
+	Result:= Self;
+end;
+
+function TControlListenerHelper.addListener(const _events: TStringArray;
+	const _handler: TControlListenerProc; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+	_event: String;
+begin
+    for _event in _events do
+            addListener(_event, _handler, _sigType, _ignoreduplicates);
+    Result := Self;
 end;
 
 //Listener Proc
@@ -426,6 +475,7 @@ var
 begin
     for _handler in _handlers do
         addListener(_event, _handler, _sigType,_ignoreduplicates);
+    Result := Self;
 end;
 
 // TNotifyEvent
@@ -435,10 +485,24 @@ function TControlListenerHelper.addListener(const _event: string;
 var
    _L : TControlListener;
 begin
-    _L := TControlListener.Create;
-    _L.add(_handler, _sigType);
-    listener(_event).Add(_L);
-    Result:= Self;
+    if assigned(_handler) then begin
+        _L := TControlListener.Create;
+        _L.add(_handler, _sigType);
+        listener(_event).Add(_L);
+	end;
+	Result:= Self;
+end;
+
+function TControlListenerHelper.addListener(const _events: TStringArray;
+	const _handler: TNotifyEvent; const _sigType: TInvokeType;
+	const _ignoreduplicates: boolean): TControl;
+var
+	_event: String;
+begin
+    for _event in _events do
+        addListener(_event, _handler, _sigType, _ignoreduplicates);
+
+    Result := Self;
 end;
 
 // TNotifyEvent
@@ -450,6 +514,7 @@ var
 begin
     for _handler in _handlers do
         addListener(_event, _handler, _sigType,_ignoreduplicates);
+    Result := Self;
 end;
 
 procedure TControlListenerHelper.rmListeners;
