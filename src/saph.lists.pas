@@ -121,6 +121,9 @@ type
 
         procedure resetSelection; // Unselects all selected items
         procedure clear(_freeObj: boolean = true);
+
+        // Returns true if this object is present in the list
+        function exists(item: GItem): boolean;
 	end;
 
 
@@ -281,7 +284,7 @@ var
 	_key: String;
 begin
     _key := key(_item);
-    if not assigned(masterList.Find(_key)) then
+    if not exists(_item) then
     begin
         masterList.Add(_key, _item);
         unselList.add(_key, _item);
@@ -294,7 +297,7 @@ var
 	_i: Integer;
 begin
     _key := key(_item);
-    if assigned(masterList.Find(_key)) then
+    if exists(_item) then
     begin
         if selected[_item] then begin
             _i := selectList.FindIndexOf(_key);
@@ -364,6 +367,11 @@ begin
     end;
     masterList.Clear;
     masterList.OwnsObjects := _prevOwnsObj;
+end;
+
+function TSelectList.exists(item: GItem): boolean;
+begin
+    Result:= Assigned(masterList.Find(key(item)));
 end;
 
 end.
