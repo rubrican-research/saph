@@ -64,6 +64,8 @@ type
       params: TJSONObject;
       freeParams: boolean;
       sigType: TInvokeType;
+
+      function getAsString: string;
 	public
       constructor Create;
 	  procedure add(constref _proc: TControlListenerProc; const _sigType: TInvokeType = qAsync); overload;
@@ -72,6 +74,8 @@ type
 	  procedure do_(constref _sender: TControl; const _event: string; constref _params: TJSONObject; const _freeParams: Boolean = true);
     public
       property enabled: boolean read myEnabled write myEnabled;
+      property asString : string read getAsString;
+      function getAsJSON: TJSONObject;
 	end;
 
 	TControlListenerProcList   = specialize TFPGObjectList<TControlListener>;             // List of listeners
@@ -192,6 +196,7 @@ type
 
         // Returns a list of signal names that have been registered
         function signals: TStringArray;
+        function memdump: TJSONArray;
 
         // TODO -- still evaluating if this is a good idea.
         //-------------------------------------------------
@@ -331,7 +336,7 @@ begin
 	                try
 			            meth(sender, event, params)
 					except
-	                    meth := nil;
+	                    //meth := nil;
 					end
 
 			    else if assigned(proc) then
@@ -603,7 +608,78 @@ begin
 	end;
 end;
 
+function TControlListenerHelper.memdump: TJSONArray;
+var
+    _signals: TStringArray;
+	_signal: String;
+	_procList: TControlListenerProcList;
+	_obj: TJSONObject;
+	_i: Integer;
+begin
+    Result:= TJSONArray.Create;
+    _signals := signals;
+
+    for _signal in _signals do begin
+        _procList :=  listener(_signal);
+
+        _obj := TJSONObject.Create([
+            'control', PtrUInt(self).ToHexString(16),
+            'signal', _signal,
+            'listeners', TJSONArray.Create()
+        ]);
+
+        Result.Add(_obj);
+        for _i := 0 to pred(_procList.Count) do begin
+            _obj.arrays['listeners'].add (_proclist.Items[_i].getAsJSON);
+        end;
+	end;
+
+end;
+
 { TControlListener }
+
+function TControlListener.getAsString: string;
+begin
+    with getAsJSON() do begin
+        Result:= AsJSON;
+        Free;
+	end;
+end;
+
+function TControlListener.getAsJSON: TJSONObject;
+var
+    _s: string = '';
+
+    function ObjAddressAsHex(_obj: pointer): string;
+    begin
+        Result:= PtrUInt(_obj).ToHexString(16);
+    end;
+
+begin
+    Result:= TJSONObject.Create;
+    Result.Add('enabled', myEnabled);
+    Result.Add('sender', ObjAddressAsHex(sender));
+    Result.Add('event', event);
+    if assigned(proc) then
+        Result.Add('proc', 'proc: ' + ObjAddressAsHex(@proc))
+    else if assigned(meth) then
+        Result.Add('proc', 'meth: ' + ObjAddressAsHex(@meth))
+    else if assigned(notify) then
+        Result.Add('proc', 'notify: ' + ObjAddressAsHex(@notify))
+    else
+        Result.add('proc', 'nil');
+
+    if assigned(params) then
+        Result.Add('params', params.AsJSON)
+    else
+        Result.Add('params', 'nil');
+
+    Result.Add('freeParams', freeParams);
+
+    Str(sigType, _s);
+    Result.Add('sigType', _s);
+
+end;
 
 constructor TControlListener.Create;
 begin
