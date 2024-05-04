@@ -73,15 +73,47 @@ type
       procedure add(constref _notify: TNotifyEvent; const _sigType: TInvokeType = qAsync); overload;
 	  procedure do_(constref _sender: TControl; const _event: string; constref _params: TJSONObject; const _freeParams: Boolean = true);
     public
+      beforeDo: function : integer of object;
+      afterDo : function : integer of object;
       property enabled: boolean read myEnabled write myEnabled;
       property asString : string read getAsString;
+
       function getAsJSON: TJSONObject;
 	end;
 
-	TControlListenerProcList   = specialize TFPGObjectList<TControlListener>;             // List of listeners
-    TControlListenerCollection = specialize TFPGMap<string, TControlListenerProcList>;    // Map of Event and List of listener procedures
+	TControlListenerProcListBase   = specialize TFPGObjectList<TControlListener>;             // List of listeners
 
-    TListenerListBase           = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control Name and List of Event Listeners
+	{ TControlListenerProcList }
+
+    TControlListenerProcList       = class(TControlListenerProcListBase)
+    public
+        beforeDo: function : integer of object;
+        afterDo : function : integer of object;
+
+        function Add(const Item: TControlListener): Integer; inline;
+	end;
+
+    TControlListenerCollectionBase = specialize TFPGMap<string, TControlListenerProcList>;// Map of Event and List of listener procedures
+
+
+
+	{ TControlListenerCollection }
+
+    TControlListenerCollection = class(TControlListenerCollectionBase)
+    private
+        myActiveCallCount : integer; // count
+        myCriticalSection: TRTLCriticalSection;
+    public
+        constructor Create;
+        destructor Destroy; override;
+        function Add(const AKey: string; const AData: TControlListenerProcList): Integer; inline;
+
+        function activeCallCount: integer;
+        function incActiveCall: integer; // Returns new count;
+        function decActiveCall: integer; // Returns new count;
+	end;
+
+    TListenerListBase          = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control Name and List of Event Listeners
 
 	{ TListenerList }
 
@@ -212,16 +244,21 @@ type
         //function await(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64;
         //function await(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
 
+        function activeSignalCount: integer; // Returns the number of signals active for this particular object.
+
+        function objectAlive: boolean;
+
 	end;
 
     TListenerSignalMode = (lmSingleton, lmDynamic);
 
-
+    function isObjectAlive(_obj: TObject) : boolean;
 
 
 var
-    ListenerSignalMode: TListenerSignalMode = lmSingleton;
-    //ListenerSignalMode: TListenerSignalMode = lmDynamic;
+    // ListenerSignalMode: TListenerSignalMode = lmSingleton;
+    ListenerSignalMode: TListenerSignalMode = lmDynamic;
+
 implementation
 
 type
@@ -233,12 +270,13 @@ type
     // See doRun();
     TListenerProcRunner = class
     private
-
         myFreeOnDone: boolean;
         listener: TControlListener;
-        procedure doRun;    // Can be called in a thread as well.
-        procedure doRunAsync(_param: PtrInt);
+        procedure doRun;                        // Can be called in a thread as well.
+        procedure doRunAsync(_param: PtrInt);   // For Application.QueueAsyncCall()
     public
+        beforeDo: function : integer of object;
+        afterDo : function : integer of object;
         Enabled: boolean;
         procedure runAsync (_listener: TControlListener);
         procedure runThread(_listener: TControlListener);
@@ -262,6 +300,69 @@ begin
         myListenerList.Data[0].Free;
         myListenerList.Delete(0);
     end;
+end;
+
+function isObjectAlive(_obj: TObject): boolean;
+begin
+    try
+        if _obj is TObject then ;
+        Result := true;
+	except
+        Result := false;
+	end;
+end;
+
+function TControlListenerProcList.Add(const Item: TControlListener): Integer;
+begin
+    inherited add(Item);
+    Item.beforeDo := Self.beforeDo;
+    Item.afterDo  := Self.afterDo;
+end;
+
+{ TControlListenerCollection }
+
+constructor TControlListenerCollection.Create;
+begin
+    inherited Create;
+    InitCriticalSection(myCriticalSection);
+    myActiveCallCount:=0;
+end;
+
+destructor TControlListenerCollection.Destroy;
+begin
+    DoneCriticalSection(myCriticalSection);
+	inherited Destroy;
+end;
+
+function TControlListenerCollection.Add(const AKey: string;
+	const AData: TControlListenerProcList): Integer;
+begin
+    inherited add(Akey, AData);
+    AData.beforeDo := @Self.incActiveCall;
+    AData.afterDo  := @Self.decActiveCall;
+end;
+
+function TControlListenerCollection.activeCallCount: integer;
+begin
+    Result:= myActiveCallCount;
+end;
+
+function TControlListenerCollection.incActiveCall: integer;
+begin
+    EnterCriticalSection(myCriticalSection);
+    inc(myActiveCallCount);
+    LeaveCriticalSection(myCriticalSection);
+    Result := myActiveCallCount;
+end;
+
+function TControlListenerCollection.decActiveCall: integer;
+begin
+    if myActiveCallCount > 0 then begin
+        EnterCriticalSection(myCriticalSection);
+        dec(myActiveCallCount);
+        LeaveCriticalSection(myCriticalSection);
+	end;
+	Result := myActiveCallCount;
 end;
 
 { TListenerList }
@@ -331,28 +432,39 @@ begin
 
     if enabled then
 	    if assigned(listener) then with listener do begin
+            if isObjectAlive(listener) then
 	        try
+                if assigned(beforeDo) then beforeDo();
 		        if assigned(meth) then
 	                try
 			            meth(sender, event, params)
 					except
-	                    //meth := nil;
+	                    ; //meth := nil;
 					end
 
 			    else if assigned(proc) then
-			        proc(sender, event, params)
+                    try
+			            proc(sender, event, params);
+					except
+                        ;
+					end
 
 			    else if assigned(notify) then
-			        notify(sender);
-
+                    try
+			            notify(sender);
+					except
+                        ;
+					end;
                 if freeParams then params.Free;
+                if assigned(AfterDo) then AfterDo();
 			except
 	            on E:Exception do begin
                     // procedure is probably pointing to freed memory
                     // Don't run this listener anymore.
-	                Enabled := false;
+	                // Enabled := false;
 	            end;
 			end;
+
 	    end;
 
     if myFreeOnDone then Free; // Destroy itself
@@ -587,6 +699,9 @@ var
    _l : TControlListenerProcList;
    _tmpParams: TJSONObject = nil;
 begin
+
+    if not objectAlive then exit;
+
     _l := listener(_event);
     for i := 0 to pred(_l.Count) do begin
         if assigned(_params) then begin
@@ -634,6 +749,16 @@ begin
         end;
 	end;
 
+end;
+
+function TControlListenerHelper.activeSignalCount: integer;
+begin
+    Result := listeners.activeCallCount;
+end;
+
+function TControlListenerHelper.objectAlive: boolean;
+begin
+    Result := isObjectAlive(self);
 end;
 
 { TControlListener }
@@ -732,11 +857,16 @@ begin
         lmDynamic:   _runner     := TListenerProcRunner.Create(true); // Free on done.
     end;
 
+    _runner.beforeDo := Self.beforeDo;
+    _runner.afterDo  := Self.afterDo;
+
     case sigType of
         qAsync:     _runner.runAsync(self);
         qThreads:   _runner.runThread(self);
         qSerial:    _runner.runSerial(self);
     end;
+    if assigned(AfterDo) then AfterDo();
+
 end;
 
 initialization
