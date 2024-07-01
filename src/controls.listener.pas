@@ -95,8 +95,6 @@ type
 
     TControlListenerCollectionBase = specialize TFPGMap<string, TControlListenerProcList>;// Map of Event and List of listener procedures
 
-
-
 	{ TControlListenerCollection }
 
     TControlListenerCollection = class(TControlListenerCollectionBase)
@@ -113,7 +111,7 @@ type
         function decActiveCall: integer; // Returns new count;
 	end;
 
-    TListenerListBase          = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control Name and List of Event Listeners
+    TListenerListBase          = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control ID and List of Event Listeners
 
 	{ TListenerList }
 
@@ -226,6 +224,7 @@ type
         // Invokes listeners
         procedure signal(const _event: string; constref _params: TJSONObject=nil; _freeParams: Boolean = true);
 
+
         // Returns a list of signal names that have been registered
         function signals: TStringArray;
         function memdump: TJSONArray;
@@ -245,13 +244,13 @@ type
         //function await(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
 
         function activeSignalCount: integer; // Returns the number of signals active for this particular object.
-
         function objectAlive: boolean;
 
 	end;
 
     TListenerSignalMode = (lmSingleton, lmDynamic);
 
+    // Hack to check if an object address points to a valid object.
     function isObjectAlive(_obj: TObject) : boolean;
 
 
@@ -305,8 +304,8 @@ end;
 function isObjectAlive(_obj: TObject): boolean;
 begin
     try
-        if _obj is TObject then ;
-        Result := true;
+        if _obj is TObject then
+            Result := true;
 	except
         Result := false;
 	end;
@@ -431,41 +430,42 @@ begin
     }
 
     if enabled then
-	    if assigned(listener) then with listener do begin
+	    if assigned(listener) then
             if isObjectAlive(listener) then
-	        try
-                if assigned(beforeDo) then beforeDo();
-		        if assigned(meth) then
-	                try
-			            meth(sender, event, params)
-					except
-	                    ; //meth := nil;
-					end
+                with listener do begin
+			        try
+		                if assigned(beforeDo) then beforeDo();
+				        if assigned(meth) then
+			                try
+					            meth(sender, event, params)
+							except
+			                    ; //meth := nil;
+							end
 
-			    else if assigned(proc) then
-                    try
-			            proc(sender, event, params);
-					except
-                        ;
-					end
+					    else if assigned(proc) then
+		                    try
+					            proc(sender, event, params);
+							except
+		                        ;
+							end
 
-			    else if assigned(notify) then
-                    try
-			            notify(sender);
+					    else if assigned(notify) then
+		                    try
+					            notify(sender);
+							except
+		                        ;
+							end;
+		                if freeParams then params.Free;
+		                if assigned(AfterDo) then AfterDo();
 					except
-                        ;
+			            on E:Exception do begin
+		                    // procedure is probably pointing to freed memory
+		                    // Don't run this listener anymore.
+			                // Enabled := false;
+			            end;
 					end;
-                if freeParams then params.Free;
-                if assigned(AfterDo) then AfterDo();
-			except
-	            on E:Exception do begin
-                    // procedure is probably pointing to freed memory
-                    // Don't run this listener anymore.
-	                // Enabled := false;
-	            end;
-			end;
 
-	    end;
+	            end;
 
     if myFreeOnDone then Free; // Destroy itself
 end;
@@ -638,6 +638,11 @@ procedure TControlListenerHelper.rmListeners;
 var
 	_i: Integer;
 begin
+    {WE ALSO NEED A WAY
+        To remove proc addresses from other objects whose signals we are listening to
+        when we are being destroyed.
+        Need more indexes.
+    }
     _i := myListenerList.IndexOf(PtrUint(Self).ToHexString(16));
     if _i > -1 then begin
 	    while myListenerList.Data[_i].Count > 0 do begin // Loop of event listeners
@@ -700,7 +705,7 @@ var
    _tmpParams: TJSONObject = nil;
 begin
 
-    if not objectAlive then exit;
+    if not objectAlive then exit;  // Check if this object is still in scope.
 
     _l := listener(_event);
     for i := 0 to pred(_l.Count) do begin

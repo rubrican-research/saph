@@ -4,7 +4,7 @@
     <PathDelim Value="\"/>
     <Version Value="12"/>
     <BuildModes Active="Default"/>
-    <Units Count="35">
+    <Units Count="36">
       <Unit0>
         <Filename Value="sellist.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -31,7 +31,7 @@
         <ComponentName Value="FRStudent"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="67"/>
         <CursorPos X="5" Y="69"/>
         <UsageCount Value="47"/>
@@ -57,7 +57,7 @@
         <ComponentName Value="FRSubject"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="52"/>
         <CursorPos X="35" Y="91"/>
         <UsageCount Value="47"/>
@@ -70,7 +70,7 @@
         <ComponentName Value="FRStudSub"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="80"/>
         <CursorPos X="19" Y="83"/>
         <UsageCount Value="47"/>
@@ -279,13 +279,25 @@
       </Unit33>
       <Unit34>
         <Filename Value="..\..\..\..\sugar\src\mod\sugar.logger.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="312"/>
+        <TopLine Value="305"/>
         <CursorPos X="18" Y="348"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit34>
+      <Unit35>
+        <Filename Value="..\..\..\..\sugar\src\mod\sugar.fmkvdisplay.pas"/>
+        <ComponentName Value="FMKVDisplay"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Frame"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="43"/>
+        <CursorPos X="29" Y="37"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit35>
     </Units>
     <JumpHistory Count="24" HistoryIndex="23">
       <Position1>
