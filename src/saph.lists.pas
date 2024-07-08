@@ -260,15 +260,8 @@ constructor TSelectList.Create(_OwnObjects: boolean);
 begin
     inherited Create;
     masterList := TFPHashObjectList.Create(_OwnObjects);
-
     selectList := TFPHashObjectList.Create(False);
     unselList  := TFPHashObjectList.Create(False);
-
-    //selectList := TAvgLvlTree.CreateObjectCompare(@itemSort);
-    //selectList.OwnsObjects :=False;
-    //
-    //unselList  := TAvgLvlTree.CreateObjectCompare(@itemSort);
-    //unselList.OwnsObjects := False
 end;
 
 destructor TSelectList.Destroy;

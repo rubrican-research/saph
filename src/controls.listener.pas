@@ -109,6 +109,7 @@ type
         function activeCallCount: integer;
         function incActiveCall: integer; // Returns new count;
         function decActiveCall: integer; // Returns new count;
+        procedure wrapUp;
 	end;
 
     TListenerListBase          = specialize TFPGMap<string, TControlListenerCollection>;  // Map of Control ID and List of Event Listeners
@@ -329,6 +330,7 @@ end;
 
 destructor TControlListenerCollection.Destroy;
 begin
+    wrapUp;
     DoneCriticalSection(myCriticalSection);
 	inherited Destroy;
 end;
@@ -362,6 +364,14 @@ begin
         LeaveCriticalSection(myCriticalSection);
 	end;
 	Result := myActiveCallCount;
+end;
+
+procedure TControlListenerCollection.wrapUp;
+begin
+    while activeCallCount > 0 do begin
+        sleep(10);
+        Application.ProcessMessages;
+	end;
 end;
 
 { TListenerList }
