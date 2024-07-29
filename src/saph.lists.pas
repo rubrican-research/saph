@@ -124,6 +124,7 @@ type
 
         // Returns true if this object is present in the list
         function exists(item: GItem): boolean;
+        function indexOf(item: GItem): integer; // Returns the index of this item from the master list
 	end;
 
 
@@ -365,6 +366,11 @@ end;
 function TSelectList.exists(item: GItem): boolean;
 begin
     Result:= Assigned(masterList.Find(key(item)));
+end;
+
+function TSelectList.indexOf(item: GItem): integer;
+begin
+    Result := masterList.FindIndexOf(key(item));
 end;
 
 end.
