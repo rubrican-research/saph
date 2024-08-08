@@ -290,6 +290,12 @@ type
     myListenerList : TListenerList;
     myRunner: TListenerProcRunner;
 
+
+ function ObjAddressAsHex(_obj: pointer): string;
+ begin
+    Result:= PtrUInt(_obj).ToHexString(16);
+ end;
+
 procedure clearMyListenerList;
 begin
     while myListenerList.Count>0 do begin               // Loop of control event listeners
@@ -499,12 +505,12 @@ begin
     }
 
     // _i := myListenerList.IndexOf(Self.Name);
-    _i := myListenerList.IndexOf(PtrUint(Self).ToHexString(16));
+    _i := myListenerList.IndexOf(ObjAddressAsHex(Self));
     if _i >= 0 then
         Result:= myListenerList.Data[_i]
     else begin
         Result:= TControlListenerCollection.Create;
-        myListenerList.Add(PtrUint(Self).ToHexString(16), Result);
+        myListenerList.Add(ObjAddressAsHex(Self), Result);
 	end;
 end;
 
@@ -653,7 +659,7 @@ begin
         when we are being destroyed.
         Need more indexes.
     }
-    _i := myListenerList.IndexOf(PtrUint(Self).ToHexString(16));
+    _i := myListenerList.IndexOf(ObjAddressAsHex(Self));
     if _i > -1 then begin
 	    while myListenerList.Data[_i].Count > 0 do begin // Loop of event listeners
 	        myListenerList.Data[_i].Data[0].Free;        // TControlListenerProcList
@@ -753,7 +759,7 @@ begin
         _procList :=  listener(_signal);
 
         _obj := TJSONObject.Create([
-            'control', PtrUInt(self).ToHexString(16),
+            'control', ObjAddressAsHex(Self),
             'signal', _signal,
             'listeners', TJSONArray.Create()
         ]);
@@ -789,12 +795,6 @@ end;
 function TControlListener.getAsJSON: TJSONObject;
 var
     _s: string = '';
-
-    function ObjAddressAsHex(_obj: pointer): string;
-    begin
-        Result:= PtrUInt(_obj).ToHexString(16);
-    end;
-
 begin
     Result:= TJSONObject.Create;
     Result.Add('enabled', myEnabled);
