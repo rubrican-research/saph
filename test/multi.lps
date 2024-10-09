@@ -8,11 +8,10 @@
       <Unit>
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="-1"/>
-        <TopLine Value="-1"/>
-        <CursorPos X="-1" Y="-1"/>
-        <UsageCount Value="60"/>
+        <EditorIndex Value="3"/>
+        <CursorPos X="22" Y="13"/>
+        <UsageCount Value="62"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="main_multi.pas"/>
@@ -20,18 +19,19 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos X="15" Y="34"/>
-        <UsageCount Value="60"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="29"/>
+        <CursorPos X="15" Y="50"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
-        <EditorIndex Value="1"/>
-        <CursorPos Y="54"/>
-        <UsageCount Value="30"/>
+        <TopLine Value="125"/>
+        <CursorPos X="56" Y="145"/>
+        <UsageCount Value="31"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -48,118 +48,166 @@
         <CursorPos Y="2089"/>
         <UsageCount Value="6"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <UnitName Value="Obj.Listener"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="47"/>
+        <CursorPos Y="49"/>
+        <UsageCount Value="11"/>
+        <Bookmarks Count="1">
+          <Item0 X="5" Y="792" ID="1"/>
+        </Bookmarks>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\lcl\controls.pp"/>
+        <UnitName Value="Controls"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1176"/>
+        <CursorPos X="3" Y="1196"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="main_multi.lfm"/>
+        <EditorIndex Value="-1"/>
+        <CursorPos X="13" Y="2"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="1552"/>
+        <CursorPos Y="1572"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
-    <JumpHistory HistoryIndex="26">
+    <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="65" Column="12" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="319" Column="6" TopLine="286"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="25" Column="93"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="457" Column="30" TopLine="433"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="52" Column="25" TopLine="4"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="459" Column="36" TopLine="433"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="57" Column="17" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="445" Column="42" TopLine="433"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="58" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="416" Column="6" TopLine="397"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="58" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="131" Column="20" TopLine="114"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="58" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="555" Column="5" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="42" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="131" Column="18" TopLine="113"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="61" Column="5" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="558" Column="34" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="236" Column="9" TopLine="205"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="561" Column="16" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="230" Column="28" TopLine="205"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="129" Column="32" TopLine="109"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="238" Column="22" TopLine="205"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="538" Column="31" TopLine="533"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="285" Column="5" TopLine="257"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="128" Column="29" TopLine="108"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="97" Column="21" TopLine="68"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="129" Column="28" TopLine="108"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="58" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="133" Column="31" TopLine="124"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="231" Column="15" TopLine="195"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="565" Column="2" TopLine="548"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="236" TopLine="195"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="128" Column="19" TopLine="109"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="58" TopLine="16"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="529" Column="14" TopLine="502"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="237" Column="38" TopLine="198"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="292" Column="29" TopLine="272"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="186" Column="5" TopLine="162"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="293" Column="21" TopLine="272"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="71" Column="48" TopLine="13"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="292" Column="30" TopLine="272"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="227" TopLine="213"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="896" Column="88" TopLine="863"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="69" Column="18" TopLine="26"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="286" Column="21" TopLine="266"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="251" Column="17" TopLine="245"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="434" Column="5" TopLine="432"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="43" Column="74" TopLine="20"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="286" Column="21" TopLine="266"/>
       </Position>
       <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="23" Column="106" TopLine="11"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="267" Column="6" TopLine="228"/>
       </Position>
       <Position>
-        <Filename Value="..\src\controls.listener.pas"/>
-        <Caret Line="251" Column="5" TopLine="245"/>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="58" Column="37" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="57" Column="23" TopLine="37"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="247" Column="5" TopLine="211"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="58" Column="31" TopLine="38"/>
       </Position>
     </JumpHistory>
     <RunParams>
