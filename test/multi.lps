@@ -8,9 +8,9 @@
       <Unit>
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="22" Y="13"/>
-        <UsageCount Value="90"/>
+        <CursorPos Y="25"/>
+        <UsageCount Value="102"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="main_multi.pas"/>
@@ -20,18 +20,19 @@
         <ResourceBaseClass Value="Form"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="228"/>
-        <CursorPos X="6" Y="260"/>
-        <UsageCount Value="90"/>
+        <TopLine Value="272"/>
+        <CursorPos X="9" Y="294"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
-        <TopLine Value="125"/>
-        <CursorPos X="56" Y="145"/>
-        <UsageCount Value="45"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="547"/>
+        <CursorPos Y="753"/>
+        <UsageCount Value="51"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -39,24 +40,24 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1054"/>
         <CursorPos Y="1085"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.0.0\lcl\interfaces\win32\win32callback.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="2058"/>
         <CursorPos Y="2089"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\obj.listener.pas"/>
         <UnitName Value="Obj.Listener"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="427"/>
-        <CursorPos Y="373"/>
-        <UsageCount Value="25"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="573"/>
+        <CursorPos Y="593"/>
+        <UsageCount Value="31"/>
         <Bookmarks Count="1">
-          <Item0 X="26" Y="834" ID="1"/>
+          <Item0 X="5" Y="326" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
       </Unit>
@@ -64,95 +65,87 @@
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="1176"/>
-        <CursorPos X="3" Y="1196"/>
-        <UsageCount Value="8"/>
+        <TopLine Value="1801"/>
+        <CursorPos X="30" Y="1818"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="main_multi.lfm"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="13" Y="2"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="1724"/>
-        <CursorPos X="25" Y="1742"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="181"/>
+        <CursorPos X="14" Y="200"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\types.pp"/>
         <UnitName Value="Types"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="147"/>
         <CursorPos X="27" Y="167"/>
-        <UsageCount Value="16"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="21"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\objpash.inc"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="181"/>
         <CursorPos X="8" Y="201"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\objpas.inc"/>
-        <EditorIndex Value="16"/>
-        <TopLine Value="323"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="322"/>
         <CursorPos X="9" Y="325"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.utils.pas"/>
-        <EditorIndex Value="14"/>
-        <TopLine Value="1287"/>
-        <CursorPos X="5" Y="1301"/>
-        <UsageCount Value="24"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="1286"/>
+        <CursorPos Y="1296"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\application.inc"/>
-        <EditorIndex Value="13"/>
-        <TopLine Value="1067"/>
-        <CursorPos Y="1085"/>
-        <UsageCount Value="24"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="406"/>
+        <CursorPos X="43" Y="417"/>
+        <UsageCount Value="29"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32callback.inc"/>
-        <EditorIndex Value="12"/>
-        <TopLine Value="2070"/>
-        <CursorPos Y="2089"/>
-        <UsageCount Value="23"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="2031"/>
+        <CursorPos Y="2051"/>
+        <UsageCount Value="28"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\heaph.inc"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="67"/>
         <CursorPos X="11" Y="93"/>
-        <UsageCount Value="23"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="28"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\heap.inc"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="315"/>
         <CursorPos X="3" Y="317"/>
-        <UsageCount Value="23"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="28"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\win\sysosh.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="50" Y="30"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\laz_conf\3.4\laz_indentation.pas"/>
@@ -160,183 +153,247 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="56"/>
         <CursorPos Y="93"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="99"/>
-        <CursorPos X="3" Y="118"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="1672"/>
+        <CursorPos X="3" Y="1692"/>
+        <UsageCount Value="25"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.logger.pas"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="57"/>
-        <CursorPos Y="76"/>
-        <UsageCount Value="20"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="249"/>
+        <CursorPos X="23" Y="285"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\buttoncontrol.inc"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="36"/>
         <CursorPos Y="55"/>
-        <UsageCount Value="14"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\buttons.inc"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="149"/>
         <CursorPos Y="169"/>
-        <UsageCount Value="14"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\control.inc"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="2956"/>
-        <CursorPos Y="2974"/>
-        <UsageCount Value="14"/>
-        <Loaded Value="True"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="5032"/>
+        <CursorPos Y="5054"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\thread.inc"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="220"/>
         <CursorPos X="3" Y="223"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="17"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\threadh.inc"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="145"/>
         <CursorPos X="24" Y="168"/>
+        <UsageCount Value="17"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\win\sysutils.pp"/>
+        <UnitName Value="SysUtils"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="838"/>
+        <CursorPos X="31" Y="838"/>
+        <UsageCount Value="14"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\classes\classes.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="937"/>
+        <CursorPos X="3" Y="940"/>
+        <UsageCount Value="13"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\packages\fcl-json\src\fpjson.pp"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="54"/>
+        <CursorPos X="19" Y="77"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\components\lazutils\lazmethodlist.pas"/>
+        <UnitName Value="LazMethodList"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="200"/>
+        <CursorPos X="16" Y="209"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32wsforms.pp"/>
+        <UnitName Value="Win32WSForms"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="391"/>
+        <CursorPos Y="412"/>
+        <UsageCount Value="12"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32object.inc"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="406"/>
+        <CursorPos X="23" Y="428"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\sugar\src\mod\sugar.ddlmodel.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="217"/>
+        <CursorPos Y="244"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\interfaces.pp"/>
+        <UnitName Value="Interfaces"/>
+        <EditorIndex Value="-1"/>
+        <UsageCount Value="10"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\..\sugar\src\mod\webui\bulma.pas"/>
+        <EditorIndex Value="-1"/>
+        <TopLine Value="179"/>
+        <CursorPos X="38" Y="198"/>
+        <UsageCount Value="10"/>
       </Unit>
     </Units>
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
-    <JumpHistory HistoryIndex="28">
+    <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="131" Column="29" TopLine="110"/>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="290" TopLine="270"/>
       </Position>
       <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="514" Column="43" TopLine="503"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="1119" Column="26" TopLine="1084"/>
+        <Filename Value="..\..\sugar\src\mod\sugar.logger.pas"/>
+        <Caret Line="285" TopLine="233"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="165" Column="9" TopLine="161"/>
+        <Caret Line="290" TopLine="270"/>
+      </Position>
+      <Position>
+        <Filename Value="multi.lpr"/>
+        <Caret Line="12" Column="51"/>
+      </Position>
+      <Position>
+        <Filename Value="multi.lpr"/>
+        <Caret Line="25"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="142" TopLine="125"/>
+        <Caret Line="290" Column="37" TopLine="270"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="58" Column="19" TopLine="37"/>
+        <Caret Line="297" Column="37" TopLine="277"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="97" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
-        <Caret Line="1742" Column="25" TopLine="1724"/>
+        <Caret Line="211" Column="24" TopLine="209"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="109" Column="16" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="124" Column="5" TopLine="94"/>
+        <Caret Line="116" Column="79" TopLine="104"/>
       </Position>
       <Position>
         <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="792" Column="5" TopLine="788"/>
+        <Caret Line="550" Column="47" TopLine="533"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="183" TopLine="159"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="296" TopLine="278"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="172" Column="60" TopLine="155"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="295" Column="5" TopLine="278"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="74" Column="28" TopLine="94"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="175" Column="27" TopLine="157"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="210" Column="26" TopLine="196"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="308" Column="67" TopLine="287"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="304" Column="6" TopLine="287"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="310" Column="5" TopLine="287"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="308" Column="86" TopLine="287"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="100" TopLine="82"/>
       </Position>
       <Position>
         <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="800" Column="23" TopLine="788"/>
+        <Caret Line="593" TopLine="573"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="109" Column="16" TopLine="94"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="343" Column="52" TopLine="325"/>
+        <Caret Line="252" Column="5" TopLine="231"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="181" Column="25" TopLine="161"/>
+        <Caret Line="297" Column="10" TopLine="272"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="179" Column="6" TopLine="161"/>
+        <Caret Line="198" Column="5" TopLine="194"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="245" TopLine="219"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="584" TopLine="565"/>
+        <Caret Line="74" Column="19" TopLine="42"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="193" Column="36" TopLine="168"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="368" Column="32" TopLine="348"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="489" Column="42" TopLine="455"/>
+        <Caret Line="258" Column="17" TopLine="254"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-        <Caret Line="193" Column="36" TopLine="168"/>
+        <Caret Line="209" Column="5" TopLine="194"/>
       </Position>
       <Position>
         <Filename Value="main_multi.pas"/>
-      </Position>
-      <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="105" Column="33" TopLine="69"/>
-      </Position>
-      <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="100" TopLine="69"/>
-      </Position>
-      <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="255" Column="58" TopLine="224"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="367" TopLine="347"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\obj.listener.pas"/>
-        <Caret Line="824" TopLine="804"/>
-      </Position>
-      <Position>
-        <Filename Value="main_multi.pas"/>
-        <Caret Line="260" Column="40" TopLine="228"/>
+        <Caret Line="304" TopLine="272"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -344,4 +401,11 @@
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
+  <Debugging>
+    <Watches>
+      <Item>
+        <Expression Value="LeaveCriticalSection"/>
+      </Item>
+    </Watches>
+  </Debugging>
 </CONFIG>

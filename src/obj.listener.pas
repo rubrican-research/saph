@@ -39,10 +39,8 @@ type
     //      _event:     The event. Text.   You can implement a case structure to handle multiple events.
     //      _params:    Parameters as a JSONObject. DO NOT free the object inside your listener procedure!!
     //                  The runner with free it after the procedure is called.
-    TListenerProc = procedure(const _sender: TObject;
-        const _event: string; constref _params: TJSONObject);
-    TListenerMethod = procedure(const _sender: TObject;
-        const _event: string; constref _params: TJSONObject) of object;
+    TListenerProc = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject);
+    TListenerMethod = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject) of object;
 
     // Syntax sugar. To assign multiple listeners in one go.
     TArrayListenerProc = array of TListenerProc;
@@ -111,17 +109,10 @@ type
     { TEventListenerMap }
 
     TEventListenerMap = class(specialize TFPGMapObject<string, TListenerProcList>)
-    private
-        myActiveCallCount: integer; // count
-        myCriticalSection: TRTLCriticalSection;
     public
         constructor Create(AFreeObjects: Boolean = true);
         destructor Destroy; override;
         function Add(const AKey: string; const AData: TListenerProcList): integer; inline;
-        function activeCallCount: integer;
-        function incActiveCall: integer; // Returns new count;
-        function decActiveCall: integer; // Returns new count;
-        procedure wrapUp;
     end;
 
 
@@ -281,9 +272,11 @@ type
 // Hack to check if an object address points to a valid object.
 function isObjectAlive(constref _obj: TObject): boolean;
 
+// calls Application.ProcessMessages if _hold milliseconds have passed since last "breath"
+procedure Breathe(_hold : Qword = 0);
 
 var
-    // ListenerSignalMode: TListenerSignalMode = lmSingleton;
+    //ListenerSignalMode: TListenerSignalMode = lmSingleton;
     ListenerSignalMode: TListenerSignalMode = lmDynamic;
 
 implementation
@@ -309,9 +302,9 @@ type
         beforeDo: function: integer of object;
         afterDo: function: integer of object;
         Enabled: boolean;
-        procedure runAsync(_listener: TListener);
-        procedure runThread(_listener: TListener);
-        procedure runSerial(_listener: TListener);
+        procedure runAsync(constref  _listener: TListener);
+        procedure runThread(constref _listener: TListener);
+        procedure runSerial(constref _listener: TListener);
         constructor Create(_freeOnDone: boolean = False);
         destructor Destroy; override;
 
@@ -325,6 +318,44 @@ var
     objectListeners: TObjectEventList;
     procRunner: TProcRunner;
     subscriberObjectMap: TSubscriberObjectMap;
+
+{================================================================================}
+{                       MANAGE SIGNAL PENDING                                    }
+{================================================================================}
+    activeSignals: integer;         // count of active signals
+    signalCountCS: TRTLCriticalSection;
+
+    function incSignalCount: integer;
+    begin
+        EnterCriticalSection(signalCountCS);
+        InterlockedIncrement(activeSignals);
+        LeaveCriticalSection(signalCountCS);
+        Result := activeSignals;
+    end;
+
+    function decSignalCount: integer;
+    begin
+        if activeSignals > 0 then
+        begin
+            EnterCriticalSection(signalCountCS);
+            InterlockedDecrement(activeSignals);
+            LeaveCriticalSection(signalCountCS);
+        end;
+        Result := activeSignals;
+    end;
+
+    procedure wrapUpSignals;
+    begin
+        log('wrapUpSignals()--->');
+        while activeSignals > 0 do
+        begin
+            sleep(10);
+            Application.ProcessMessages;
+		end;
+        log('<----- wrapUpSignals() done.');
+	end;
+
+{================================================================================}
 
 
 function pointerAsHex(_obj: pointer): string;
@@ -392,13 +423,27 @@ begin
 	_subscribers.add(pointerAsHex(_signaler));
 end;
 
-
-
 procedure clearGlobalListenerToObjectMap;
 begin
     while subscriberObjectMap.Count > 0 do
         subscriberObjectMap.Delete(0);
 end;
+
+
+
+{================ BREATHE =====================================}
+var
+    lastBreath: QWord = 0;
+procedure Breathe(_hold : Qword = 0);
+begin
+    log('Breath : %s', [ IntToStr(getTickCount64() - lastBreath)]);
+    if (getTickCount64() - lastBreath) >= _hold then begin
+        Application.ProcessMessages;
+        lastBreath := getTickCount64();
+        log('...... whew() .......');
+	end;
+end;
+//============================================================
 
 function TListenerProcList.Add(const Item: TListener): integer;
 begin
@@ -423,19 +468,16 @@ end;
 constructor TEventListenerMap.Create(AFreeObjects: Boolean);
 begin
     inherited;
-    InitCriticalSection(myCriticalSection);
-    myActiveCallCount := 0;
 end;
 
 destructor TEventListenerMap.Destroy;
 var
 	i: Integer;
 begin
-    wrapUp;
-    DoneCriticalSection(myCriticalSection);
-    log('TEventListenerMap.Destroy::');
+    log('TEventListenerMap.Destroy start::');
     for i := 0 to pred(count) do
         log ('  -> key=%s', [Keys[i]]);
+    log('TEventListenerMap.Destroy done::');
     inherited Destroy;
 end;
 
@@ -443,41 +485,8 @@ function TEventListenerMap.Add(const AKey: string;
     const AData: TListenerProcList): integer;
 begin
     Result := inherited add(Akey, AData);
-    AData.beforeDo := @Self.incActiveCall;
-    AData.afterDo  := @Self.decActiveCall;
-end;
-
-function TEventListenerMap.activeCallCount: integer;
-begin
-    Result := myActiveCallCount;
-end;
-
-function TEventListenerMap.incActiveCall: integer;
-begin
-    EnterCriticalSection(myCriticalSection);
-    Inc(myActiveCallCount);
-    LeaveCriticalSection(myCriticalSection);
-    Result := myActiveCallCount;
-end;
-
-function TEventListenerMap.decActiveCall: integer;
-begin
-    if myActiveCallCount > 0 then
-    begin
-        EnterCriticalSection(myCriticalSection);
-        Dec(myActiveCallCount);
-        LeaveCriticalSection(myCriticalSection);
-    end;
-    Result := myActiveCallCount;
-end;
-
-procedure TEventListenerMap.wrapUp;
-begin
-    while activeCallCount > 0 do
-    begin
-        sleep(20);
-        Application.ProcessMessages;
-    end;
+    AData.beforeDo := nil;
+    AData.afterDo  := nil;
 end;
 
 { TObjectEventList }
@@ -489,25 +498,24 @@ begin
     log ('----------------------------');
 end;
 
-
-
 { TListenerProcRunner }
 
-procedure TProcRunner.runAsync(_listener: TListener);
+procedure TProcRunner.runAsync(constref _listener: TListener);
 begin
-    //log3('TProcRunner.runAsync:: -->');
+    //log('TProcRunner.runAsync:: -->');
     myListener := _listener;
     Application.QueueAsyncCall(@doRunAsync, 0);
+    breathe;
 end;
 
-procedure TProcRunner.runThread(_listener: TListener);
+procedure TProcRunner.runThread(constref _listener: TListener);
 begin
     //log3('TProcRunner.runThread:: -->');
     myListener := _listener;
-    TThread.ExecuteInThread(@doRun);
+    TThread.ExecuteInThread(@Self.doRun);
 end;
 
-procedure TProcRunner.runSerial(_listener: TListener);
+procedure TProcRunner.runSerial(constref _listener: TListener);
 begin
     //log3('TProcRunner.runSerial:: -->');
     myListener := _listener;
@@ -559,32 +567,32 @@ begin
                             if assigned(beforeDo) then beforeDo();
 
                             if assigned(meth) then
-                            try
-                                if isObjectAlive(TObject(subscriber)) then
-                                    meth(Sender, event, params)
-                            except
-                                log3('       meth Exception'); //meth := nil;
-                            end
+	                            try
+	                                if isObjectAlive(subscriber) then
+	                                    meth(Sender, event, params)
+	                            except
+	                                log('       meth Exception'); //meth := nil;
+	                            end
 
                             else if assigned(proc) then
-                            try
-                                proc(Sender, event, params);
-                            except
-                                log3('       proc Exception');; // proc is nil
-                            end
+	                            try
+	                                proc(Sender, event, params);
+	                            except
+	                                log('       proc Exception'); // proc is nil
+	                            end
 
                             else if assigned(notify) then
-                            try
-                                if isObjectAlive(TObject(subscriber)) then
-                                    notify(Sender);
-                            except
-                                log3('       notify Exception');;
-                            end;
+	                            try
+	                                if isObjectAlive(subscriber) then
+	                                    notify(Sender);
+	                            except
+	                                log('       notify Exception');
+	                            end;
 
                             try
                                 if freeParams then params.Free;
                             except
-                                log3('       params.Free Exception');;
+                                log('       params.Free Exception');;
                             end;
 							if assigned(AfterDo) then AfterDo();
                             if sigType = qThreads then LeaveCriticalSection(myCS);
@@ -600,11 +608,12 @@ begin
 					end;
                 end
                 else
-                    log3('   isObjectAlive(listener) is false');
+                    log('   isObjectAlive(listener) is false');
             end;
         end;
 
     finally
+        decSignalCount;
         if myFreeOnDone then Free; // Destroy itself
     end;
 end;
@@ -894,7 +903,8 @@ end;
 //begin
 
 //end;
-
+var
+    _j: TJSONObject;
 procedure TObjectListenerHelper.signal(const _event: string;
     constref _params: TJSONObject; _freeParams: boolean);
 var
@@ -913,12 +923,17 @@ begin
 	            begin
 	                // Always call the Listener procedure with
 	                // a cloned param object (memory safety).
-	                _tmpParams := _params.Clone as TJSONObject;
-	            end;
-	            _l.Items[i].do_(self, _event, _tmpParams, True {free params because it will be cloned before next call});
+                    _j := _params.Clone as TJSONObject;
+                    //log('signal() params clone : %s', [_j.formatJSON(AsCompactJSON)]);
+	                _l.Items[i].do_(self, _event, _j, True {free params because it will be cloned before next call});
+	            end
+                else
+                    _l.Items[i].do_(self, _event, nil, false);
 	        end;
-	    finally
-
+	    except
+            On E:Exception do begin
+                log('signal(): Exception ' + E.Message);
+			end;
 	    end;
     finally
         if _freeParams then _params.Free; // Always free parameters, irrespective of whether there were event handlers or not
@@ -966,7 +981,7 @@ end;
 
 function TObjectListenerHelper.activeSignalCount: integer;
 begin
-    Result := Listeners.activeCallCount;
+    Result := activeSignals;
 end;
 
 function TObjectListenerHelper.objectAlive: boolean;
@@ -1089,6 +1104,8 @@ begin
     event   := _event;
     params  := _params;
     freeParams := _freeParams;
+    //if assigned(params) then
+    //    log('TListener.do_ params: %s', [params.formatJSON(AsCompressedJSON)]);
 
     //if isObjectAlive(TObject(subscriber)) then
     //    log ('  ## subscriber is %s @%s', [TObject(subscriber).ClassName, pointerAsHex(subscriber)])
@@ -1103,6 +1120,7 @@ begin
     _runner.beforeDo := Self.beforeDo;
     _runner.afterDo  := Self.afterDo;
 
+    incSignalCount;
     //log3('TObjectListenerHelper.do_:: starting runners');
     case sigType of
         qAsync:     _runner.runAsync(self);
@@ -1110,19 +1128,21 @@ begin
         qSerial:    _runner.runSerial(self);
     end;
 
-    if assigned(AfterDo) then AfterDo();
     //log3('<------- TObjectListenerHelper.do_:: -->');
 end;
 
 initialization
+    InitCriticalSection(signalCountCS);
     objectListeners := TObjectEventList.Create;
     procRunner := TProcRunner.Create; // Don't free on done;
     subscriberObjectMap := TSubscriberObjectMap.Create;
     subscriberObjectMap.Sorted:=True;
 
 finalization
+    wrapUpSignals;
     objectListeners.Free;
     procRunner.Free;
     subscriberObjectMap.Free;
+    DoneCriticalSection(signalCountCS);
 
 end.

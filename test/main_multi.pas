@@ -31,10 +31,12 @@ type
     TForm1 = class(TForm)
         addL1: TButton;
 		Button1: TButton;
+		Button2: TButton;
 		Label6: TLabel;
 		Label7: TLabel;
 		Label8: TLabel;
 		Label9: TLabel;
+		Memo1: TMemo;
 		rb1: TRadioButton;
 		rb2: TRadioButton;
 		rb3: TRadioButton;
@@ -51,6 +53,7 @@ type
 		Label5: TLabel;
         procedure addL1Click(Sender: TObject);
 		procedure Button1Click(Sender: TObject);
+		procedure Button2Click(Sender: TObject);
         procedure stopL1Click(Sender: TObject);
         procedure delObjClick(Sender: TObject);
         procedure addL2Click(Sender: TObject);
@@ -67,6 +70,9 @@ type
             constref _params: TJSONObject);
         procedure L4Change(const _sender: TObject; const _event: string;
             constref _params: TJSONObject);
+        procedure X1Change(const _sender: TObject; const _event: string; constref _params: TJSONObject);
+        procedure doneSpike(const _sender: TObject; const _event: string; constref _params: TJSONObject);
+
     public
         myStores : TStores;
     end;
@@ -74,14 +80,17 @@ type
     { TTest }
 
     TTest = class
+
         val: string;
         procedure X1Change(const _sender: TObject; const _event: string;  constref _params: TJSONObject);
         destructor Destroy; override;
     end;
 
+    function X1: TTest;
+
 var
     Form1: TForm1;
-    X1: TTest;
+    myX1: TTest;
 
 implementation
 
@@ -90,21 +99,31 @@ implementation
 uses
     sugar.logger, sugar.utils;
 
+function X1: TTest;
+begin
+    if not assigned(myX1) then
+        myX1 := TTest.Create;
+
+    Result := myX1;
+end;
+
 { TForm1 }
+
 
 procedure TForm1.Edit1Change(Sender: TObject);
 begin
-    //Sender.signal('change', TJSONObject.Create(['text', TEdit(Sender).Text]));
-    //Sender.signal('pearl',  TJSONObject.Create(['text', TEdit(Sender).Text]));
-    //Sender.signal('dance',  TJSONObject.Create(['text', TEdit(Sender).Text]));
+
+    Sender.signal('change', TJSONObject.Create(['text', TEdit(Sender).Text]));
+    Sender.signal('pearl',  TJSONObject.Create(['text', TEdit(Sender).Text]));
+    Sender.signal('dance',  TJSONObject.Create(['text', TEdit(Sender).Text]));
 
     //Sender.signal('change', TJSONObject.Create(['text', '#']));
     //Sender.signal('pearl',  TJSONObject.Create(['text', '$']));
     //Sender.signal('dance',  TJSONObject.Create(['text', '%']));
 
-    Sender.signal('change');
-    Sender.signal('pearl');
-    Sender.signal('dance');
+    //Sender.signal('change');
+    //Sender.signal('pearl');
+    //Sender.signal('dance');
 
 
 end;
@@ -131,15 +150,13 @@ end;
 
 procedure TForm1.delObjClick(Sender: TObject);
 begin
-    FreeAndNil(X1);
+    FreeAndNil(myX1);
 end;
 
 procedure TForm1.addL2Click(Sender: TObject);
 var
     _sigType: TInvokeType = qAsync;
 begin
-    X1 := TTest.Create;
-
     if rb1.Checked then
         _sigType := qAsync
     else if rb2.checked then
@@ -149,12 +166,16 @@ begin
 
     with Edit2 do
     begin
-        addListener('change',   X1, @X1.X1Change, _sigType);
-        addListener('pearl',    X1, @X1.X1Change, _sigType);
-        addListener('dance',    X1, @X1.X1Change, _sigType);
+        //addListener('change', X1, @X1.X1Change, _sigType);
 
-        addListener('change',   Self, @L3Change, _sigType);
-        addListener('pearl',    Self, @L4Change, _sigType);
+         addListener('change', X1, @X1.X1Change, _sigType);
+         addListener('pearl',  X1, @X1.X1Change, _sigType);
+         addListener('dance',  X1, @X1.X1Change, _sigType);
+         addListener('done',   Self, @doneSpike, _sigType);
+
+        // addListener('change', Self, @L3Change, _sigType);
+        // addListener('pearl',  Self, @L4Change, _sigType);
+
     end;
 end;
 
@@ -175,15 +196,23 @@ procedure TForm1.Button1Click(Sender: TObject);
 var
 	i: Integer;
 begin
+    Memo1.Lines.Clear;
     log('======================================================');
     log('============ SPIKE TEST BEGIN ========================');
     log('======================================================');
     Edit2.Text := '';
-    for i := 0 to 255 do begin
+    for i := 0 to 1024 do begin
         Edit2.Text :=Edit2.Text + intToStr(i);
 	end;
     log('============ SPIKE TEST END ========================');
     log('======================================================');
+    Edit2.signal('done');
+    //Close;
+end;
+
+procedure TForm1.Button2Click(Sender: TObject);
+begin
+    Memo1.Text:= X1.val;
 end;
 
 procedure _a(constref _l: TLabel; constref _p: TJSONObject);
@@ -218,6 +247,18 @@ begin
     _a(label4, _params);
 end;
 
+procedure TForm1.X1Change(const _sender: TObject; const _event: string;
+	constref _params: TJSONObject);
+begin
+
+end;
+
+procedure TForm1.doneSpike(const _sender: TObject; const _event: string;
+	constref _params: TJSONObject);
+begin
+    log(X1.val);
+end;
+
 { TStore }
 
 procedure TStore.do_;
@@ -245,18 +286,26 @@ end;
 
 { TTest }
 
-procedure TTest.X1Change(const _sender: TObject; const _event: string;    constref _params: TJSONObject);
+procedure TTest.X1Change(const _sender: TObject; const _event: string; constref _params: TJSONObject);
 begin
+    //writeToLog(getLogFileName(), format('X1Change:: (%s) %s', [_event, 'nothing']));
+
     if assigned(_params) then begin
-	    val := _params.get('text', '');
-	    log('X1Change:: (%s) %s', [_event, val]);
+	    val := val + DateTimeToStr(Now()) + ':: ' + _event + ':: ' + _params.get('text', '') + sLineBreak;
+        // writeToLog(getLogFileName(), format('X1Change:: (%s) %s', [_event, val]));
 	end
     else
-        log('X1Change:: (%s) %s', [_event, 'no params']);
+    begin
+        //log('X1Change:: (%s) %s', [_event, 'no params']);
+	end;
+
+    //log('X1Change:: (%s) %s', [_event, 'received']);
+	//sleep(45);
 end;
 
 destructor TTest.Destroy;
 begin
+    stopListening;
     inherited Destroy;
 end;
 

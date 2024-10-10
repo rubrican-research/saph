@@ -1,3 +1,8 @@
+{
+    DEPRECATED.
+    USE OBJ.LISTENER
+}
+
 unit Controls.Listener;
 {
 (c) Rubrican Research.
@@ -320,7 +325,7 @@ end;
 
 function TControlListenerProcList.Add(const Item: TControlListener): Integer;
 begin
-    inherited add(Item);
+    Result := inherited add(Item);
     Item.beforeDo := Self.beforeDo;
     Item.afterDo  := Self.afterDo;
 end;
@@ -344,7 +349,7 @@ end;
 function TControlListenerCollection.Add(const AKey: string;
 	const AData: TControlListenerProcList): Integer;
 begin
-    inherited add(Akey, AData);
+    Result := inherited add(Akey, AData);
     AData.beforeDo := @Self.incActiveCall;
     AData.afterDo  := @Self.decActiveCall;
 end;
@@ -408,6 +413,7 @@ end;
 procedure TListenerProcRunner.runAsync(_listener: TControlListener);
 begin
     Application.QueueAsyncCall(@doRunAsync, PtrInt(_listener));
+    Application.ProcessMessages;
 end;
 
 procedure TListenerProcRunner.runThread(_listener: TControlListener);
@@ -738,6 +744,7 @@ function TControlListenerHelper.signals: TStringArray;
 var
 	i: Integer;
 begin
+    Result := [];
     SetLength(Result, listeners.Count);
     for i := 0 to High(Result) do begin
         Result[i] := listeners.Keys[i];
