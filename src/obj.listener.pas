@@ -39,6 +39,7 @@ type
     //      _event:     The event. Text.   You can implement a case structure to handle multiple events.
     //      _params:    Parameters as a JSONObject. DO NOT free the object inside your listener procedure!!
     //                  The runner with free it after the procedure is called.
+
     TListenerProc = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject);
     TListenerMethod = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject) of object;
 
@@ -90,6 +91,7 @@ type
 
         function getAsJSON: TJSONObject;
     end;
+
 
 
     // List of listeners
@@ -278,6 +280,7 @@ procedure Breathe(_hold : Qword = 0);
 var
     //ListenerSignalMode: TListenerSignalMode = lmSingleton;
     ListenerSignalMode: TListenerSignalMode = lmDynamic;
+    runnerCS: TRTLCriticalSection;
 
 implementation
 
@@ -293,7 +296,6 @@ type
     // See doRun();
     TProcRunner = class
     private
-        myCs: TRTLCriticalSection;
         myFreeOnDone: boolean;
         myListener: TListener;
         procedure doRun;                        // Can be called in a thread as well.
@@ -324,6 +326,7 @@ var
 {================================================================================}
     activeSignals: integer;         // count of active signals
     signalCountCS: TRTLCriticalSection;
+
 
     function incSignalCount: integer;
     begin
@@ -370,10 +373,11 @@ end;
 
 procedure clearObjectListener(_index: integer);
 begin
-    while objectListeners.Data[_index].Count > 0 do
-    begin // Loop of event listeners
-        objectListeners.Data[_index].Delete(_index);
-    end;
+    //while objectListeners.Data[_index].Count > 0 do
+    //begin // Loop of event listeners
+    //
+    //end;
+    //objectListeners.Data[_index].Free;
     objectListeners.Delete(_index);
 end;
 
@@ -436,11 +440,11 @@ var
     lastBreath: QWord = 0;
 procedure Breathe(_hold : Qword = 0);
 begin
-    log('Breath : %s', [ IntToStr(getTickCount64() - lastBreath)]);
+    //log('Breath : %s', [ IntToStr(getTickCount64() - lastBreath)]);
     if (getTickCount64() - lastBreath) >= _hold then begin
         Application.ProcessMessages;
         lastBreath := getTickCount64();
-        log('...... whew() .......');
+        //log('...... whew() .......');
 	end;
 end;
 //============================================================
@@ -513,6 +517,7 @@ begin
     //log3('TProcRunner.runThread:: -->');
     myListener := _listener;
     TThread.ExecuteInThread(@Self.doRun);
+
 end;
 
 procedure TProcRunner.runSerial(constref _listener: TListener);
@@ -527,12 +532,11 @@ begin
     inherited Create;
     myFreeOnDone := _freeOnDone;
     Enabled := True;
-    InitCriticalSection(myCs);
+
 end;
 
 destructor TProcRunner.Destroy;
 begin
-    DoneCriticalSection(myCs);
 	inherited Destroy;
 end;
 
@@ -563,7 +567,6 @@ begin
                     with myListener do
                     begin
                         try
-                            if sigType = qThreads then EnterCriticalSection(myCS);
                             if assigned(beforeDo) then beforeDo();
 
                             if assigned(meth) then
@@ -590,12 +593,18 @@ begin
 	                            end;
 
                             try
+                                if sigType = qThreads then
+                                    EnterCriticalSection(runnerCS);
                                 if freeParams then params.Free;
                             except
                                 log('       params.Free Exception');;
                             end;
+                            if sigType = qThreads then begin
+                                LeaveCriticalSection(runnerCS);
+                                sleep(300);
+							end;
 							if assigned(AfterDo) then AfterDo();
-                            if sigType = qThreads then LeaveCriticalSection(myCS);
+
                         except
                             on E: Exception do
                             begin
@@ -923,7 +932,9 @@ begin
 	            begin
 	                // Always call the Listener procedure with
 	                // a cloned param object (memory safety).
+                    EnterCriticalSection(runnerCS);
                     _j := _params.Clone as TJSONObject;
+                    LeaveCriticalSection(runnerCS);
                     //log('signal() params clone : %s', [_j.formatJSON(AsCompactJSON)]);
 	                _l.Items[i].do_(self, _event, _j, True {free params because it will be cloned before next call});
 	            end
@@ -1133,10 +1144,13 @@ end;
 
 initialization
     InitCriticalSection(signalCountCS);
+    InitCriticalSection(runnerCS);
     objectListeners := TObjectEventList.Create;
     procRunner := TProcRunner.Create; // Don't free on done;
     subscriberObjectMap := TSubscriberObjectMap.Create;
     subscriberObjectMap.Sorted:=True;
+
+
 
 finalization
     wrapUpSignals;
@@ -1144,5 +1158,5 @@ finalization
     procRunner.Free;
     subscriberObjectMap.Free;
     DoneCriticalSection(signalCountCS);
-
+    DoneCriticalSection(runnerCS);
 end.

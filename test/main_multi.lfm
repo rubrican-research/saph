@@ -1,10 +1,10 @@
 object Form1: TForm1
-  Left = 300
-  Height = 616
-  Top = 122
+  Left = 213
+  Height = 652
+  Top = 212
   Width = 1168
   Caption = 'Form1'
-  ClientHeight = 616
+  ClientHeight = 652
   ClientWidth = 1168
   Color = clWindow
   OnCreate = FormCreate
@@ -49,7 +49,7 @@ object Form1: TForm1
   object Edit1: TEdit
     Left = 16
     Height = 25
-    Top = 288
+    Top = 279
     Width = 288
     TabOrder = 0
     Text = 'Edit1'
@@ -58,7 +58,7 @@ object Form1: TForm1
   object addL1: TButton
     Left = 304
     Height = 25
-    Top = 288
+    Top = 279
     Width = 75
     Caption = 'add L'
     TabOrder = 1
@@ -67,7 +67,7 @@ object Form1: TForm1
   object stopL1: TButton
     Left = 414
     Height = 25
-    Top = 288
+    Top = 279
     Width = 75
     Caption = 'Remove L'
     TabOrder = 2
@@ -112,7 +112,7 @@ object Form1: TForm1
   object Label5: TLabel
     Left = 304
     Height = 57
-    Top = 229
+    Top = 220
     Width = 80
     AutoSize = False
     Caption = 'Changes propagate to L1, L2'
@@ -121,7 +121,7 @@ object Form1: TForm1
   object Label6: TLabel
     Left = 414
     Height = 57
-    Top = 229
+    Top = 220
     Width = 80
     AutoSize = False
     Caption = 'Remove all listeners'
@@ -138,11 +138,11 @@ object Form1: TForm1
   end
   object Label8: TLabel
     Left = 414
-    Height = 198
+    Height = 216
     Top = 407
     Width = 80
     AutoSize = False
-    Caption = 'Free subscriber X1 object.'#13#10#13#10'Log file shout stop showing change to X1. '#13#10'No exception.'
+    Caption = 'Free subscriber X1 object.'#13#10#13#10'Log file should stop showing change to X1. '#13#10'No exception.'
     WordWrap = True
   end
   object Label9: TLabel
@@ -191,7 +191,7 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 674
-    Height = 616
+    Height = 652
     Top = 0
     Width = 494
     Align = alRight
@@ -208,5 +208,12 @@ object Form1: TForm1
     Caption = 'show X1.val'
     TabOrder = 12
     OnClick = Button2Click
+  end
+  object Label10: TLabel
+    Left = 16
+    Height = 17
+    Top = 326
+    Width = 97
+    Caption = 'Invoke Signal As:'
   end
 end

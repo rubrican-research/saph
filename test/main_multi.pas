@@ -32,6 +32,7 @@ type
         addL1: TButton;
 		Button1: TButton;
 		Button2: TButton;
+		Label10: TLabel;
 		Label6: TLabel;
 		Label7: TLabel;
 		Label8: TLabel;
@@ -70,6 +71,9 @@ type
             constref _params: TJSONObject);
         procedure L4Change(const _sender: TObject; const _event: string;
             constref _params: TJSONObject);
+        procedure MChange(const _sender: TObject; const _event: string;
+            constref _params: TJSONObject);
+
         procedure X1Change(const _sender: TObject; const _event: string; constref _params: TJSONObject);
         procedure doneSpike(const _sender: TObject; const _event: string; constref _params: TJSONObject);
 
@@ -80,7 +84,6 @@ type
     { TTest }
 
     TTest = class
-
         val: string;
         procedure X1Change(const _sender: TObject; const _event: string;  constref _params: TJSONObject);
         destructor Destroy; override;
@@ -173,8 +176,9 @@ begin
          addListener('dance',  X1, @X1.X1Change, _sigType);
          addListener('done',   Self, @doneSpike, _sigType);
 
-        // addListener('change', Self, @L3Change, _sigType);
-        // addListener('pearl',  Self, @L4Change, _sigType);
+         addListener('change', Self, @L3Change, _sigType);
+         addListener('pearl',  Self, @L4Change, _sigType);
+         addListener('dance',  Self, @MChange, _sigType);
 
     end;
 end;
@@ -201,12 +205,16 @@ begin
     log('============ SPIKE TEST BEGIN ========================');
     log('======================================================');
     Edit2.Text := '';
-    for i := 0 to 1024 do begin
+    //for i := 0 to 1024 do begin
+    for i := 0 to 512 do begin
         Edit2.Text :=Edit2.Text + intToStr(i);
+        sleep(10);
+        ThreadSwitch;
+        //Application.ProcessMessages;
 	end;
     log('============ SPIKE TEST END ========================');
     log('======================================================');
-    Edit2.signal('done');
+    //Edit2.signal('done');
     //Close;
 end;
 
@@ -245,6 +253,16 @@ procedure TForm1.L4Change(const _sender: TObject; const _event: string;
     constref _params: TJSONObject);
 begin
     _a(label4, _params);
+end;
+
+procedure TForm1.MChange(const _sender: TObject; const _event: string; constref
+	_params: TJSONObject);
+begin
+    if assigned(_params) then
+    begin
+        Memo1.Append(_params.get('text', ''));
+    end;
+
 end;
 
 procedure TForm1.X1Change(const _sender: TObject; const _event: string;
@@ -289,16 +307,22 @@ end;
 procedure TTest.X1Change(const _sender: TObject; const _event: string; constref _params: TJSONObject);
 begin
     //writeToLog(getLogFileName(), format('X1Change:: (%s) %s', [_event, 'nothing']));
+    EnterCriticalSection(runnerCS);
+    try
+	    if assigned(_params) then begin
+		    val := val + DateTimeToStr(Now()) + ':: ' + _event + ':: ' + _params.get('text', '') + sLineBreak;
+            log('X1Change:: (%s) %s', [_event, _params.get('text', '')]);
+		end
+	    else
+	    begin
+	        //log('X1Change:: (%s) %s', [_event, 'no params']);
+		end;
 
-    if assigned(_params) then begin
-	    val := val + DateTimeToStr(Now()) + ':: ' + _event + ':: ' + _params.get('text', '') + sLineBreak;
-        // writeToLog(getLogFileName(), format('X1Change:: (%s) %s', [_event, val]));
-	end
-    else
-    begin
-        //log('X1Change:: (%s) %s', [_event, 'no params']);
+	except
+        on E:Exception do
+            log('TTest.X1Change exception: ' + E.Message);
 	end;
-
+	LeaveCriticalSection(runnerCS);
     //log('X1Change:: (%s) %s', [_event, 'received']);
 	//sleep(45);
 end;

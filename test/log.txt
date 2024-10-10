@@ -1,5 +1,303 @@
-19:26:34:314:: -------------- START  -----------------------
-19:26:34:315:: 
-19:26:38:905:: ======================================================
-19:26:38:905:: ============ SPIKE TEST BEGIN ========================
-19:26:38:906:: ======================================================
+20:41:13:182:: -------------- START  -----------------------
+20:41:13:183:: 
+20:41:20:426:: X1Change:: (change) Edit
+20:41:20:428:: X1Change:: (pearl) Edit
+20:41:20:428:: X1Change:: (dance) Edit
+20:41:20:867:: X1Change:: (change) Edi
+20:41:20:868:: X1Change:: (pearl) Edi
+20:41:20:869:: X1Change:: (dance) Edi
+20:41:21:122:: X1Change:: (change) Ed
+20:41:21:123:: X1Change:: (pearl) Ed
+20:41:21:123:: X1Change:: (dance) Ed
+20:41:21:298:: X1Change:: (change) E
+20:41:21:299:: X1Change:: (pearl) E
+20:41:21:300:: X1Change:: (dance) E
+20:41:21:634:: X1Change:: (change) 
+20:41:21:634:: X1Change:: (pearl) 
+20:41:21:635:: X1Change:: (dance) 
+20:41:22:234:: X1Change:: (change) O
+20:41:22:234:: X1Change:: (pearl) O
+20:41:22:235:: X1Change:: (dance) O
+20:41:22:490:: X1Change:: (change) O 
+20:41:22:491:: X1Change:: (pearl) O 
+20:41:22:492:: X1Change:: (dance) O 
+20:41:22:715:: X1Change:: (change) O h
+20:41:22:715:: X1Change:: (pearl) O h
+20:41:22:716:: X1Change:: (dance) O h
+20:41:22:946:: X1Change:: (change) O ho
+20:41:22:947:: X1Change:: (pearl) O ho
+20:41:22:947:: X1Change:: (dance) O ho
+20:41:23:114:: X1Change:: (change) O hoy
+20:41:23:116:: X1Change:: (pearl) O hoy
+20:41:23:116:: X1Change:: (dance) O hoy
+20:41:23:274:: X1Change:: (change) O hoy 
+20:41:23:275:: X1Change:: (pearl) O hoy 
+20:41:23:276:: X1Change:: (dance) O hoy 
+20:41:24:555:: X1Change:: (change) O hoy k
+20:41:24:555:: X1Change:: (pearl) O hoy k
+20:41:24:556:: X1Change:: (dance) O hoy k
+20:41:24:747:: X1Change:: (change) O hoy kd
+20:41:24:747:: X1Change:: (pearl) O hoy kd
+20:41:24:748:: X1Change:: (dance) O hoy kd
+20:41:24:883:: X1Change:: (change) O hoy kdj
+20:41:24:883:: X1Change:: (pearl) O hoy kdj
+20:41:24:884:: X1Change:: (dance) O hoy kdj
+20:41:25:074:: X1Change:: (change) O hoy kdjf
+20:41:25:075:: X1Change:: (pearl) O hoy kdjf
+20:41:25:075:: X1Change:: (dance) O hoy kdjf
+20:41:25:195:: X1Change:: (change) O hoy kdjfi
+20:41:25:195:: X1Change:: (pearl) O hoy kdjfi
+20:41:25:196:: X1Change:: (dance) O hoy kdjfi
+20:41:25:395:: X1Change:: (change) O hoy kdjfis
+20:41:25:395:: X1Change:: (pearl) O hoy kdjfis
+20:41:25:396:: X1Change:: (dance) O hoy kdjfis
+20:41:25:635:: X1Change:: (change) O hoy kdjfisd
+20:41:25:636:: X1Change:: (pearl) O hoy kdjfisd
+20:41:25:636:: X1Change:: (dance) O hoy kdjfisd
+20:41:25:786:: X1Change:: (change) O hoy kdjfisd 
+20:41:25:787:: X1Change:: (pearl) O hoy kdjfisd 
+20:41:25:788:: X1Change:: (dance) O hoy kdjfisd 
+20:41:25:947:: X1Change:: (change) O hoy kdjfisd T
+20:41:25:948:: X1Change:: (pearl) O hoy kdjfisd T
+20:41:25:949:: X1Change:: (dance) O hoy kdjfisd T
+20:41:26:058:: X1Change:: (change) O hoy kdjfisd Th
+20:41:26:059:: X1Change:: (pearl) O hoy kdjfisd Th
+20:41:26:059:: X1Change:: (dance) O hoy kdjfisd Th
+20:41:26:146:: X1Change:: (change) O hoy kdjfisd Thi
+20:41:26:147:: X1Change:: (pearl) O hoy kdjfisd Thi
+20:41:26:148:: X1Change:: (dance) O hoy kdjfisd Thi
+20:41:26:227:: X1Change:: (change) O hoy kdjfisd This
+20:41:26:229:: X1Change:: (pearl) O hoy kdjfisd This
+20:41:26:230:: X1Change:: (dance) O hoy kdjfisd This
+20:41:26:315:: X1Change:: (change) O hoy kdjfisd This 
+20:41:26:316:: X1Change:: (pearl) O hoy kdjfisd This 
+20:41:26:316:: X1Change:: (dance) O hoy kdjfisd This 
+20:41:26:378:: X1Change:: (change) O hoy kdjfisd This i
+20:41:26:379:: X1Change:: (pearl) O hoy kdjfisd This i
+20:41:26:379:: X1Change:: (dance) O hoy kdjfisd This i
+20:41:26:474:: X1Change:: (change) O hoy kdjfisd This is
+20:41:26:475:: X1Change:: (pearl) O hoy kdjfisd This is
+20:41:26:476:: X1Change:: (dance) O hoy kdjfisd This is
+20:41:26:563:: X1Change:: (change) O hoy kdjfisd This is 
+20:41:26:563:: X1Change:: (pearl) O hoy kdjfisd This is 
+20:41:26:564:: X1Change:: (dance) O hoy kdjfisd This is 
+20:41:26:682:: X1Change:: (change) O hoy kdjfisd This is a
+20:41:26:684:: X1Change:: (pearl) O hoy kdjfisd This is a
+20:41:26:684:: X1Change:: (dance) O hoy kdjfisd This is a
+20:41:26:754:: X1Change:: (change) O hoy kdjfisd This is a 
+20:41:26:755:: X1Change:: (pearl) O hoy kdjfisd This is a 
+20:41:26:756:: X1Change:: (dance) O hoy kdjfisd This is a 
+20:41:26:954:: X1Change:: (change) O hoy kdjfisd This is a s
+20:41:26:955:: X1Change:: (pearl) O hoy kdjfisd This is a s
+20:41:26:956:: X1Change:: (dance) O hoy kdjfisd This is a s
+20:41:27:066:: X1Change:: (change) O hoy kdjfisd This is a se
+20:41:27:066:: X1Change:: (pearl) O hoy kdjfisd This is a se
+20:41:27:068:: X1Change:: (dance) O hoy kdjfisd This is a se
+20:41:27:188:: X1Change:: (change) O hoy kdjfisd This is a ser
+20:41:27:188:: X1Change:: (pearl) O hoy kdjfisd This is a ser
+20:41:27:189:: X1Change:: (dance) O hoy kdjfisd This is a ser
+20:41:27:274:: X1Change:: (change) O hoy kdjfisd This is a seri
+20:41:27:275:: X1Change:: (pearl) O hoy kdjfisd This is a seri
+20:41:27:276:: X1Change:: (dance) O hoy kdjfisd This is a seri
+20:41:27:402:: X1Change:: (change) O hoy kdjfisd This is a seria
+20:41:27:404:: X1Change:: (pearl) O hoy kdjfisd This is a seria
+20:41:27:404:: X1Change:: (dance) O hoy kdjfisd This is a seria
+20:41:27:490:: X1Change:: (change) O hoy kdjfisd This is a serial
+20:41:27:491:: X1Change:: (pearl) O hoy kdjfisd This is a serial
+20:41:27:492:: X1Change:: (dance) O hoy kdjfisd This is a serial
+20:41:27:634:: X1Change:: (change) O hoy kdjfisd This is a serial 
+20:41:27:635:: X1Change:: (pearl) O hoy kdjfisd This is a serial 
+20:41:27:636:: X1Change:: (dance) O hoy kdjfisd This is a serial 
+20:41:28:291:: X1Change:: (change) O hoy kdjfisd This is a serial a
+20:41:28:291:: X1Change:: (pearl) O hoy kdjfisd This is a serial a
+20:41:28:292:: X1Change:: (dance) O hoy kdjfisd This is a serial a
+20:41:28:427:: X1Change:: (change) O hoy kdjfisd This is a serial ap
+20:41:28:427:: X1Change:: (pearl) O hoy kdjfisd This is a serial ap
+20:41:28:429:: X1Change:: (dance) O hoy kdjfisd This is a serial ap
+20:41:28:579:: X1Change:: (change) O hoy kdjfisd This is a serial app
+20:41:28:579:: X1Change:: (pearl) O hoy kdjfisd This is a serial app
+20:41:28:579:: X1Change:: (dance) O hoy kdjfisd This is a serial app
+20:41:28:762:: X1Change:: (change) O hoy kdjfisd This is a serial appl
+20:41:28:763:: X1Change:: (pearl) O hoy kdjfisd This is a serial appl
+20:41:28:764:: X1Change:: (dance) O hoy kdjfisd This is a serial appl
+20:41:28:842:: X1Change:: (change) O hoy kdjfisd This is a serial appli
+20:41:28:843:: X1Change:: (pearl) O hoy kdjfisd This is a serial appli
+20:41:28:844:: X1Change:: (dance) O hoy kdjfisd This is a serial appli
+20:41:28:906:: X1Change:: (change) O hoy kdjfisd This is a serial applic
+20:41:28:907:: X1Change:: (pearl) O hoy kdjfisd This is a serial applic
+20:41:28:908:: X1Change:: (dance) O hoy kdjfisd This is a serial applic
+20:41:29:018:: X1Change:: (change) O hoy kdjfisd This is a serial applica
+20:41:29:019:: X1Change:: (pearl) O hoy kdjfisd This is a serial applica
+20:41:29:019:: X1Change:: (dance) O hoy kdjfisd This is a serial applica
+20:41:29:106:: X1Change:: (change) O hoy kdjfisd This is a serial applicat
+20:41:29:107:: X1Change:: (pearl) O hoy kdjfisd This is a serial applicat
+20:41:29:107:: X1Change:: (dance) O hoy kdjfisd This is a serial applicat
+20:41:29:139:: X1Change:: (change) O hoy kdjfisd This is a serial applicati
+20:41:29:139:: X1Change:: (pearl) O hoy kdjfisd This is a serial applicati
+20:41:29:140:: X1Change:: (dance) O hoy kdjfisd This is a serial applicati
+20:41:29:218:: X1Change:: (change) O hoy kdjfisd This is a serial applicatio
+20:41:29:218:: X1Change:: (pearl) O hoy kdjfisd This is a serial applicatio
+20:41:29:219:: X1Change:: (dance) O hoy kdjfisd This is a serial applicatio
+20:41:29:371:: X1Change:: (change) O hoy kdjfisd This is a serial application
+20:41:29:371:: X1Change:: (pearl) O hoy kdjfisd This is a serial application
+20:41:29:373:: X1Change:: (dance) O hoy kdjfisd This is a serial application
+20:41:29:467:: X1Change:: (change) O hoy kdjfisd This is a serial application 
+20:41:29:467:: X1Change:: (pearl) O hoy kdjfisd This is a serial application 
+20:41:29:468:: X1Change:: (dance) O hoy kdjfisd This is a serial application 
+20:41:29:547:: X1Change:: (change) O hoy kdjfisd This is a serial application o
+20:41:29:548:: X1Change:: (pearl) O hoy kdjfisd This is a serial application o
+20:41:29:548:: X1Change:: (dance) O hoy kdjfisd This is a serial application o
+20:41:29:674:: X1Change:: (change) O hoy kdjfisd This is a serial application of
+20:41:29:674:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of
+20:41:29:675:: X1Change:: (dance) O hoy kdjfisd This is a serial application of
+20:41:29:739:: X1Change:: (change) O hoy kdjfisd This is a serial application of 
+20:41:29:739:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of 
+20:41:29:740:: X1Change:: (dance) O hoy kdjfisd This is a serial application of 
+20:41:29:866:: X1Change:: (change) O hoy kdjfisd This is a serial application of t
+20:41:29:867:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of t
+20:41:29:867:: X1Change:: (dance) O hoy kdjfisd This is a serial application of t
+20:41:29:931:: X1Change:: (change) O hoy kdjfisd This is a serial application of th
+20:41:29:931:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of th
+20:41:29:931:: X1Change:: (dance) O hoy kdjfisd This is a serial application of th
+20:41:30:067:: X1Change:: (change) O hoy kdjfisd This is a serial application of the
+20:41:30:068:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the
+20:41:30:068:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the
+20:41:30:121:: X1Change:: (change) O hoy kdjfisd This is a serial application of the 
+20:41:30:123:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the 
+20:41:30:124:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the 
+20:41:30:586:: X1Change:: (change) O hoy kdjfisd This is a serial application of the s
+20:41:30:586:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the s
+20:41:30:588:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the s
+20:41:30:690:: X1Change:: (change) O hoy kdjfisd This is a serial application of the si
+20:41:30:691:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the si
+20:41:30:692:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the si
+20:41:31:122:: X1Change:: (change) O hoy kdjfisd This is a serial application of the sig
+20:41:31:123:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the sig
+20:41:31:123:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the sig
+20:41:31:275:: X1Change:: (change) O hoy kdjfisd This is a serial application of the sign
+20:41:31:275:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the sign
+20:41:31:276:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the sign
+20:41:31:435:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signa
+20:41:31:435:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signa
+20:41:31:436:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signa
+20:41:31:548:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal
+20:41:31:548:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal
+20:41:31:549:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal
+20:41:31:762:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal.
+20:41:31:762:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal.
+20:41:31:764:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal.
+20:41:31:931:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. 
+20:41:31:931:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. 
+20:41:31:932:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. 
+20:41:32:154:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. b
+20:41:32:154:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. b
+20:41:32:155:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. b
+20:41:32:362:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. bl
+20:41:32:363:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. bl
+20:41:32:363:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. bl
+20:41:32:554:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blo
+20:41:32:555:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blo
+20:41:32:556:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blo
+20:41:33:035:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. bloc
+20:41:33:035:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. bloc
+20:41:33:036:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. bloc
+20:41:33:242:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. block
+20:41:33:242:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. block
+20:41:33:243:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. block
+20:41:33:396:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocki
+20:41:33:397:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocki
+20:41:33:397:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocki
+20:41:33:459:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blockin
+20:41:33:460:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blockin
+20:41:33:460:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blockin
+20:41:33:530:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking
+20:41:33:532:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking
+20:41:33:532:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking
+20:41:33:698:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking 
+20:41:33:699:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking 
+20:41:33:700:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking 
+20:41:34:017:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking c
+20:41:34:019:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking c
+20:41:34:019:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking c
+20:41:34:138:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking ca
+20:41:34:138:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking ca
+20:41:34:140:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking ca
+20:41:34:227:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking cal
+20:41:34:227:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking cal
+20:41:34:228:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking cal
+20:41:34:355:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking call
+20:41:34:355:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking call
+20:41:34:356:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking call
+20:41:34:450:: X1Change:: (change) O hoy kdjfisd This is a serial application of the signal. blocking calls
+20:41:34:451:: X1Change:: (pearl) O hoy kdjfisd This is a serial application of the signal. blocking calls
+20:41:34:451:: X1Change:: (dance) O hoy kdjfisd This is a serial application of the signal. blocking calls
+20:41:52:152:: TEventListenerMap.Destroy start::
+20:41:52:152::   -> key=change
+20:41:52:153::   -> key=pearl
+20:41:52:153::   -> key=dance
+20:41:52:153:: TEventListenerMap.Destroy done::
+20:41:52:154:: TListenerProcList.Destroy() 
+20:41:52:154:: TListenerProcList.Destroy() 
+20:41:52:154:: TListenerProcList.Destroy() 
+20:42:09:618:: X1Change:: (change) 
+20:42:09:619:: X1Change:: (pearl) 
+20:42:09:620:: X1Change:: (dance) 
+20:42:11:395:: X1Change:: (change) a
+20:42:11:396:: X1Change:: (pearl) a
+20:42:11:397:: X1Change:: (dance) a
+20:42:11:532:: X1Change:: (change) as
+20:42:11:532:: X1Change:: (pearl) as
+20:42:11:533:: X1Change:: (dance) as
+20:42:11:659:: X1Change:: (change) asd
+20:42:11:660:: X1Change:: (pearl) asd
+20:42:11:660:: X1Change:: (dance) asd
+20:42:11:818:: X1Change:: (change) asdf
+20:42:11:819:: X1Change:: (pearl) asdf
+20:42:11:821:: X1Change:: (dance) asdf
+20:42:12:565:: X1Change:: (change) asdfd
+20:42:12:565:: X1Change:: (pearl) asdfd
+20:42:12:566:: X1Change:: (dance) asdfd
+20:42:12:714:: X1Change:: (change) asdfdf
+20:42:12:716:: X1Change:: (pearl) asdfdf
+20:42:12:716:: X1Change:: (dance) asdfdf
+20:42:12:994:: X1Change:: (change) asdfdfs
+20:42:12:995:: X1Change:: (pearl) asdfdfs
+20:42:12:996:: X1Change:: (dance) asdfdfs
+20:42:13:299:: X1Change:: (change) asdfdfsa
+20:42:13:299:: X1Change:: (pearl) asdfdfsa
+20:42:13:300:: X1Change:: (dance) asdfdfsa
+20:42:13:436:: X1Change:: (change) asdfdfsas
+20:42:13:437:: X1Change:: (pearl) asdfdfsas
+20:42:13:438:: X1Change:: (dance) asdfdfsas
+20:42:13:514:: X1Change:: (change) asdfdfsasd
+20:42:13:515:: X1Change:: (pearl) asdfdfsasd
+20:42:13:515:: X1Change:: (dance) asdfdfsasd
+20:42:13:618:: X1Change:: (change) asdfdfsasdf
+20:42:13:618:: X1Change:: (pearl) asdfdfsasdf
+20:42:13:619:: X1Change:: (dance) asdfdfsasdf
+20:42:41:202:: 
+20:42:41:203:: -------------- STOP  -----------------------
+20:42:41:230:: Exiting stopListening because application is terminated
+20:42:41:230:: wrapUpSignals()--->
+20:42:41:230:: <----- wrapUpSignals() done.
+20:42:41:231:: TEventListenerMap.Destroy start::
+20:42:41:231::   -> key=change
+20:42:41:231::   -> key=pearl
+20:42:41:231::   -> key=dance
+20:42:41:231::   -> key=done
+20:42:41:231:: TEventListenerMap.Destroy done::
+20:42:41:232:: TListenerProcList.Destroy() 
+20:42:41:232:: TListenerProcList.Destroy() 
+20:42:41:232:: TListenerProcList.Destroy() 
+20:42:41:233:: TListenerProcList.Destroy() 
+20:42:41:233:: TEventListenerMap.Destroy start::
+20:42:41:233::   -> key=change
+20:42:41:233::   -> key=pearl
+20:42:41:234::   -> key=dance
+20:42:41:234:: TEventListenerMap.Destroy done::
+20:42:41:234:: TListenerProcList.Destroy() 
+20:42:41:234:: TListenerProcList.Destroy() 
+20:42:41:236:: TListenerProcList.Destroy() 
+20:42:41:236:: ----------------------------
+20:42:41:236:: TObjectEventList.destroyed()
+20:42:41:236:: ----------------------------
