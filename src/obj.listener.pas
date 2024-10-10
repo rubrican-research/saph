@@ -39,191 +39,215 @@ type
     //      _event:     The event. Text.   You can implement a case structure to handle multiple events.
     //      _params:    Parameters as a JSONObject. DO NOT free the object inside your listener procedure!!
     //                  The runner with free it after the procedure is called.
-    TObjectListenerProc        = procedure (const _sender: TObject; const _event: string; constref _params: TJSONObject);
-    TObjectListenerMethod      = procedure (const _sender: TObject; const _event: string; constref _params: TJSONObject) of object;
+    TListenerProc = procedure(const _sender: TObject;
+        const _event: string; constref _params: TJSONObject);
+    TListenerMethod = procedure(const _sender: TObject;
+        const _event: string; constref _params: TJSONObject) of object;
 
     // Syntax sugar. To assign multiple listeners in one go.
-    TArrayObjectListenerProc   = array of TObjectListenerProc;
-    TArrayObjectListenerMethod = array of TObjectListenerMethod;
+    TArrayListenerProc = array of TListenerProc;
+    TArrayListenerMethod = array of TListenerMethod;
 
 
 
     TInvokeType = (
-                            qAsync,     // Queues the listeners to Application.QueueAsyncCall();
-                            qThreads,   // Runs the methods in individual threads;
-                            qSerial     // Runs in a blocking loop
-                          );
+        qAsync,
+        // Queues the listeners to Application.QueueAsyncCall();
+        qThreads,   // Runs the methods in individual threads;
+        qSerial     // Runs in a blocking loop
+        );
 
-	{ TObjectlListener }
-    TObjectlListener = class
-	private
-	  myEnabled: boolean;
-      sender: TObject;
-      event: string;
-	  proc: TObjectListenerProc;
-	  meth: TObjectListenerMethod;
-      notify: TNotifyEvent;
-      params: TJSONObject;
-      freeParams: boolean;
-      sigType: TInvokeType;
+    { TListener }
+    TListener = class
+    private
+        myEnabled: boolean;
+        Sender: TObject;
+        Subscriber: TObject;
+        //Subscriber: pointer;
+        event: string;
+        proc: TListenerProc;
+        meth: TListenerMethod;
+        notify: TNotifyEvent;
+        params: TJSONObject;
+        freeParams: boolean;
+        sigType: TInvokeType;
 
-      function getAsString: string;
-	public
-      constructor Create;
-	  procedure add(constref _proc: TObjectListenerProc; const _sigType: TInvokeType = qAsync); overload;
-	  procedure add(constref _meth: TObjectListenerMethod; const _sigType: TInvokeType = qAsync); overload;
-      procedure add(constref _notify: TNotifyEvent; const _sigType: TInvokeType = qAsync); overload;
-	  procedure do_(constref _sender: TObject; const _event: string; constref _params: TJSONObject; const _freeParams: Boolean = true);
+        function getAsString: string;
     public
-      beforeDo: function : integer of object;
-      afterDo : function : integer of object;
-      property enabled: boolean read myEnabled write myEnabled;
-      property asString : string read getAsString;
+        constructor Create;
+        procedure add(constref _proc: TListenerProc;
+            const _sigType: TInvokeType = qAsync); overload;
+        procedure add(constref _subscriber: TObject; constref _meth: TListenerMethod;
+            const _sigType: TInvokeType = qAsync); overload;
+        procedure add(constref _subscriber: TObject; constref _notify: TNotifyEvent;
+            const _sigType: TInvokeType = qAsync); overload;
 
-      function getAsJSON: TJSONObject;
-	end;
+        procedure do_(constref _sender: TObject; const _event: string;
+            constref _params: TJSONObject; const _freeParams: boolean = True);
+    public
+        beforeDo: function: integer of object;
+        afterDo: function: integer of object;
+        property Enabled: boolean read myEnabled write myEnabled;
+        property AsString: string read getAsString;
+
+        function getAsJSON: TJSONObject;
+    end;
 
 
     // List of listeners
-	{ TObjectListenerProcList }
+    { TListenerProcList }
 
-    TObjectListenerProcList       = class(specialize TFPGObjectList<TObjectlListener>)
+    TListenerProcList = class(specialize TFPGObjectList<TListener>)
     public
-        beforeDo: function : integer of object;
-        afterDo : function : integer of object;
+        key: string;
+        beforeDo: function: integer of object;
+        afterDo: function: integer of object;
 
-        function Add(const Item: TObjectlListener): Integer; inline;
-	end;
+        function Add(const Item: TListener): integer; inline;
+        destructor Destroy; override;
+    end;
 
     // Map of Event and List of listener procedures
-	{ TObjectListenerMap }
+    { TEventListenerMap }
 
-    TObjectListenerMap = class(specialize TFPGMap<string, TObjectListenerProcList>)
+    TEventListenerMap = class(specialize TFPGMapObject<string, TListenerProcList>)
     private
-        myActiveCallCount : integer; // count
+        myActiveCallCount: integer; // count
         myCriticalSection: TRTLCriticalSection;
     public
-        constructor Create;
+        constructor Create(AFreeObjects: Boolean = true);
         destructor Destroy; override;
-        function Add(const AKey: string; const AData: TObjectListenerProcList): Integer; inline;
-
+        function Add(const AKey: string; const AData: TListenerProcList): integer; inline;
         function activeCallCount: integer;
         function incActiveCall: integer; // Returns new count;
         function decActiveCall: integer; // Returns new count;
         procedure wrapUp;
-	end;
+    end;
 
 
-     // Map of Control ID and List of Event Listeners
-	{ TObjectListenerList }
-    TObjectListenerList = class(specialize TFPGMap<string, TObjectListenerMap>)
-        procedure Clear; reintroduce;
+    // Map of Control ID and List of Event Listeners
+    { TObjectEventList }
+    TObjectEventList = class(specialize TFPGMapObject<string, TEventListenerMap>)
         destructor Destroy; override;
-	end;
+    end;
 
-	{ TObjectListenerHelper }
+    { TObjectListenerHelper }
 
     TObjectListenerHelper = class helper for TObject
 
-        function myListeners: TObjectListenerMap;                     // Returns the list of listeners for this particular object!
-        function myListener(const _event: string): TObjectListenerProcList;  // Returns the proc list for this particular event
+        function Listeners: TEventListenerMap;
+        // Returns the list of listeners for this particular object!
+        function Listener(const _event: string): TListenerProcList;
+        // Returns the proc list for this particular event
 
-        function addListener(
-                        const _event: string;
-                        const _handler: TObjectListenerMethod;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        {================================================================}
+        {ADD TListenerMethod}
+        {================================================================}
+        function addListener(const _event: string;
+            constref _subscriber: TObject;
+            constref _handler: TListenerMethod;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
         {Array of events -> single listener Method}
-        function addListener(
-                        const _events: TStringArray;
-                        const _handler: TObjectListenerMethod;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        function addListener(const _events: TStringArray;
+            constref _subscriber: TObject;
+            constref _handler: TListenerMethod;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
         {Array of Listener Methods}
-        function addListener(
-                        const _event: string;
-                        const _handlers: TArrayObjectListenerMethod;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        function addListener(const _event: string;
+            constref _subscriber: TObject;
+            constref _handlers: TArrayListenerMethod;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
 
-        function addListener(
-                        const _event: string;
-                        const _handler: TObjectListenerProc;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        {================================================================}
+        {ADD TListenerProc}
+        {================================================================}
+        function addListener(const _event: string;
+            constref _handler: TListenerProc;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
 
         {Array of events -> single listener Proc}
-        function addListener(
-                        const _events: TStringArray;
-                        const _handler: TObjectListenerProc;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        function addListener(const _events: TStringArray;
+            constref _handler: TListenerProc;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
         {Array of Listener Procs}
-        function addListener(
-                        const _event: string;
-                        const _handlers: TArrayObjectListenerProc;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        function addListener(const _event: string;
+            constref _handlers: TArrayListenerProc;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
 
-        function addListener(
-                        const _event: string;
-                        const _handler: TNotifyEvent;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        {================================================================}
+        {ADD TNotifyEvent}
+        {================================================================}
+        function addListener(const _event: string;
+            constref _subscriber: TObject;
+            constref _handler: TNotifyEvent;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
 
         {Array of events -> single listener Notify Event}
-        function addListener(
-                        const _events: TStringArray;
-                        const _handler: TNotifyEvent;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
+        function addListener(const _events: TStringArray;
+            constref _subscriber: TObject;
+            constref _handler: TNotifyEvent;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
 
         {Array of Notify Events}
-        function addListener(
-                        const _event: string;
-                        const _handlers: array of TNotifyEvent;
-                        const _sigType: TInvokeType = qAsync;
-                        const _ignoreduplicates: boolean = true) : TObject; overload;
-        // TODO - not implemented
-        procedure rmListeners; // Removes all listeners
-        procedure rmListeners(const _event: string); unimplemented;
-        procedure rmListener(const _event: string; const _handler: TObjectListenerMethod); overload; unimplemented;
-        procedure rmListener(const _event: string; const _handlers: TArrayObjectListenerMethod); overload; unimplemented;
-        procedure rmListener(const _event: string; const _handler: TObjectListenerProc); overload; unimplemented;
-        procedure rmListener(const _event: string; const _handlers: TArrayObjectListenerProc); overload; unimplemented;
-        procedure rmListener(const _event: string; const _handler: TNotifyEvent); overload; unimplemented;
-        procedure rmListener(const _event: string; const _handlers: array of TNotifyEvent); overload; unimplemented;
+        function addListener(const _event: string;
+            constref _subscriber: TObject;
+            constref _handlers: array of TNotifyEvent;
+            constref _sigType: TInvokeType = qAsync;
+            constref _ignoreduplicates: boolean = True): TObject; overload;
+        {================================================================}
 
-        //function isListener(const _event: string; const _handler: TObjectListenerMethod): boolean; overload;
-        //function isListener(const _event: string; const _handler: TObjectListenerProc): boolean; overload;
+        // TODO - not implemented
+        procedure rmListeners; // Removes all listeners on this object
+        procedure rmListeners(const _event: string); // Removes listeners on this event
+        procedure rmListeners(constref _subscriber: TObject); // Removes listeners that belong to this subscriber
+
+        //procedure rmListener(const _event: string; const _handler: TListenerMethod); overload; unimplemented;
+        //procedure rmListener(const _event: string; const _handlers: TArrayListenerMethod); overload; unimplemented;
+        //procedure rmListener(const _event: string; const _handler: TListenerProc); overload; unimplemented;
+        //procedure rmListener(const _event: string; const _handlers: TArrayListenerProc); overload; unimplemented;
+        //procedure rmListener(const _event: string; const _handler: TNotifyEvent); overload; unimplemented;
+        //procedure rmListener(const _event: string; const _handlers: array of TNotifyEvent); overload; unimplemented;
+
+        {TODO - still evaluating if this is necessary}
+        {============================================}
+        //function isListener(const _event: string; const _handler: TListenerMethod): boolean; overload;
+        //function isListener(const _event: string; const _handler: TListenerProc): boolean; overload;
         //function isListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
-        //
+
         //function isEnabledListeners(const _event: string): boolean;
-        //function isEnabledListener(const _event: string; const _handler: TObjectListenerMethod): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handlers: TArrayObjectListenerMethod): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handler: TObjectListenerProc): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handlers: TArrayObjectListenerProc): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handler: TListenerMethod): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handlers: TArrayListenerMethod): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handler: TListenerProc): boolean; overload;
+        //function isEnabledListener(const _event: string; const _handlers: TArrayListenerProc): boolean; overload;
         //function isEnabledListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
         //function isEnabledListener(const _event: string; const _handlers: array of TNotifyEvent): boolean; overload;
-        //
+
         //procedure enableListeners(const _event: string);
-        //procedure enableListener(const _event: string; const _handler: TObjectListenerMethod); overload;
-        //procedure enableListener(const _event: string; const _handlers: TArrayObjectListenerMethod); overload;
-        //procedure enableListener(const _event: string; const _handler: TObjectListenerProc); overload;
-        //procedure enableListener(const _event: string; const _handlers: TArrayObjectListenerProc); overload;
+        //procedure enableListener(const _event: string; const _handler: TListenerMethod); overload;
+        //procedure enableListener(const _event: string; const _handlers: TArrayListenerMethod); overload;
+        //procedure enableListener(const _event: string; const _handler: TListenerProc); overload;
+        //procedure enableListener(const _event: string; const _handlers: TArrayListenerProc); overload;
         //procedure enableListener(const _event: string; const _handler: TNotifyEvent); overload;
         //procedure enableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
-        //
+
         //procedure disableListeners(const _event: string);
-        //procedure disableListener(const _event: string; const _handler: TObjectListenerMethod); overload;
-        //procedure disableListener(const _event: string; const _handlers: TArrayObjectListenerMethod); overload;
-        //procedure disableListener(const _event: string; const _handler: TObjectListenerProc); overload;
-        //procedure disableListener(const _event: string; const _handlers: TArrayObjectListenerProc); overload;
+        //procedure disableListener(const _event: string; const _handler: TListenerMethod); overload;
+        //procedure disableListener(const _event: string; const _handlers: TArrayListenerMethod); overload;
+        //procedure disableListener(const _event: string; const _handler: TListenerProc); overload;
+        //procedure disableListener(const _event: string; const _handlers: TArrayListenerProc); overload;
         //procedure disableListener(const _event: string; const _handler: TNotifyEvent); overload;
         //procedure disableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
 
         // Invokes listeners
-        procedure signal(const _event: string; constref _params: TJSONObject=nil; _freeParams: Boolean = true);
+        procedure signal(const _event: string; constref _params: TJSONObject = nil; _freeParams: boolean = True);
 
 
         // Returns a list of signal names that have been registered
@@ -237,24 +261,25 @@ type
         //function async(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64;
         //function async(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64;
         //function async(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
-        //
+
         //function await(_p: TProcedure; _invoke: TInvokeType = qAsync): int64;
         //function await(_p: TProcedureOfObject; _invoke: TInvokeType = qAsync): int64;
         //function await(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64;
         //function await(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64;
         //function await(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
 
-        function activeSignalCount: integer; // Returns the number of signals active for this particular object.
+        function activeSignalCount: integer;
+
+        // Returns the number of signals active for this particular object.
         function objectAlive: boolean;
 
-        procedure stopListening; // Removes this object from the list of listeners.
-
-	end;
+        procedure stopListening; // Removes to signals from other objects
+    end;
 
     TListenerSignalMode = (lmSingleton, lmDynamic);
 
-    // Hack to check if an object address points to a valid object.
-    function isObjectAlive(_obj: TObject) : boolean;
+// Hack to check if an object address points to a valid object.
+function isObjectAlive(constref _obj: TObject): boolean;
 
 
 var
@@ -263,243 +288,325 @@ var
 
 implementation
 
+uses
+    StrUtils, sugar.logger;
+
 type
 
-	{ TObjectListenerProcRunner }
+    { TProcRunner }
 
     // IMPORTANT.
     // This class frees itself after running
     // See doRun();
-    TObjectListenerProcRunner = class
+    TProcRunner = class
     private
+        myCs: TRTLCriticalSection;
         myFreeOnDone: boolean;
-        listener: TObjectlListener;
+        myListener: TListener;
         procedure doRun;                        // Can be called in a thread as well.
         procedure doRunAsync(_param: PtrInt);   // For Application.QueueAsyncCall()
     public
-        beforeDo: function : integer of object;
-        afterDo : function : integer of object;
+        beforeDo: function: integer of object;
+        afterDo: function: integer of object;
         Enabled: boolean;
-        procedure runAsync (_listener: TObjectlListener);
-        procedure runThread(_listener: TObjectlListener);
-        procedure runSerial(_listener: TObjectlListener);
-        constructor Create(_freeOnDone: boolean = false);
+        procedure runAsync(_listener: TListener);
+        procedure runThread(_listener: TListener);
+        procedure runSerial(_listener: TListener);
+        constructor Create(_freeOnDone: boolean = False);
+        destructor Destroy; override;
 
-	end;
+    end;
 
- var
-     // See Initialization section
-    globalObjectListenerList : TObjectListenerList;
-    globalProcRunner         : TObjectListenerProcRunner;
+    THexstringMap = class(specialize TFPGMap<string, string>);
+    TSubscriberObjectMap = class(specialize TFPGMapObject<string, THexstringMap>);
+
+var
+    // See Initialization section
+    objectListeners: TObjectEventList;
+    procRunner: TProcRunner;
+    subscriberObjectMap: TSubscriberObjectMap;
 
 
- function AddressAsHex(_obj: pointer): string;
- begin
-    Result:= PtrUInt(_obj).ToHexString(16);
- end;
+function pointerAsHex(_obj: pointer): string;
+begin
+    Result := PtrUInt(_obj).ToHexString(16);
+end;
 
- procedure clearListenerObject(_index: integer);
- begin
-     while globalObjectListenerList.Data[_index].Count > 0 do begin // Loop of event listeners
-         globalObjectListenerList.Data[_index].Data[_index].Free;        // TObjectListenerProcList
-         globalObjectListenerList.Data[_index].Delete(_index);
-     end;
-     globalObjectListenerList.Data[_index].Free;
-     globalObjectListenerList.Delete(_index);
- end;
+function hexStrAsPointer(_hex: string): Pointer;
+begin
+    Result := pointer(Hex2Dec64(_hex));
+end;
+
+procedure clearObjectListener(_index: integer);
+begin
+    while objectListeners.Data[_index].Count > 0 do
+    begin // Loop of event listeners
+        objectListeners.Data[_index].Delete(_index);
+    end;
+    objectListeners.Delete(_index);
+end;
 
 procedure clearMyListenerList;
 begin
-    while globalObjectListenerList.Count>0 do begin               // Loop of control event listeners
-        clearListenerObject(0);
+    while objectListeners.Count > 0 do
+    begin               // Loop of control event listeners
+        clearObjectListener(0);
     end;
 end;
 
-function isObjectAlive(_obj: TObject): boolean;
+{=============IMPORTANT=========================================}
+// Hack to check if an object address points to a valid object.
+// If during debugging, an exception is raised here
+// while an object is being destoryed, it would not
+// cause no memory leaks. To be sure, please check memory leaks
+// with heaprtc turned on in the debugging options.
+// The exception is unavoidable in this design
+function isObjectAlive(constref _obj: TObject): boolean;
 begin
     try
         if _obj is TObject then
-            Result := true;
-	except
-        Result := false;
+            Result := True;
+    except
+        Result := False;
+    end;
+end;
+
+function addSubscriber(_subscriber: TObject; _signaler: TObject): integer;
+var
+    _subscribers: THexstringMap;
+	_i: Integer;
+begin
+	// subscriber => object 1:many relationship
+	if subscriberObjectMap.Find(pointerAsHex(_subscriber), _i) then
+	begin
+	    _subscribers := subscriberObjectMap.Data[_i];
+        Result := _i;
+	end
+	else
+	begin
+	    _subscribers := THexstringMap.Create;
+	    _subscribers.Duplicates:=dupIgnore;
+	    subscriberObjectMap.Add(pointerAsHex(_subscriber), _subscribers);
+        Result := pred(subscriberObjectMap.count)
 	end;
+	_subscribers.add(pointerAsHex(_signaler));
 end;
 
-function TObjectListenerProcList.Add(const Item: TObjectlListener): Integer;
+
+
+procedure clearGlobalListenerToObjectMap;
 begin
-    inherited add(Item);
+    while subscriberObjectMap.Count > 0 do
+        subscriberObjectMap.Delete(0);
+end;
+
+function TListenerProcList.Add(const Item: TListener): integer;
+begin
+    Result := inherited add(Item);
+    if key.isEmpty then
+        key := Item.event
+    else
+        if not key.Contains(Item.event) then
+            key := key + ', ' + Item.Event;
     Item.beforeDo := Self.beforeDo;
-    Item.afterDo  := Self.afterDo;
+    Item.afterDo := Self.afterDo;
 end;
 
-{ TObjectListenerMap }
-
-constructor TObjectListenerMap.Create;
+destructor TListenerProcList.Destroy;
 begin
-    inherited Create;
-    InitCriticalSection(myCriticalSection);
-    myActiveCallCount:=0;
-end;
-
-destructor TObjectListenerMap.Destroy;
-begin
-    wrapUp;
-    DoneCriticalSection(myCriticalSection);
+    log('TListenerProcList.Destroy() %s', [key] );
 	inherited Destroy;
 end;
 
-function TObjectListenerMap.Add(const AKey: string;
-	const AData: TObjectListenerProcList): Integer;
+{ TEventListenerMap }
+
+constructor TEventListenerMap.Create(AFreeObjects: Boolean);
 begin
-    inherited add(Akey, AData);
+    inherited;
+    InitCriticalSection(myCriticalSection);
+    myActiveCallCount := 0;
+end;
+
+destructor TEventListenerMap.Destroy;
+var
+	i: Integer;
+begin
+    wrapUp;
+    DoneCriticalSection(myCriticalSection);
+    log('TEventListenerMap.Destroy::');
+    for i := 0 to pred(count) do
+        log ('  -> key=%s', [Keys[i]]);
+    inherited Destroy;
+end;
+
+function TEventListenerMap.Add(const AKey: string;
+    const AData: TListenerProcList): integer;
+begin
+    Result := inherited add(Akey, AData);
     AData.beforeDo := @Self.incActiveCall;
     AData.afterDo  := @Self.decActiveCall;
 end;
 
-function TObjectListenerMap.activeCallCount: integer;
+function TEventListenerMap.activeCallCount: integer;
 begin
-    Result:= myActiveCallCount;
+    Result := myActiveCallCount;
 end;
 
-function TObjectListenerMap.incActiveCall: integer;
+function TEventListenerMap.incActiveCall: integer;
 begin
     EnterCriticalSection(myCriticalSection);
-    inc(myActiveCallCount);
+    Inc(myActiveCallCount);
     LeaveCriticalSection(myCriticalSection);
     Result := myActiveCallCount;
 end;
 
-function TObjectListenerMap.decActiveCall: integer;
+function TEventListenerMap.decActiveCall: integer;
 begin
-    if myActiveCallCount > 0 then begin
+    if myActiveCallCount > 0 then
+    begin
         EnterCriticalSection(myCriticalSection);
-        dec(myActiveCallCount);
+        Dec(myActiveCallCount);
         LeaveCriticalSection(myCriticalSection);
-	end;
-	Result := myActiveCallCount;
+    end;
+    Result := myActiveCallCount;
 end;
 
-procedure TObjectListenerMap.wrapUp;
+procedure TEventListenerMap.wrapUp;
 begin
-    while activeCallCount > 0 do begin
+    while activeCallCount > 0 do
+    begin
         sleep(20);
         Application.ProcessMessages;
-	end;
+    end;
 end;
 
-{ TObjectListenerList }
-
-procedure TObjectListenerList.Clear;
+{ TObjectEventList }
+destructor TObjectEventList.Destroy;
 begin
-    while Count> 0 do // Loop of control event myListeners
-    begin
-        while Data[0].Count > 0 do begin // Loop of event myListeners
-            Data[0].Data[0].Free;        // TObjectListenerProcList
-            Data[0].Delete(0);
-        end;
-    	Data[0].Free;
-        Delete(0);
-	end;
-end;
-
-destructor TObjectListenerList.Destroy;
-begin
-    Clear;
-	inherited Destroy;
+    inherited Destroy;
+    log ('----------------------------');
+    log ('TObjectEventList.destroyed()');
+    log ('----------------------------');
 end;
 
 
 
 { TListenerProcRunner }
 
-procedure TObjectListenerProcRunner.runAsync(_listener: TObjectlListener);
+procedure TProcRunner.runAsync(_listener: TListener);
 begin
-    Application.QueueAsyncCall(@doRunAsync, PtrInt(_listener));
+    //log3('TProcRunner.runAsync:: -->');
+    myListener := _listener;
+    Application.QueueAsyncCall(@doRunAsync, 0);
 end;
 
-procedure TObjectListenerProcRunner.runThread(_listener: TObjectlListener);
+procedure TProcRunner.runThread(_listener: TListener);
 begin
-    listener := _listener;
+    //log3('TProcRunner.runThread:: -->');
+    myListener := _listener;
     TThread.ExecuteInThread(@doRun);
 end;
 
-procedure TObjectListenerProcRunner.runSerial(_listener: TObjectlListener);
+procedure TProcRunner.runSerial(_listener: TListener);
 begin
-    listener := _listener;
+    //log3('TProcRunner.runSerial:: -->');
+    myListener := _listener;
     doRun;
 end;
 
-constructor TObjectListenerProcRunner.Create(_freeOnDone: boolean);
+constructor TProcRunner.Create(_freeOnDone: boolean);
 begin
     inherited Create;
     myFreeOnDone := _freeOnDone;
-    Enabled      := true;
+    Enabled := True;
+    InitCriticalSection(myCs);
 end;
 
-procedure TObjectListenerProcRunner.doRunAsync(_param: PtrInt);
+destructor TProcRunner.Destroy;
 begin
-    listener := TObjectlListener(_param);
+    DoneCriticalSection(myCs);
+	inherited Destroy;
+end;
+
+procedure TProcRunner.doRunAsync(_param: PtrInt);
+begin
     doRun;
 end;
 
-procedure TObjectListenerProcRunner.doRun;
+procedure TProcRunner.doRun;
 var
-	a: String;
+    a, _objAdd: string;
+    _i: integer;
 begin
     {
-        Because this version has not implemented freeing myListeners when the object is freed
+        Because this version has not implemented freeing Listeners when the object is freed
         which then causes the proc address to point to invalid memory
-        catch the exception and then disable this listener.
+        catch the exception and then disable this myListener.
     }
 
-    if enabled then begin
-	    if assigned(listener) then begin
-            if isObjectAlive(listener) then
+    log3('   TProcRunner.doRun:: -->');
+    try
+        if Enabled then
+        begin
+            if assigned(myListener) then
             begin
-                with listener do begin
-			        try
-		                if assigned(beforeDo) then beforeDo();
+                if isObjectAlive(myListener) then
+                begin
+                    with myListener do
+                    begin
+                        try
+                            if sigType = qThreads then EnterCriticalSection(myCS);
+                            if assigned(beforeDo) then beforeDo();
 
-				        if assigned(meth) then
-			                try
-					            meth(sender, event, params)
-							except
-			                    ; //meth := nil;
-							end
+                            if assigned(meth) then
+                            try
+                                if isObjectAlive(TObject(subscriber)) then
+                                    meth(Sender, event, params)
+                            except
+                                log3('       meth Exception'); //meth := nil;
+                            end
 
-					    else if assigned(proc) then
-		                    try
-					            proc(sender, event, params);
-							except
-		                        ; // proc is nil
-							end
+                            else if assigned(proc) then
+                            try
+                                proc(Sender, event, params);
+                            except
+                                log3('       proc Exception');; // proc is nil
+                            end
 
-					    else if assigned(notify) then
-		                    try
-					            notify(sender);
-							except
-		                        ; //
-							end;
+                            else if assigned(notify) then
+                            try
+                                if isObjectAlive(TObject(subscriber)) then
+                                    notify(Sender);
+                            except
+                                log3('       notify Exception');;
+                            end;
 
-                        if freeParams then params.Free;
-		                if assigned(AfterDo) then AfterDo();
-					except
-			            on E:Exception do begin
-		                    // procedure is probably pointing to freed memory
-		                    // Don't run this listener anymore.
-			                // Enabled := false;
-			            end;
+                            try
+                                if freeParams then params.Free;
+                            except
+                                log3('       params.Free Exception');;
+                            end;
+							if assigned(AfterDo) then AfterDo();
+                            if sigType = qThreads then LeaveCriticalSection(myCS);
+                        except
+                            on E: Exception do
+                            begin
+                                // procedure is probably pointing to freed memory
+                                // Don't run this listener anymore.
+                                // Enabled := false;
+                                //log3('   doRun: Exception');
+                            end;
+                        end;
 					end;
+                end
+                else
+                    log3('   isObjectAlive(listener) is false');
+            end;
+        end;
 
-	            end;
-			end
-            else
-                ;
-		end;
-	end;
-
-
-    if myFreeOnDone then Free; // Destroy itself
+    finally
+        if myFreeOnDone then Free; // Destroy itself
+    end;
 end;
 
 
@@ -507,278 +614,359 @@ end;
 { TObjectListenerHelper }
 
 
-function TObjectListenerHelper.myListeners: TObjectListenerMap;
+function TObjectListenerHelper.Listeners: TEventListenerMap;
 var
-   _i: integer;
+    _i: integer;
 begin
     {
-        myListeners returns a map of
-        Each control has its own myListeners collection.
+        Listeners returns a map of
+        Each control has its own Listeners collection.
         Because type helpers cannot have fields, the list is stored in
         the implementation global variable as a key map.
 
         Key is the hex representation of the "self" pointer.
     }
 
-    // _i := globalObjectListenerList.IndexOf(Self.Name);
-    _i := globalObjectListenerList.IndexOf(AddressAsHex(Self));
+    // _i := objectListeners.IndexOf(Self.Name);
+    _i := objectListeners.IndexOf(pointerAsHex(Self));
     if _i >= 0 then
-        Result:= globalObjectListenerList.Data[_i]
-    else begin
-        Result:= TObjectListenerMap.Create;
-        globalObjectListenerList.Add(AddressAsHex(Self), Result);
-	end;
-end;
-
-function TObjectListenerHelper.myListener(const _event: string
-	): TObjectListenerProcList;
-var
-   _i: integer;
-begin
-    _i := myListeners.IndexOf(_event);
-    if _i >= 0 then begin
-        Result:= myListeners.Data[_i];
-    end
-    else begin
-        Result:= TObjectListenerProcList.Create;
-        myListeners.Add(_event, Result);
+        Result := objectListeners.Data[_i]
+    else
+    begin
+        Result := TEventListenerMap.Create;
+        objectListeners.Add(pointerAsHex(Self), Result);
     end;
 end;
 
-//Listener Method
-function TObjectListenerHelper.addListener(const _event: string;
-	const _handler: TObjectListenerMethod; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
+function TObjectListenerHelper.Listener(
+    const _event: string): TListenerProcList;
 var
-   _L : TObjectlListener;
+    _i: integer;
 begin
-    if assigned(_handler) then begin
-        _L := TObjectlListener.Create;
-        _L.sender := self;
-        _L.add(_handler, _sigType);
-        myListener(_event).Add(_L);
-	end;
-	Result:= Self;
+    _i := Listeners.IndexOf(_event);
+    if _i >= 0 then
+    begin
+        //log2('!!%s Listener found', [_event]);
+        Result := Listeners.Data[_i];
+    end
+    else
+    begin
+        Result := TListenerProcList.Create;
+        Listeners.Add(_event, Result); // return an empty Proclist
+        //log2('>> %s added listener', [_event]);
+    end;
+end;
+
+{==========================================================================}
+{  TListenerMethod                                                   }
+{==========================================================================}
+function TObjectListenerHelper.addListener(const _event: string; constref
+	_subscriber: TObject; constref _handler: TListenerMethod; constref
+	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+var
+    _L: TListener;
+begin
+    if assigned(_handler) then
+    begin
+        _L := TListener.Create;
+        _L.Sender := self;
+        _L.Subscriber := _subscriber;
+        _L.add(_subscriber, _handler, _sigType);
+        Listener(_event).Add(_L);
+        addSubscriber(_subscriber, self);
+    end;
+    Result := Self;
 end;
 
 function TObjectListenerHelper.addListener(const _events: TStringArray;
-	const _handler: TObjectListenerMethod; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
+	constref _subscriber: TObject; constref _handler: TListenerMethod;
+	constref _sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
 var
-	_event: String;
+    _event: string;
 begin
     for _event in _events do
-            addListener(_event, _handler, _sigType, _ignoreduplicates);
+        addListener(_event, _subscriber, _handler, _sigType, _ignoreduplicates);
     Result := Self;
 end;
 
-//Listener Method
-function TObjectListenerHelper.addListener(const _event: string;
-	const _handlers: TArrayObjectListenerMethod; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
+function TObjectListenerHelper.addListener(const _event: string; constref
+	_subscriber: TObject; constref _handlers: TArrayListenerMethod; constref
+	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
 var
-	_handler: TObjectListenerMethod;
+    _handler: TListenerMethod;
 begin
     for _handler in _handlers do
-        addListener(_event, _handler, _sigType,_ignoreduplicates);
+        addListener(_event, _subscriber, _handler, _sigType, _ignoreduplicates);
     Result := Self;
 end;
 
-//Listener Proc
-function TObjectListenerHelper.addListener(const _event: string;
-	const _handler: TObjectListenerProc; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
+
+{==========================================================================}
+{  Listener Proc                                                           }
+{==========================================================================}
+function TObjectListenerHelper.addListener(const _event: string; constref
+	_handler: TListenerProc; constref _sigType: TInvokeType; constref
+	_ignoreduplicates: boolean): TObject;
 var
-   _L : TObjectlListener;
+    _L: TListener;
 begin
-    if assigned(_handler) then begin
-        _L := TObjectlListener.Create;
+    if assigned(_handler) then
+    begin
+        _L := TListener.Create;
         _L.add(_handler, _sigType);
-        myListener(_event).Add(_L);
-	end;
-	Result:= Self;
+        Listener(_event).Add(_L);
+    end;
+    Result := Self;
 end;
 
 function TObjectListenerHelper.addListener(const _events: TStringArray;
-	const _handler: TObjectListenerProc; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
+	constref _handler: TListenerProc; constref _sigType: TInvokeType;
+	constref _ignoreduplicates: boolean): TObject;
 var
-	_event: String;
-begin
-    for _event in _events do
-            addListener(_event, _handler, _sigType, _ignoreduplicates);
-    Result := Self;
-end;
-
-//Listener Proc
-function TObjectListenerHelper.addListener(const _event: string;
-	const _handlers: TArrayObjectListenerProc; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
-var
-	_handler: TObjectListenerProc;
-begin
-    for _handler in _handlers do
-        addListener(_event, _handler, _sigType,_ignoreduplicates);
-    Result := Self;
-end;
-
-// TNotifyEvent
-function TObjectListenerHelper.addListener(const _event: string;
-	const _handler: TNotifyEvent; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
-var
-   _L : TObjectlListener;
-begin
-    if assigned(_handler) then begin
-        _L := TObjectlListener.Create;
-        _L.add(_handler, _sigType);
-        myListener(_event).Add(_L);
-	end;
-	Result:= Self;
-end;
-
-function TObjectListenerHelper.addListener(const _events: TStringArray;
-	const _handler: TNotifyEvent; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
-var
-	_event: String;
+    _event: string;
 begin
     for _event in _events do
         addListener(_event, _handler, _sigType, _ignoreduplicates);
-
     Result := Self;
 end;
 
-// TNotifyEvent
-function TObjectListenerHelper.addListener(const _event: string;
-	const _handlers: array of TNotifyEvent; const _sigType: TInvokeType;
-	const _ignoreduplicates: boolean): TObject;
+function TObjectListenerHelper.addListener(const _event: string; constref
+	_handlers: TArrayListenerProc; constref _sigType: TInvokeType; constref
+	_ignoreduplicates: boolean): TObject;
 var
-	_handler: TNotifyEvent;
+    _handler: TListenerProc;
 begin
     for _handler in _handlers do
-        addListener(_event, _handler, _sigType,_ignoreduplicates);
+        addListener(_event, _handler, _sigType, _ignoreduplicates);
+    Result := Self;
+end;
+
+
+{==========================================================================}
+{  TNotifyEvent                                                            }
+{==========================================================================}
+function TObjectListenerHelper.addListener(const _event: string; constref
+	_subscriber: TObject; constref _handler: TNotifyEvent; constref
+	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+var
+    _L: TListener;
+begin
+    if assigned(_handler) then
+    begin
+        _L := TListener.Create;
+        _L.add(_subscriber, _handler, _sigType);
+        Listener(_event).Add(_L);
+        addSubscriber(_subscriber, Self);
+    end;
+    Result := Self;
+end;
+
+function TObjectListenerHelper.addListener(const _events: TStringArray;
+	constref _subscriber: TObject; constref _handler: TNotifyEvent; constref
+	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+var
+    _event: string;
+begin
+    for _event in _events do
+        addListener(_event, _subscriber, _handler, _sigType, _ignoreduplicates);
+
+    Result := Self;
+end;
+function TObjectListenerHelper.addListener(const _event: string; constref
+	_subscriber: TObject; constref _handlers: array of TNotifyEvent; constref
+	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+var
+    _handler: TNotifyEvent;
+begin
+    for _handler in _handlers do
+        addListener(_event, _subscriber, _handler, _sigType, _ignoreduplicates);
     Result := Self;
 end;
 
 procedure TObjectListenerHelper.rmListeners;
 var
-	_i: Integer;
+    _i: integer;
 begin
     {WE ALSO NEED A WAY
         To remove proc addresses from other objects whose signals we are listening to
         when we are being destroyed.
         Need more indexes.
     }
-    _i := globalObjectListenerList.IndexOf(AddressAsHex(Self));
-    if _i > -1 then clearListenerObject(_i);
+    if not objectAlive then exit;
+    _i := objectListeners.IndexOf(pointerAsHex(Self));
+    if _i > -1 then clearObjectListener(_i);
 end;
 
 procedure TObjectListenerHelper.rmListeners(const _event: string);
-begin
-
-end;
-
-procedure TObjectListenerHelper.rmListener(const _event: string;
-	const _handler: TObjectListenerMethod);
-begin
-
-end;
-
-procedure TObjectListenerHelper.rmListener(const _event: string;
-	const _handlers: TArrayObjectListenerMethod);
-begin
-
-end;
-
-procedure TObjectListenerHelper.rmListener(const _event: string;
-	const _handler: TObjectListenerProc);
-begin
-
-end;
-
-procedure TObjectListenerHelper.rmListener(const _event: string;
-	const _handlers: TArrayObjectListenerProc);
-begin
-
-end;
-
-procedure TObjectListenerHelper.rmListener(const _event: string;
-	const _handler: TNotifyEvent);
-begin
-
-end;
-
-procedure TObjectListenerHelper.rmListener(const _event: string;
-	const _handlers: array of TNotifyEvent);
-begin
-
-end;
-
-procedure TObjectListenerHelper.signal(
-            const _event: string;
-            constref _params: TJSONObject; _freeParams: Boolean
-	);
 var
-   i : integer;
-   _l : TObjectListenerProcList;
-   _tmpParams: TJSONObject = nil;
+    _i, _j: integer;
 begin
-
-    if not objectAlive then exit;  // Check if this object is still in scope.
-
-    _l := myListener(_event);
-    for i := 0 to pred(_l.Count) do begin
-        if assigned(_params) then begin
-	        _tmpParams:= _params.Clone as TJSONObject // Always call the myListener procedure with a cloned param object (memory safety).
-        end;
-        _l.Items[i].do_(self, _event, _tmpParams, true {free params because it will be cloned before next call})
+    if not objectAlive then exit;
+    begin
+        _j := listeners.indexOf(_event);
+        if _j > -1 then begin
+            listeners.Delete(_j);
+            log('rmListeners(%s): deleted %d',[_event, _j])
+		end
+        else
+            log('rmListeners(%s): event listener map not found',[_event]);
 	end;
-    // Always free parameters, irrespective of whether there were event handlers or not
-    if _freeParams then _params.Free;
+end;
+
+procedure TObjectListenerHelper.rmListeners(constref _subscriber: TObject);
+var
+    _i, _j, _k, _x, _y: integer;
+    _signalerList : THexstringMap;
+	_listenerMap: TEventListenerMap;
+    _procList : TListenerProcList;
+    _listener : TListener;
+begin
+    if not objectAlive then exit;
+    //log3('=============== TObjectListenerHelper.rmListeners() ================');
+    _y := subscriberObjectMap.IndexOf(pointerAsHex(_subscriber));
+    if _y > -1 then
+    begin
+        //log3('subscriber %s @%s', [_subscriber.ClassName, pointerAsHex(_subscriber)]);
+
+        _signalerList :=subscriberObjectMap.Data[_y];
+        for _i := 0 to pred(_signalerList.Count) do begin
+
+            _x := objectListeners.IndexOf(_signalerList.Keys[_i]);
+            if _x = -1 then continue;
+
+	        _listenerMap := objectListeners.Data[_x]; // TEventListenerMap(objectListeners.Items[_i]);
+	        for _j := 0 to pred(_listenerMap.Count) do begin
+	            _procList := _listenerMap.Data[_j];
+	            _k := 0;
+	            while _k < _procList.Count do begin
+	                _listener := _procList.Items[_k];
+                    if isObjectAlive(_listener) and isObjectAlive(_listener.subscriber)then begin
+                        if _listener.subscriber.equals(_subscriber) then begin
+                            //log3('   deleting %s, %s [%d]', [_listener.event, _listener.Subscriber.ClassName, _k]);
+                            _procList.Delete(_k);
+					    end
+                        else
+                            inc(_k);
+    				end
+                    else
+                        inc(_k);
+				end;
+			end;
+
+		end;
+	end;
+    //log3('=============== DONE ================');
+end;
+
+
+//procedure TObjectListenerHelper.rmListener(const _event: string;
+//    const _handler: TListenerMethod);
+//begin
+
+//end;
+
+//procedure TObjectListenerHelper.rmListener(const _event: string;
+//    const _handlers: TArrayListenerMethod);
+//begin
+
+//end;
+
+//procedure TObjectListenerHelper.rmListener(const _event: string;
+//    const _handler: TListenerProc);
+//begin
+
+//end;
+
+//procedure TObjectListenerHelper.rmListener(const _event: string;
+//    const _handlers: TArrayListenerProc);
+//begin
+
+//end;
+
+//procedure TObjectListenerHelper.rmListener(const _event: string;
+//    const _handler: TNotifyEvent);
+//begin
+
+//end;
+
+//procedure TObjectListenerHelper.rmListener(const _event: string;
+//    const _handlers: array of TNotifyEvent);
+//begin
+
+//end;
+
+procedure TObjectListenerHelper.signal(const _event: string;
+    constref _params: TJSONObject; _freeParams: boolean);
+var
+    i: integer;
+    _l: TListenerProcList;
+    _tmpParams: TJSONObject = nil;
+begin
+    try
+	    if not objectAlive then exit;  // Check if this object is still in scope.
+	    _l := Listener(_event);
+	    try
+	        //log3('TObjectListenerHelper.signal:: --> start (%s, %s)', [_event, _params.FormatJSON()]);
+	        for i := 0 to pred(_l.Count) do
+	        begin
+	            if assigned(_params) then
+	            begin
+	                // Always call the Listener procedure with
+	                // a cloned param object (memory safety).
+	                _tmpParams := _params.Clone as TJSONObject;
+	            end;
+	            _l.Items[i].do_(self, _event, _tmpParams, True {free params because it will be cloned before next call});
+	        end;
+	    finally
+
+	    end;
+    finally
+        if _freeParams then _params.Free; // Always free parameters, irrespective of whether there were event handlers or not
+	end;
 end;
 
 function TObjectListenerHelper.signals: TStringArray;
 var
-	i: Integer;
+    i: integer;
 begin
-    SetLength(Result, myListeners.Count);
-    for i := 0 to High(Result) do begin
-        Result[i] := myListeners.Keys[i];
-	end;
+    Result := [];
+    SetLength(Result, Listeners.Count);
+    for i := 0 to High(Result) do
+    begin
+        Result[i] := Listeners.Keys[i];
+    end;
 end;
 
 function TObjectListenerHelper.memdump: TJSONArray;
 var
     _signals: TStringArray;
-	_signal: String;
-	_procList: TObjectListenerProcList;
-	_obj: TJSONObject;
-	_i: Integer;
+    _signal: string;
+    _procList: TListenerProcList;
+    _obj: TJSONObject;
+    _i: integer;
 begin
-    Result:= TJSONArray.Create;
+    Result := TJSONArray.Create;
     _signals := signals;
 
-    for _signal in _signals do begin
-        _procList :=  myListener(_signal);
+    for _signal in _signals do
+    begin
+        _procList := Listener(_signal);
 
-        _obj := TJSONObject.Create([
-            'control', AddressAsHex(Self),
-            'signal', _signal,
-            'listeners', TJSONArray.Create()
-        ]);
+        _obj := TJSONObject.Create(['control', pointerAsHex(Self),
+            'signal', _signal, 'listeners', TJSONArray.Create()]);
 
         Result.Add(_obj);
-        for _i := 0 to pred(_procList.Count) do begin
-            _obj.arrays['listeners'].add (_proclist.Items[_i].getAsJSON);
+        for _i := 0 to pred(_procList.Count) do
+        begin
+            _obj.arrays['listeners'].add(_proclist.Items[_i].getAsJSON);
         end;
-	end;
+    end;
 
 end;
 
 function TObjectListenerHelper.activeSignalCount: integer;
 begin
-    Result := myListeners.activeCallCount;
+    Result := Listeners.activeCallCount;
 end;
 
 function TObjectListenerHelper.objectAlive: boolean;
@@ -787,35 +975,56 @@ begin
 end;
 
 procedure TObjectListenerHelper.stopListening;
+var
+    _signalerList: THexstringMap;
+    _signaler : TObject;
+    _i, _j: integer;
 begin
-    rmListeners;
-end;
 
-
-{ TObjectlListener }
-
-function TObjectlListener.getAsString: string;
-begin
-    with getAsJSON() do begin
-        Result:= AsJSON;
-        Free;
+    if Application.Terminated then
+    begin
+        log('Exiting stopListening because application is terminated');
+        exit;
 	end;
+
+    _i := subscriberObjectMap.IndexOf(pointerAsHex(self));
+    if _i = -1 then exit;
+
+    _signalerList := subscriberObjectMap.Data[_i];
+    for _j := 0 to pred(_signalerList.Count) do
+    begin
+        _signaler := TObject(hexStrAsPointer(_signalerList.Keys[_j]));
+        _signaler.rmListeners(self);
+    end;
+    subscriberObjectMap.delete(_i);
 end;
 
-function TObjectlListener.getAsJSON: TJSONObject;
+
+{ TListener }
+
+function TListener.getAsString: string;
+begin
+    with getAsJSON() do
+    begin
+        Result := AsJSON;
+        Free;
+    end;
+end;
+
+function TListener.getAsJSON: TJSONObject;
 var
     _s: string = '';
 begin
-    Result:= TJSONObject.Create;
+    Result := TJSONObject.Create;
     Result.Add('enabled', myEnabled);
-    Result.Add('sender', AddressAsHex(sender));
+    Result.Add('sender', pointerAsHex(Sender));
     Result.Add('event', event);
     if assigned(proc) then
-        Result.Add('proc', 'proc: ' + AddressAsHex(@proc))
+        Result.Add('proc', 'proc: ' + pointerAsHex(@proc))
     else if assigned(meth) then
-        Result.Add('proc', 'meth: ' + AddressAsHex(@meth))
+        Result.Add('proc', 'meth: ' + pointerAsHex(@meth))
     else if assigned(notify) then
-        Result.Add('proc', 'notify: ' + AddressAsHex(@notify))
+        Result.Add('proc', 'notify: ' + pointerAsHex(@notify))
     else
         Result.add('proc', 'nil');
 
@@ -831,72 +1040,89 @@ begin
 
 end;
 
-constructor TObjectlListener.Create;
+constructor TListener.Create;
 begin
     inherited Create;
-    myEnabled:= true;
+    myEnabled := True;
 end;
 
-procedure TObjectlListener.add(constref _proc: TObjectListenerProc; const _sigType: TInvokeType = qAsync);
+procedure TListener.add(constref _proc: TListenerProc;
+    const _sigType: TInvokeType = qAsync);
 begin
-    proc:= _proc;
-    meth:= nil;
-    notify:= nil;
+    proc := _proc;
+    meth := nil;
+    notify := nil;
+    sigType := _sigType;
+    subscriber := nil;
 end;
 
-procedure TObjectlListener.add(constref _meth: TObjectListenerMethod; const _sigType: TInvokeType = qAsync);
+procedure TListener.add(constref _subscriber: TObject; constref
+	_meth: TListenerMethod; const _sigType: TInvokeType);
 begin
-    meth:= _meth;
-    proc:=  nil;
-    notify:= nil;
+    meth := _meth;
+    proc := nil;
+    notify := nil;
+    sigType := _sigType;
+    subscriber:= _subscriber;
 end;
 
-procedure TObjectlListener.add(constref _notify: TNotifyEvent;
-	const _sigType: TInvokeType);
+procedure TListener.add(constref _subscriber: TObject; constref
+	_notify: TNotifyEvent; const _sigType: TInvokeType);
 begin
-    notify:= _notify;
-    proc:= nil;
-    meth:= nil;
+    notify := _notify;
+    proc := nil;
+    meth := nil;
+    sigType := _sigType;
+    subscriber := _subscriber;
 end;
 
 
-procedure TObjectlListener.do_(constref _sender: TObject; const _event: string;
-	constref _params: TJSONObject; const _freeParams: Boolean);
+procedure TListener.do_(constref _sender: TObject; const _event: string;
+    constref _params: TJSONObject; const _freeParams: boolean);
 var
-	_runner: TObjectListenerProcRunner;
-
+    _runner: TProcRunner;
 begin
+    //log3('TObjectListenerHelper.do_:: -->');
+    if not Enabled then exit;
 
-    if not enabled then exit;
+    Sender  := _sender;
+    event   := _event;
+    params  := _params;
+    freeParams := _freeParams;
 
-    sender      := _sender;
-    event       := _event;
-    params      := _params;
-    freeParams  := _freeParams;
+    //if isObjectAlive(TObject(subscriber)) then
+    //    log ('  ## subscriber is %s @%s', [TObject(subscriber).ClassName, pointerAsHex(subscriber)])
+    //else
+    //    log ('  ## subscriber is dead @%s', [TObject(subscriber).ClassName, pointerAsHex(subscriber)]);
 
     case ListenerSignalMode of
-    	lmSingleton: _runner     := globalProcRunner;
-        lmDynamic:   _runner     := TObjectListenerProcRunner.Create(true); // Free on done.
+        lmSingleton:    _runner := procRunner;
+        lmDynamic:      _runner := TProcRunner.Create(True); // Free on done.
     end;
 
     _runner.beforeDo := Self.beforeDo;
     _runner.afterDo  := Self.afterDo;
 
+    //log3('TObjectListenerHelper.do_:: starting runners');
     case sigType of
         qAsync:     _runner.runAsync(self);
         qThreads:   _runner.runThread(self);
         qSerial:    _runner.runSerial(self);
     end;
-    if assigned(AfterDo) then AfterDo();
 
+    if assigned(AfterDo) then AfterDo();
+    //log3('<------- TObjectListenerHelper.do_:: -->');
 end;
 
 initialization
-    globalObjectListenerList:= TObjectListenerList.Create;
-    globalProcRunner        := TObjectListenerProcRunner.Create; // Don't free on done;
+    objectListeners := TObjectEventList.Create;
+    procRunner := TProcRunner.Create; // Don't free on done;
+    subscriberObjectMap := TSubscriberObjectMap.Create;
+    subscriberObjectMap.Sorted:=True;
 
 finalization
-    globalObjectListenerList.Free;
-    globalProcRunner.Free;
-end.
+    objectListeners.Free;
+    procRunner.Free;
+    subscriberObjectMap.Free;
 
+end.
