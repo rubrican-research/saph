@@ -1,6 +1,6 @@
 unit Obj.Listener;
 {
-(c) Rubrican Research.
+(c) 2024.  Rubrican Research.
 https://github.com/rubrican-research/saph
 
 This library is released under the MIT License.
@@ -9,14 +9,84 @@ to freely define event listeners - which is text based, case-sensitive - on any 
 This is implemented as a Type Helper on TObject.
 
 Implement event listeners in your units with the following signature
+
     procedure (const _sender: TObject; const _event: string; constref _params: TJSONObject);
 
 Also an event listener can be TNotify
 
 Then, for any control in that unit (form, button, editbox etc.) you can now assign an event listener as follows:
     edtName.addListener('change', @FormChange);   // Where FormChange is a general listener for all changes to data on the from
-    edtDOB.addListener('change', @FormChange);    // EditBox for Date of Birth - change is listened by FormChange
-    edtDOB.addListener('change', @CalculateAge);  // Same Date of Birth edit box, the change will be listened by CalculateAge
+    edtDOB.addListener('change',  @FormChange);    // EditBox for Date of Birth - change is listened by FormChange
+    edtDOB.addListener('change',  @CalculateAge);  // Same Date of Birth edit box, the change will be listened by CalculateAge
+
+About Signals
+    This library provides a mechanism to implement complex signalling systems on objects.
+    When a signal is designed, there are three things to consider:
+        - points of invocation:
+                        Clarity is required to list all the points in the logic where an object
+                        will send a signal. Avoid using string literals when adding listeners or sending signals
+                        as any typos would be very hard to find when signals don't behave as expected. It is best
+                        to define all signals as constants in the unit where an object is intended to send signals
+
+                        Listeners use the constants in the listener procs (_event) if they need to know what signal
+                        was sent (except the TNotify listener, which does not send any event or parameters)
+
+        - parameters:
+                        because the parameters of a signal are implemented as a JSONObject, it is important
+                        to define each field in the parameter list and denote its purpose. It may prove to be
+                        useful to create a separate unit that contains factory methods to instantiate the
+                        parameter object of a signal, which provides a good place in the the code to document
+                        how a signal may be consumed.
+
+        - avoid recursion:
+                        Because of the inherent async nature of signals, we can have a situation akin to callback hell,
+                        where it can become impossible to keep track of when signals being fired. This could make it
+                        extremely difficult to debug the code.
+
+                        One hack is to use a global search by signal name
+
+                        Object Pascal currently does not support anonymous functions yet (which would make for readable
+                        code to know what a listener would do at the place where it is being added) so one would have to
+                        jump around in the code quite a bit to locate different listenenrs
+
+        ** CALL stopListening() in your destructors **
+                        when an object consumes signals, its address is registerd in the library. When the object is
+                        freed, the library does not implicitly know that the object has been freed. So, in the destructor
+                        of the object, call "stopListening()", it will delete the entries for this object.
+
+                        Exceptions are handled in the library if the listener object is not alive anymore, but it makes debugging
+                        very cumbersome because every call to a deleted object will raise an exception in the debugger
+                        (not in the final executable).
+        thread safety:
+                        One of the listener types is qThreads, which calls each listner method inside its own thread.
+                        The library has a dedicated variable
+                            runnerCS: TRTLCriticalSection;
+                        which MUST be used inside your listener methods if you have opted to consume the signal as  qThread.
+
+                        NOTE: Threaded listeners are not stable as of this release. They work most of the time
+                        as long a listener method listens to only one signal. It leads to unstable conditions if you do
+                        something like this
+                            obj.addListener('sigA', self, @listener1, qThreads);
+                            obj.addListener('sigB', self, @listener1, qThreads);
+
+                        two signals "sigA" and "sigB" are calling the same method "listener1". This works well for aAsync and qSerial. But
+                        for qThread, it can cause unexpected exceptions if the method accesses any global variables.
+
+Best Practices
+    Ideally, there should be a dedicated method in every unit or class that adds listeners. This way it is easy to see at a
+    glance how many listeners are assigned to an object OR all the different objects that are being listened to within a
+    listener implementation.
+
+    Factory functions that instantiate objects are a good way to keep the listener definitions in a single place. If a class
+    consumes objects from other classes and also manages their lifecycles, this style is better suited, for it guarantees that
+    every instance of a particular class has the exact same set of listeners
+
+    The  listener code can make decisions based on:
+    - _sender (which tells you which object has signalled)
+    - _event (the string literal of the event)
+
+    NOTE: the lifecycle of the param object is managed by the listener library. It will be freed as soon as the listener method
+    is exited. So, if you need for it to persist outside of the method, you would have to clone it.
 }
 
 
@@ -197,47 +267,10 @@ type
             constref _ignoreduplicates: boolean = True): TObject; overload;
         {================================================================}
 
-        // TODO - not implemented
+
         procedure rmListeners; // Removes all listeners on this object
-        procedure rmListeners(const _event: string); // Removes listeners on this event
+        procedure rmListeners(const _event: string); // Removes listeners on this event of this object
         procedure rmListeners(constref _subscriber: TObject); // Removes listeners that belong to this subscriber
-
-        //procedure rmListener(const _event: string; const _handler: TListenerMethod); overload; unimplemented;
-        //procedure rmListener(const _event: string; const _handlers: TArrayListenerMethod); overload; unimplemented;
-        //procedure rmListener(const _event: string; const _handler: TListenerProc); overload; unimplemented;
-        //procedure rmListener(const _event: string; const _handlers: TArrayListenerProc); overload; unimplemented;
-        //procedure rmListener(const _event: string; const _handler: TNotifyEvent); overload; unimplemented;
-        //procedure rmListener(const _event: string; const _handlers: array of TNotifyEvent); overload; unimplemented;
-
-        {TODO - still evaluating if this is necessary}
-        {============================================}
-        //function isListener(const _event: string; const _handler: TListenerMethod): boolean; overload;
-        //function isListener(const _event: string; const _handler: TListenerProc): boolean; overload;
-        //function isListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
-
-        //function isEnabledListeners(const _event: string): boolean;
-        //function isEnabledListener(const _event: string; const _handler: TListenerMethod): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handlers: TArrayListenerMethod): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handler: TListenerProc): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handlers: TArrayListenerProc): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handler: TNotifyEvent): boolean; overload;
-        //function isEnabledListener(const _event: string; const _handlers: array of TNotifyEvent): boolean; overload;
-
-        //procedure enableListeners(const _event: string);
-        //procedure enableListener(const _event: string; const _handler: TListenerMethod); overload;
-        //procedure enableListener(const _event: string; const _handlers: TArrayListenerMethod); overload;
-        //procedure enableListener(const _event: string; const _handler: TListenerProc); overload;
-        //procedure enableListener(const _event: string; const _handlers: TArrayListenerProc); overload;
-        //procedure enableListener(const _event: string; const _handler: TNotifyEvent); overload;
-        //procedure enableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
-
-        //procedure disableListeners(const _event: string);
-        //procedure disableListener(const _event: string; const _handler: TListenerMethod); overload;
-        //procedure disableListener(const _event: string; const _handlers: TArrayListenerMethod); overload;
-        //procedure disableListener(const _event: string; const _handler: TListenerProc); overload;
-        //procedure disableListener(const _event: string; const _handlers: TArrayListenerProc); overload;
-        //procedure disableListener(const _event: string; const _handler: TNotifyEvent); overload;
-        //procedure disableListener(const _event: string; const _handlers: array of TNotifyEvent); overload;
 
         // Invokes listeners
         procedure signal(const _event: string; constref _params: TJSONObject = nil; _freeParams: boolean = True);
@@ -261,12 +294,21 @@ type
         //function await(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64;
         //function await(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;
 
-        function activeSignalCount: integer;
+        function activeSignalCount: integer; // Returns total number of all signals that are active at the present moment.
+                                             // This is not the count of active signals of this object.
 
-        // Returns the number of signals active for this particular object.
+        // Is this object currenly alive ?
+        // hack to handle cases where the memory address will be accessed
+        // but we don't know if the object has been freed.
         function objectAlive: boolean;
 
-        procedure stopListening; // Removes to signals from other objects
+        {IMPORTANT}
+        // You should call this in the destructor of your objects that
+        // are listening to signals.
+        // This is for listener objects, not signalling.
+        // It removes all methods that were added as listeners across all
+        // objects in the library.
+        procedure stopListening;
     end;
 
     TListenerSignalMode = (lmSingleton, lmDynamic);
@@ -285,7 +327,9 @@ var
 implementation
 
 uses
-    StrUtils, sugar.logger;
+    StrUtils
+    {, sugar.logger}
+    ;
 
 type
 
@@ -349,13 +393,13 @@ var
 
     procedure wrapUpSignals;
     begin
-        log('wrapUpSignals()--->');
+        //log('wrapUpSignals()--->');
         while activeSignals > 0 do
         begin
             sleep(10);
             Application.ProcessMessages;
 		end;
-        log('<----- wrapUpSignals() done.');
+        //log('<----- wrapUpSignals() done.');
 	end;
 
 {================================================================================}
@@ -373,11 +417,6 @@ end;
 
 procedure clearObjectListener(_index: integer);
 begin
-    //while objectListeners.Data[_index].Count > 0 do
-    //begin // Loop of event listeners
-    //
-    //end;
-    //objectListeners.Data[_index].Free;
     objectListeners.Delete(_index);
 end;
 
@@ -463,7 +502,7 @@ end;
 
 destructor TListenerProcList.Destroy;
 begin
-    log('TListenerProcList.Destroy() %s', [key] );
+    //log('TListenerProcList.Destroy() %s', [key] );
 	inherited Destroy;
 end;
 
@@ -478,10 +517,10 @@ destructor TEventListenerMap.Destroy;
 var
 	i: Integer;
 begin
-    log('TEventListenerMap.Destroy start::');
+    //log('TEventListenerMap.Destroy start::');
     for i := 0 to pred(count) do
-        log ('  -> key=%s', [Keys[i]]);
-    log('TEventListenerMap.Destroy done::');
+        //log ('  -> key=%s', [Keys[i]]);
+    //log('TEventListenerMap.Destroy done::');
     inherited Destroy;
 end;
 
@@ -497,9 +536,9 @@ end;
 destructor TObjectEventList.Destroy;
 begin
     inherited Destroy;
-    log ('----------------------------');
-    log ('TObjectEventList.destroyed()');
-    log ('----------------------------');
+    //log ('----------------------------');
+    //log ('TObjectEventList.destroyed()');
+    //log ('----------------------------');
 end;
 
 { TListenerProcRunner }
@@ -556,7 +595,7 @@ begin
         catch the exception and then disable this myListener.
     }
 
-    log3('   TProcRunner.doRun:: -->');
+    //log3('   TProcRunner.doRun:: -->');
     try
         if Enabled then
         begin
@@ -574,14 +613,14 @@ begin
 	                                if isObjectAlive(subscriber) then
 	                                    meth(Sender, event, params)
 	                            except
-	                                log('       meth Exception'); //meth := nil;
+	                                //log('       meth Exception'); //meth := nil;
 	                            end
 
                             else if assigned(proc) then
 	                            try
 	                                proc(Sender, event, params);
 	                            except
-	                                log('       proc Exception'); // proc is nil
+	                                //log('       proc Exception'); // proc is nil
 	                            end
 
                             else if assigned(notify) then
@@ -589,7 +628,7 @@ begin
 	                                if isObjectAlive(subscriber) then
 	                                    notify(Sender);
 	                            except
-	                                log('       notify Exception');
+	                                //log('       notify Exception');
 	                            end;
 
                             try
@@ -597,7 +636,7 @@ begin
                                     EnterCriticalSection(runnerCS);
                                 if freeParams then params.Free;
                             except
-                                log('       params.Free Exception');;
+                                //log('       params.Free Exception');;
                             end;
                             if sigType = qThreads then begin
                                 LeaveCriticalSection(runnerCS);
@@ -617,7 +656,7 @@ begin
 					end;
                 end
                 else
-                    log('   isObjectAlive(listener) is false');
+                    //log('   isObjectAlive(listener) is false');
             end;
         end;
 
@@ -805,11 +844,6 @@ procedure TObjectListenerHelper.rmListeners;
 var
     _i: integer;
 begin
-    {WE ALSO NEED A WAY
-        To remove proc addresses from other objects whose signals we are listening to
-        when we are being destroyed.
-        Need more indexes.
-    }
     if not objectAlive then exit;
     _i := objectListeners.IndexOf(pointerAsHex(Self));
     if _i > -1 then clearObjectListener(_i);
@@ -824,10 +858,10 @@ begin
         _j := listeners.indexOf(_event);
         if _j > -1 then begin
             listeners.Delete(_j);
-            log('rmListeners(%s): deleted %d',[_event, _j])
+            //log('rmListeners(%s): deleted %d',[_event, _j])
 		end
         else
-            log('rmListeners(%s): event listener map not found',[_event]);
+            //log('rmListeners(%s): event listener map not found',[_event]);
 	end;
 end;
 
@@ -876,44 +910,12 @@ begin
     //log3('=============== DONE ================');
 end;
 
-
-//procedure TObjectListenerHelper.rmListener(const _event: string;
-//    const _handler: TListenerMethod);
-//begin
-
-//end;
-
-//procedure TObjectListenerHelper.rmListener(const _event: string;
-//    const _handlers: TArrayListenerMethod);
-//begin
-
-//end;
-
-//procedure TObjectListenerHelper.rmListener(const _event: string;
-//    const _handler: TListenerProc);
-//begin
-
-//end;
-
-//procedure TObjectListenerHelper.rmListener(const _event: string;
-//    const _handlers: TArrayListenerProc);
-//begin
-
-//end;
-
-//procedure TObjectListenerHelper.rmListener(const _event: string;
-//    const _handler: TNotifyEvent);
-//begin
-
-//end;
-
-//procedure TObjectListenerHelper.rmListener(const _event: string;
-//    const _handlers: array of TNotifyEvent);
-//begin
-
-//end;
+{---- thread safety hack -------- }
+{see below after EnterCriticalSection(runnerCS)}
 var
     _j: TJSONObject;
+{-----------------------------------}
+
 procedure TObjectListenerHelper.signal(const _event: string;
     constref _params: TJSONObject; _freeParams: boolean);
 var
@@ -932,9 +934,11 @@ begin
 	            begin
 	                // Always call the Listener procedure with
 	                // a cloned param object (memory safety).
+
                     EnterCriticalSection(runnerCS);
                     _j := _params.Clone as TJSONObject;
                     LeaveCriticalSection(runnerCS);
+
                     //log('signal() params clone : %s', [_j.formatJSON(AsCompactJSON)]);
 	                _l.Items[i].do_(self, _event, _j, True {free params because it will be cloned before next call});
 	            end
@@ -943,7 +947,7 @@ begin
 	        end;
 	    except
             On E:Exception do begin
-                log('signal(): Exception ' + E.Message);
+                //log('signal(): Exception ' + E.Message);
 			end;
 	    end;
     finally
@@ -1009,7 +1013,7 @@ begin
 
     if Application.Terminated then
     begin
-        log('Exiting stopListening because application is terminated');
+        //log('Exiting stopListening because application is terminated');
         exit;
 	end;
 
@@ -1115,6 +1119,7 @@ begin
     event   := _event;
     params  := _params;
     freeParams := _freeParams;
+
     //if assigned(params) then
     //    log('TListener.do_ params: %s', [params.formatJSON(AsCompressedJSON)]);
 
@@ -1146,11 +1151,9 @@ initialization
     InitCriticalSection(signalCountCS);
     InitCriticalSection(runnerCS);
     objectListeners := TObjectEventList.Create;
-    procRunner := TProcRunner.Create; // Don't free on done;
+    procRunner := TProcRunner.Create; // Singleton runner: don't free when method is done;
     subscriberObjectMap := TSubscriberObjectMap.Create;
     subscriberObjectMap.Sorted:=True;
-
-
 
 finalization
     wrapUpSignals;

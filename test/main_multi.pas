@@ -60,7 +60,6 @@ type
         procedure addL2Click(Sender: TObject);
         procedure stopL2Click(Sender: TObject);
         procedure Edit1Change(Sender: TObject);
-		procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
     private
         procedure L1Change(const _sender: TObject; const _event: string;
@@ -131,18 +130,8 @@ begin
 
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
-begin
-    startLog();
-    log('-------------- START  -----------------------');
-    log('');
-end;
-
 procedure TForm1.FormDestroy(Sender: TObject);
 begin
-
-    log('');
-    log('-------------- STOP  -----------------------');
     myStores.Free;
 end;
 

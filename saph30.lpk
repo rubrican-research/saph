@@ -32,6 +32,10 @@
         <Filename Value="src\obj.listener.pas"/>
         <UnitName Value="Obj.Listener"/>
       </Item>
+      <Item>
+        <Filename Value="src\saph.reactive.pas"/>
+        <UnitName Value="saph.reactive"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

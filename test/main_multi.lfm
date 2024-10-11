@@ -1,13 +1,12 @@
 object Form1: TForm1
-  Left = 213
+  Left = 98
   Height = 652
-  Top = 212
+  Top = 104
   Width = 1168
   Caption = 'Form1'
   ClientHeight = 652
   ClientWidth = 1168
   Color = clWindow
-  OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '3.4.0.0'
   object Label1: TLabel
