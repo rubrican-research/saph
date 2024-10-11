@@ -12,6 +12,7 @@ type
     TReactive = class
     private
 		myEnableHistory: boolean;
+        myLockReq: string;
         myKey: string;
 		myLocked: boolean;
         myManaged : boolean; // Determines if this unit handles freeing the objects after use.
@@ -32,10 +33,11 @@ type
     public
         function value: variant; overload; virtual;       // getter
         procedure value(_v: variant); overload; virtual;   // setter
+        procedure value(_v: variant; _req: string; _key: string); // writes a value without unlocking
         function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
         function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
-        function lock(): string; // locks the value and returns a key. Returns empty string if already locked;
-        function unlock(_key: string): boolean;
+        function lock(_req: string): string; // locks the value and returns a key. Returns empty string if already locked;
+        function unlock(_req: string; _key: string): boolean;
         function undo: TReactive;
         function redo: TReactive;
     published
@@ -481,6 +483,11 @@ begin
     signal(SGWRITE);
 end;
 
+procedure TReactive.value(_v: variant; _req: string; _key: string);
+begin
+
+end;
+
 function TReactive.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TReactive;
 begin
@@ -495,25 +502,37 @@ begin
     addListener(SGWRITE, _subscriber, _e);
 end;
 
-function TReactive.lock(): string;
+function TReactive.lock(_req: string): string;
 begin
     if myKey.isEmpty then begin
         myLocked:= true;
-        myKey   := makeKey();
+        myLockReq := _req;
+        myKey     := makeKey();
 	end
     else
         Result := '';
 end;
 
-function TReactive.unlock(_key: string): boolean;
+function TReactive.unlock(_req: string; _key: string): boolean;
 begin
-    if UnicodeSameStr(_key, myKey) then begin
-       myKey:='';
-       myLocked:=False;
-       Result := true;
+    if UnicodeSameStr(_key, myKey) and UnicodeSameStr(_req, myLockReq)then begin
+        myLockReq:= _req;
+        myKey:='';
+        myLocked:=False;
+        Result := true;
 	end
     else
         Result := false;
+end;
+
+function TReactive.undo: TReactive;
+begin
+
+end;
+
+function TReactive.redo: TReactive;
+begin
+
 end;
 
 { TRInt }

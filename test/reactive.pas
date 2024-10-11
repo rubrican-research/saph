@@ -5,7 +5,7 @@ unit reactive;
 interface
 
 uses
-    Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, fgl, saph.reactive;
+    Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, fgl, saph.reactive, fpjson;
 
 type
 	{ TForm2 }
@@ -16,12 +16,14 @@ type
 		Button3: TButton;
 		Button4: TButton;
 		Button5: TButton;
+		Button6: TButton;
 		Memo1: TMemo;
 		procedure Button1Click(Sender: TObject);
 		procedure Button2Click(Sender: TObject);
 		procedure Button3Click(Sender: TObject);
 		procedure Button4Click(Sender: TObject);
 		procedure Button5Click(Sender: TObject);
+		procedure Button6Click(Sender: TObject);
         procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
     private
@@ -45,6 +47,7 @@ type
 
         procedure sCRead (sender:TObject);
         procedure sCWrite(sender:TObject);
+        procedure appListner(const _sender: TObject; const _event: string; constref _params: TJSONObject);
     public
 
     end;
@@ -55,7 +58,8 @@ var
 implementation
 
 {$R *.lfm}
-
+uses
+    obj.Listener;
 { TForm2 }
 
 procedure TForm2.FormCreate(Sender: TObject);
@@ -66,6 +70,7 @@ begin
     sA := RStr().listenRead(self, @sARead).listenWrite(self, @sAWrite);
     sB := RStr().listenRead(self, @sBRead).listenWrite(self, @sBWrite);
     sc := RStr().listenRead(self, @sCRead).listenWrite(self, @sCWrite);
+    application.addListener('wow', self, @appListner);
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -134,6 +139,11 @@ begin
 
 end;
 
+procedure TForm2.Button6Click(Sender: TObject);
+begin
+    Application.signal('wow', TJSONObject.Create(['sender', 'me', 'data', 'something']));
+end;
+
 procedure TForm2.iARead(sender: TObject);
 begin
 
@@ -194,6 +204,12 @@ end;
 procedure TForm2.sCWrite(sender: TObject);
 begin
 
+end;
+
+procedure TForm2.appListner(const _sender: TObject; const _event: string;
+	constref _params: TJSONObject);
+begin
+    Memo1.Lines.Add(Format('event: %s; data: %s', [_event, _params.FormatJSON(AsCompactJSON)]));
 end;
 
 end.
