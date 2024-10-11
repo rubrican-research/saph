@@ -11,24 +11,42 @@ type
 
     TReactive = class
     private
+		myEnableHistory: boolean;
+        myKey: string;
+		myLocked: boolean;
         myManaged : boolean; // Determines if this unit handles freeing the objects after use.
         myName: string;
+		mySilentLock: boolean;
         function getName: string; overload;
+		procedure setEnableHistory(AValue: boolean);
         procedure setName(const _n: string); overload;
+    protected
+        function makeKey(): string;
     public
-        const SGREAD = 'sig_read';
-        const SGWRITE = 'sig_write';
+        const SGNAME =  'sig_r_name';
+        const SGREAD =  'sig_r_read';
+        const SGWRITE = 'sig_r_write';
     public
-
         constructor Create;
         destructor Destroy; override;
     public
         function value: variant; overload; virtual;       // getter
         procedure value(_v: variant); overload; virtual;   // setter
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
+        function lock(): string; // locks the value and returns a key. Returns empty string if already locked;
+        function unlock(_key: string): boolean;
+        function undo: TReactive;
+        function redo: TReactive;
     published
         property name: string read getName write setName;
+        property locked: boolean read myLocked;
+        // silentLock
+        //      true: raises an exception when assigning a value to locked object
+        //      false: does not change value. exits silently.
+        property silentLock: boolean read mySilentLock write mySilentLock;
+        // Enables undo and redo
+        property enableHistory: boolean read myEnableHistory write setEnableHistory;
 	end;
 
 	{ TRInt }
@@ -39,8 +57,8 @@ type
     public
         function value: integer; overload; reintroduce;
         procedure value(_v: integer); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRInt; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRInt; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRInt; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRInt; reintroduce;
     published
         property val: integer read value write value;
     end;
@@ -53,8 +71,8 @@ type
     public
         function value: int64; overload; reintroduce;
         procedure value(_v: int64); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRInt64; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRInt64; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRInt64; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRInt64; reintroduce;
     published
             property val: int64 read value write value;
     end;
@@ -67,8 +85,8 @@ type
     public
         function value: DWord; overload; reintroduce;
         procedure value(_v: DWord); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRDWord; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRDWord; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRDWord; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRDWord; reintroduce;
     published
         property val: DWord read value write value;
     end;
@@ -81,8 +99,8 @@ type
     public
         function value: QWord; overload; reintroduce;
         procedure value(_v: QWord); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRQWord; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRQWord; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRQWord; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRQWord; reintroduce;
     published
         property val: QWord read value write value;
     end;
@@ -96,8 +114,8 @@ type
     public
         function value: double; overload; reintroduce;
         procedure value(_v: double); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRFloat; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRFloat; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRFloat; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRFloat; reintroduce;
     published
         property val: double read value write value;
     end;
@@ -110,8 +128,8 @@ type
     public
         function value: string; overload; reintroduce;
         procedure value(_v: string); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRStr; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRStr; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRStr; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRStr; reintroduce;
     published
         property val: string read value write value;
     end;
@@ -124,8 +142,8 @@ type
     public
         function value: boolean; overload; reintroduce;
         procedure value(_v: boolean); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRBool; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRBool; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRBool; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRBool; reintroduce;
     published
         property val: boolean read value write value;
     end;
@@ -138,20 +156,35 @@ type
     public
         function value: TDateTime; overload; reintroduce;
         procedure value(_v: TDateTime); overload; reintroduce;
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TRDateTime; reintroduce;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TRDateTime; reintroduce;
+        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRDateTime; reintroduce;
+        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRDateTime; reintroduce;
     published
         property val: TDateTime read value write value;
     end;
     // Factory functions
-    function RInt       : TRInt;
-    function RInt64     : TRInt64;
-    function RDWord     : TRDWord;
-    function RQWord     : TRQWord;
-	function RFloat     : TRFloat;
-	function RStr       : TRStr;
-	function RBool      : TRBool;
-	function RDateTime  : TRDateTime;
+    function RInt : TRInt; overload;
+    function RInt(_default: integer; _name: string = '') : TRInt; overload;
+
+    function RInt64 : TRInt64;overload;
+    function RInt64(_default: int64; _name: string = '') : TRInt64;overload;
+
+    function RDWord : TRDWord;overload;
+    function RDWord(_default: DWord; _name: string = '') : TRDWord;overload;
+
+    function RQWord : TRQWord;overload;
+    function RQWord(_default: QWord; _name: string = '') : TRQWord;overload;
+
+	function RFloat : TRFloat;overload;
+	function RFloat(_default: Double; _name: string = ''): TRFloat;overload;
+
+	function RStr : TRStr;overload;
+	function RStr(_default: string; _name: string = '') : TRStr;overload;
+
+	function RBool : TRBool;overload;
+	function RBool(_default: boolean; _name: string = '') : TRBool;overload;
+
+	function RDateTime  : TRDateTime;overload;
+	function RDateTime(_default: TDateTime; _name: string = '') : TRDateTime;overload;
 
     // Destructors
     function rFree(var _r: TReactive): integer; // syntax sugar for rmFromStore()
@@ -167,6 +200,14 @@ type
     // Manage
     function addToStore(_r: TReactive): TReactive;
     function rmFromStore(_r: TReactive): integer; // Index where it was located
+
+{========= OPERATOR OVERLOADING ============================}
+{TRStr}
+    operator :=(v: TRStr) : string;
+    operator =(v: TRStr; a: string): boolean;
+    operator +(b: TRStr; a: string): TRStr;
+    operator +(a: string; b: TRStr): TRStr;
+    operator +(a: TRStr; b: TRStr): TRStr;
 
 
 implementation
@@ -206,10 +247,45 @@ begin
         rStore.Delete(Result);
 end;
 
+operator:=(v: TRStr): string;
+begin
+    Result := v.val;
+end;
+
+operator=(v: TRStr; a: string): boolean;
+begin
+    Result := (v.val = a);
+end;
+
+operator+(b: TRStr; a: string): TRStr;
+begin
+    Result := RStr();
+    Result.Val := b.Val + a;
+end;
+
+operator+(a: string; b: TRStr): TRStr;
+begin
+    Result := RStr();
+    Result.Val := b.Val + a;
+end;
+
+operator+(a: TRStr; b: TRStr): TRStr;
+begin
+    Result := RStr(a.val + b.val);
+end;
+
+
 function RInt: TRInt;
 begin
     Result := TRInt.Create;
     addToStore(Result);
+end;
+
+function RInt(_default: integer; _name: string): TRInt;
+begin
+    Result := RInt();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
 end;
 
 function RInt64: TRInt64;
@@ -218,10 +294,26 @@ begin
     addToStore(Result);
 end;
 
+function RInt64(_default: int64; _name: string): TRInt64;
+begin
+    Result := RInt64();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
+
+
+end;
+
 function RDWord: TRDWord;
 begin
     Result := TRDWord.Create;
     addToStore(Result);
+end;
+
+function RDWord(_default: DWord; _name: string): TRDWord;
+begin
+    Result := RDWord();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
 end;
 
 function RQWord: TRQWord;
@@ -230,10 +322,24 @@ begin
     addToStore(Result);
 end;
 
+function RQWord(_default: QWord; _name: string): TRQWord;
+begin
+    Result := RQWord();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
+end;
+
 function RFloat: TRFloat;
 begin
     Result := TRFloat.Create;
     addToStore(Result);
+end;
+
+function RFloat(_default: Double; _name: string): TRFloat;
+begin
+    Result := RFloat();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
 end;
 
 function RStr: TRStr;
@@ -242,16 +348,37 @@ begin
     rStore.Add(pointerAsHex(Result), Result);
 end;
 
+function RStr(_default: string; _name: string): TRStr;
+begin
+    Result := RStr();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
+end;
+
 function RBool: TRBool;
 begin
     Result := TRBool.Create;
     rStore.Add(pointerAsHex(Result), Result);
 end;
 
+function RBool(_default: boolean; _name: string): TRBool;
+begin
+    Result := RBool();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
+end;
+
 function RDateTime: TRDateTime;
 begin
     Result := TRDateTime.Create;
     rStore.Add(pointerAsHex(Result), Result);
+end;
+
+function RDateTime(_default: TDateTime; _name: string): TRDateTime;
+begin
+    Result := RDateTime();
+    Result.val := _default;
+    if not _name.isEmpty then Result.setName(_name);
 end;
 
 function rFree(var _r: TReactive): integer;
@@ -307,13 +434,26 @@ begin
     Result := myName;
 end;
 
+procedure TReactive.setEnableHistory(AValue: boolean);
+begin
+	if myEnableHistory=AValue then Exit;
+	myEnableHistory:=AValue;
+end;
+
 procedure TReactive.setName(const _n: string);
 begin
-    if myName.isEmpty then
-        myName := _n
-    else
+    if myName.isEmpty then begin
+        myName := _n;
+        signal(SGNAME);
+	end
+	else
         raise Exception.Create('Name can only be set once. ' + sLinebreak
         + 'Right now Name = "' + myName+'"');
+end;
+
+function TReactive.makeKey(): string;
+begin
+    Result := IntToStr(getTickCount64());
 end;
 
 constructor TReactive.Create;
@@ -321,6 +461,7 @@ begin
     inherited;
     myName:= '';
     myManaged := false;
+    mySilentLock:= false; // Raise exception if value is being changed after locking
 end;
 
 destructor TReactive.Destroy;
@@ -332,6 +473,7 @@ end;
 function TReactive.value: variant;
 begin
     //signal(SGREAD);
+    Result := nil;
 end;
 
 procedure TReactive.value(_v: variant);
@@ -339,18 +481,39 @@ begin
     signal(SGWRITE);
 end;
 
-function TReactive.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TReactive.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TReactive;
 begin
     Result := self;
     addListener(SGREAD, _subscriber, _e);
 end;
 
-function TReactive.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TReactive.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TReactive;
 begin
     Result := self;
     addListener(SGWRITE, _subscriber, _e);
+end;
+
+function TReactive.lock(): string;
+begin
+    if myKey.isEmpty then begin
+        myLocked:= true;
+        myKey   := makeKey();
+	end
+    else
+        Result := '';
+end;
+
+function TReactive.unlock(_key: string): boolean;
+begin
+    if UnicodeSameStr(_key, myKey) then begin
+       myKey:='';
+       myLocked:=False;
+       Result := true;
+	end
+    else
+        Result := false;
 end;
 
 { TRInt }
@@ -363,19 +526,24 @@ end;
 
 procedure TRInt.value(_v: integer);
 begin
+    if myLocked then begin
+
+        exit;
+    end;
+
     if (myValue <> _v) then begin
         myValue := _v;
         signal(SGWRITE);
 	end;
 end;
 
-function TRInt.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRInt.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRInt;
 begin
     Result := TRInt(inherited);
 end;
 
-function TRInt.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRInt.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRInt;
 begin
     Result := TRInt(inherited);
@@ -397,12 +565,12 @@ begin
   	end;
 end;
 
-function TRInt64.reader(constref _subscriber: TObject; _e: TNotifyEvent): TRInt64;
+function TRInt64.listenRead(constref _subscriber: TObject; _e: TNotifyEvent): TRInt64;
 begin
     Result := TRInt64(inherited);
 end;
 
-function TRInt64.writer(constref _subscriber: TObject; _e: TNotifyEvent): TRInt64;
+function TRInt64.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent): TRInt64;
 begin
     Result := TRInt64(inherited);
 end;
@@ -423,13 +591,13 @@ begin
   	end;
 end;
 
-function TRDWord.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRDWord.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRDWord;
 begin
     Result := TRDWord(inherited);
 end;
 
-function TRDWord.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRDWord.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRDWord;
 begin
     Result := TRDWord(inherited);
@@ -451,13 +619,13 @@ begin
   	end;
 end;
 
-function TRQWord.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRQWord.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRQWord;
 begin
     Result := TRQWord(inherited);
 end;
 
-function TRQWord.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRQWord.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRQWord;
 begin
     Result := TRQWord(inherited);
@@ -479,13 +647,13 @@ begin
 	end;
 end;
 
-function TRFloat.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRFloat.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRFloat;
 begin
     Result:= TRFloat(inherited);
 end;
 
-function TRFloat.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRFloat.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRFloat;
 begin
     Result:= TRFloat(inherited);
@@ -507,13 +675,13 @@ begin
 	end;
 end;
 
-function TRStr.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRStr.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRStr;
 begin
     Result := TRStr(inherited);
 end;
 
-function TRStr.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRStr.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRStr;
 begin
     Result := TRStr(inherited);
@@ -535,13 +703,13 @@ begin
 	end;
 end;
 
-function TRBool.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRBool.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRBool;
 begin
     Result := TRBool(inherited);
 end;
 
-function TRBool.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRBool.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRBool;
 begin
     Result := TRBool(inherited);
@@ -562,13 +730,13 @@ begin
   	end;
 end;
 
-function TRDateTime.reader(constref _subscriber: TObject; _e: TNotifyEvent
+function TRDateTime.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRDateTime;
 begin
     Result := TRDateTime(inherited);
 end;
 
-function TRDateTime.writer(constref _subscriber: TObject; _e: TNotifyEvent
+function TRDateTime.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TRDateTime;
 begin
     Result := TRDateTime(inherited);

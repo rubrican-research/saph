@@ -14,10 +14,14 @@ type
 		Button1: TButton;
 		Button2: TButton;
 		Button3: TButton;
+		Button4: TButton;
+		Button5: TButton;
 		Memo1: TMemo;
 		procedure Button1Click(Sender: TObject);
 		procedure Button2Click(Sender: TObject);
 		procedure Button3Click(Sender: TObject);
+		procedure Button4Click(Sender: TObject);
+		procedure Button5Click(Sender: TObject);
         procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
     private
@@ -56,12 +60,12 @@ implementation
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-    iA := RInt().reader(self, @iARead).writer(self, @iAWrite);
-    iB := RInt().reader(self, @iBRead).writer(self, @iBWrite);
-    iC := RInt().reader(self, @iCRead).writer(self, @iCWrite);
-    sA := RStr().reader(self, @sARead).writer(self, @sAWrite);
-    sB := RStr().reader(self, @sBRead).writer(self, @sBWrite);
-    sc := RStr().reader(self, @sCRead).writer(self, @sCWrite);
+    iA := RInt().listenRead(self, @iARead).listenWrite(self, @iAWrite);
+    iB := RInt().listenRead(self, @iBRead).listenWrite(self, @iBWrite);
+    iC := RInt().listenRead(self, @iCRead).listenWrite(self, @iCWrite);
+    sA := RStr().listenRead(self, @sARead).listenWrite(self, @sAWrite);
+    sB := RStr().listenRead(self, @sBRead).listenWrite(self, @sBWrite);
+    sc := RStr().listenRead(self, @sCRead).listenWrite(self, @sCWrite);
 end;
 
 procedure TForm2.FormDestroy(Sender: TObject);
@@ -96,8 +100,38 @@ procedure TForm2.Button3Click(Sender: TObject);
 begin
     with RStr() do begin
         Name := 'My Name';
-        Name := 'This should not work';
+		Name := 'This should not work';
 	end;
+end;
+
+procedure TForm2.Button4Click(Sender: TObject);
+var
+    _r : TReactive;
+    _s : TRStr;
+begin
+    _s := RStr('This is cool');
+    _r := _s;
+    Memo1.Lines.Add('-------------');
+    Memo1.Lines.Add(_r.Value);
+    Memo1.Lines.Add('-------------');
+    Memo1.Lines.Add(_s.Value);
+end;
+
+procedure TForm2.Button5Click(Sender: TObject);
+var
+    a, b, c, d: TRStr;
+begin
+    a := RStr() + 'This '; // + ' is' + ' a test';
+    c := 'is it ' + a + ' somewhere is nowhere ' + 'and anywhere';
+    d := a + c;
+
+    Memo1.Lines.Add(a);
+    Memo1.Lines.Add(c);
+    Memo1.Lines.Add(d);
+    if (a = 'This ') then
+        Memo1.Lines.Add('comparison worked');
+    Memo1.Lines.Add('There is something quite nice about c = "%s"', [string(c)]);
+
 end;
 
 procedure TForm2.iARead(sender: TObject);
