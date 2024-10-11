@@ -12,19 +12,23 @@ type
     TReactive = class
     private
         myManaged : boolean; // Determines if this unit handles freeing the objects after use.
+        myName: string;
+        function getName: string; overload;
+        procedure setName(const _n: string); overload;
     public
         const SGREAD = 'sig_read';
         const SGWRITE = 'sig_write';
     public
+
         constructor Create;
         destructor Destroy; override;
     public
         function value: variant; overload; virtual;       // getter
         procedure value(_v: variant); overload; virtual;   // setter
-        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual;
-        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual;
+        function reader(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
+        function writer(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
     published
-
+        property name: string read getName write setName;
 	end;
 
 	{ TRInt }
@@ -298,9 +302,25 @@ end;
 
 { TReactive }
 
+function TReactive.getName: string;
+begin
+    Result := myName;
+end;
+
+procedure TReactive.setName(const _n: string);
+begin
+    if myName.isEmpty then
+        myName := _n
+    else
+        raise Exception.Create('Name can only be set once. ' + sLinebreak
+        + 'Right now Name = "' + myName+'"');
+end;
+
 constructor TReactive.Create;
 begin
     inherited;
+    myName:= '';
+    myManaged := false;
 end;
 
 destructor TReactive.Destroy;

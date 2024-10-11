@@ -13,9 +13,11 @@ type
     TForm2 = class(TForm)
 		Button1: TButton;
 		Button2: TButton;
+		Button3: TButton;
 		Memo1: TMemo;
 		procedure Button1Click(Sender: TObject);
 		procedure Button2Click(Sender: TObject);
+		procedure Button3Click(Sender: TObject);
         procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
     private
@@ -88,6 +90,14 @@ begin
 	end;
     iB.val := 2993;
     sA.val := 'Oh thinking about the younger years';
+end;
+
+procedure TForm2.Button3Click(Sender: TObject);
+begin
+    with RStr() do begin
+        Name := 'My Name';
+        Name := 'This should not work';
+	end;
 end;
 
 procedure TForm2.iARead(sender: TObject);

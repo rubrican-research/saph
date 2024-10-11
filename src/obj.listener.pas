@@ -514,13 +514,14 @@ begin
 end;
 
 destructor TEventListenerMap.Destroy;
-var
-	i: Integer;
+//var
+//	i: Integer;
 begin
     //log('TEventListenerMap.Destroy start::');
-    for i := 0 to pred(count) do
+    //for i := 0 to pred(count) do
         //log ('  -> key=%s', [Keys[i]]);
     //log('TEventListenerMap.Destroy done::');
+
     inherited Destroy;
 end;
 
