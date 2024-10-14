@@ -1,48 +1,218 @@
 object Form1: TForm1
-  Left = 2170
-  Height = 240
-  Top = 100
-  Width = 320
+  Left = 98
+  Height = 652
+  Top = 104
+  Width = 1168
   Caption = 'Form1'
-  ClientHeight = 240
-  ClientWidth = 320
-  OnCreate = FormCreate
-  LCLVersion = '3.0.0.3'
+  ClientHeight = 652
+  ClientWidth = 1168
+  Color = clWindow
+  OnDestroy = FormDestroy
+  LCLVersion = '3.4.0.0'
   object Label1: TLabel
-    Left = 22
-    Height = 17
-    Top = 32
-    Width = 38
+    Left = 16
+    Height = 50
+    Top = 13
+    Width = 650
+    AutoSize = False
     Caption = 'Label1'
+    WordWrap = True
   end
   object Label2: TLabel
-    Left = 25
-    Height = 17
-    Top = 69
-    Width = 38
+    Left = 16
+    Height = 50
+    Top = 60
+    Width = 650
+    AutoSize = False
     Caption = 'Label2'
+    WordWrap = True
   end
   object Label3: TLabel
-    Left = 30
-    Height = 17
-    Top = 101
-    Width = 38
+    Left = 16
+    Height = 50
+    Top = 107
+    Width = 650
+    AutoSize = False
     Caption = 'Label3'
+    WordWrap = True
   end
   object Label4: TLabel
-    Left = 34
-    Height = 17
-    Top = 147
-    Width = 38
+    Left = 16
+    Height = 50
+    Top = 174
+    Width = 650
+    AutoSize = False
     Caption = 'Label4'
+    WordWrap = True
   end
   object Edit1: TEdit
-    Left = 156
+    Left = 16
     Height = 25
-    Top = 32
-    Width = 80
+    Top = 279
+    Width = 288
     TabOrder = 0
     Text = 'Edit1'
     OnChange = Edit1Change
+  end
+  object addL1: TButton
+    Left = 304
+    Height = 25
+    Top = 279
+    Width = 75
+    Caption = 'add L'
+    TabOrder = 1
+    OnClick = addL1Click
+  end
+  object stopL1: TButton
+    Left = 414
+    Height = 25
+    Top = 279
+    Width = 75
+    Caption = 'Remove L'
+    TabOrder = 2
+    OnClick = stopL1Click
+  end
+  object Edit2: TEdit
+    Left = 16
+    Height = 25
+    Top = 376
+    Width = 288
+    TabOrder = 3
+    Text = 'Edit2'
+    OnChange = Edit1Change
+  end
+  object delObj: TButton
+    Left = 414
+    Height = 25
+    Top = 377
+    Width = 75
+    Caption = 'del Obj'
+    TabOrder = 4
+    OnClick = delObjClick
+  end
+  object addL2: TButton
+    Left = 304
+    Height = 25
+    Top = 377
+    Width = 75
+    Caption = 'add L'
+    TabOrder = 5
+    OnClick = addL2Click
+  end
+  object stopL2: TButton
+    Left = 518
+    Height = 25
+    Top = 377
+    Width = 75
+    Caption = 'rm ''change'''
+    TabOrder = 6
+    OnClick = stopL2Click
+  end
+  object Label5: TLabel
+    Left = 304
+    Height = 57
+    Top = 220
+    Width = 80
+    AutoSize = False
+    Caption = 'Changes propagate to L1, L2'
+    WordWrap = True
+  end
+  object Label6: TLabel
+    Left = 414
+    Height = 57
+    Top = 220
+    Width = 80
+    AutoSize = False
+    Caption = 'Remove all listeners'
+    WordWrap = True
+  end
+  object Label7: TLabel
+    Left = 304
+    Height = 141
+    Top = 407
+    Width = 80
+    AutoSize = False
+    Caption = 'Changes propagate to L3, L4, X1'#13#10#13#10'X1 changes show up in Log()'
+    WordWrap = True
+  end
+  object Label8: TLabel
+    Left = 414
+    Height = 216
+    Top = 407
+    Width = 80
+    AutoSize = False
+    Caption = 'Free subscriber X1 object.'#13#10#13#10'Log file should stop showing change to X1. '#13#10'No exception.'
+    WordWrap = True
+  end
+  object Label9: TLabel
+    Left = 518
+    Height = 203
+    Top = 403
+    Width = 80
+    AutoSize = False
+    Caption = 'remove listener on "change".'#13#10#13#10'Changes stop propagating to L3'#13#10#13#10'Changes continue to propagate to L4. '
+    WordWrap = True
+  end
+  object Button1: TButton
+    Left = 16
+    Height = 25
+    Top = 427
+    Width = 75
+    Caption = 'spike test'
+    TabOrder = 7
+    OnClick = Button1Click
+  end
+  object rb1: TRadioButton
+    Left = 24
+    Height = 21
+    Top = 344
+    Width = 51
+    Caption = 'Async'
+    TabOrder = 8
+  end
+  object rb2: TRadioButton
+    Tag = 1
+    Left = 130
+    Height = 21
+    Top = 344
+    Width = 59
+    Caption = 'Thread'
+    TabOrder = 9
+  end
+  object rb3: TRadioButton
+    Tag = 2
+    Left = 240
+    Height = 21
+    Top = 344
+    Width = 50
+    Caption = 'Serial'
+    TabOrder = 10
+  end
+  object Memo1: TMemo
+    Left = 674
+    Height = 652
+    Top = 0
+    Width = 494
+    Align = alRight
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 11
+  end
+  object Button2: TButton
+    Left = 16
+    Height = 25
+    Top = 464
+    Width = 75
+    Caption = 'show X1.val'
+    TabOrder = 12
+    OnClick = Button2Click
+  end
+  object Label10: TLabel
+    Left = 16
+    Height = 17
+    Top = 326
+    Width = 97
+    Caption = 'Invoke Signal As:'
   end
 end

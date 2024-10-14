@@ -91,9 +91,9 @@ type
     public
         property selected[constref _item: GItem] : boolean read getSelected write setSelected;
 
-        property all        [_index: integer]: GItem read getItemFromAll;           // retrieves the item from the full list
-        property selItems   [_index: integer]: GItem read getItemFromSelected;      // retrieves the item from the list of selected items
-        property unselItems [_index: integer] : GItem read getItemFromUnselected;   // retrieves the item from the list of unselected items.
+        property all        [_index: integer]: GItem read getItemFromAll;        // retrieves the item from the full list
+        property selItems   [_index: integer]: GItem read getItemFromSelected;   // retrieves the item from the list of selected items
+        property unselItems [_index: integer]: GItem read getItemFromUnselected; // retrieves the item from the list of unselected items.
 
         //For debug. I presume that this won't be needed in production
         //property keyall        [_index: integer]: string read getKeyItemFromAll;    //
@@ -121,6 +121,10 @@ type
 
         procedure resetSelection; // Unselects all selected items
         procedure clear(_freeObj: boolean = true);
+
+        // Returns true if this object is present in the list
+        function exists(item: GItem): boolean;
+        function indexOf(item: GItem): integer; // Returns the index of this item from the master list
 	end;
 
 
@@ -257,15 +261,8 @@ constructor TSelectList.Create(_OwnObjects: boolean);
 begin
     inherited Create;
     masterList := TFPHashObjectList.Create(_OwnObjects);
-
     selectList := TFPHashObjectList.Create(False);
     unselList  := TFPHashObjectList.Create(False);
-
-    //selectList := TAvgLvlTree.CreateObjectCompare(@itemSort);
-    //selectList.OwnsObjects :=False;
-    //
-    //unselList  := TAvgLvlTree.CreateObjectCompare(@itemSort);
-    //unselList.OwnsObjects := False
 end;
 
 destructor TSelectList.Destroy;
@@ -281,7 +278,7 @@ var
 	_key: String;
 begin
     _key := key(_item);
-    if not assigned(masterList.Find(_key)) then
+    if not exists(_item) then
     begin
         masterList.Add(_key, _item);
         unselList.add(_key, _item);
@@ -294,7 +291,7 @@ var
 	_i: Integer;
 begin
     _key := key(_item);
-    if assigned(masterList.Find(_key)) then
+    if exists(_item) then
     begin
         if selected[_item] then begin
             _i := selectList.FindIndexOf(_key);
@@ -364,6 +361,16 @@ begin
     end;
     masterList.Clear;
     masterList.OwnsObjects := _prevOwnsObj;
+end;
+
+function TSelectList.exists(item: GItem): boolean;
+begin
+    Result:= Assigned(masterList.Find(key(item)));
+end;
+
+function TSelectList.indexOf(item: GItem): integer;
+begin
+    Result := masterList.FindIndexOf(key(item));
 end;
 
 end.

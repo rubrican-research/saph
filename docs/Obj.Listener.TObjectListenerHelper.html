@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Saph Documentation: Obj.Listener: Class TObjectListenerHelper</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PasDoc 0.16.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="tipuesearch/tipuesearch.css">
+
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<div class="container"><div class="navigation">
+<h2><a href="index.html">Saph Documentation</a></h2><ul><li><a href="AllUnits.html">Units</a></li><li><a href="ClassHierarchy.html">Class Hierarchy</a></li><li><a href="AllClasses.html">Classes, Interfaces, Objects and Records</a></li><li><a href="AllTypes.html">Types</a></li><li><a href="AllVariables.html">Variables</a></li><li><a href="AllConstants.html">Constants</a></li><li><a href="AllFunctions.html">Functions and Procedures</a></li><li><a href="AllIdentifiers.html">Identifiers</a></li><li><form class="search-form" action="tipue_results.html"><div class="search-input"><input type="text" name="q" id="tipue_search_input" pattern=".{3,}" title="At least 3 characters" required><div class="search-button"><input type="button" id="tipue_search_button" onclick="this.form.submit();"></div></div></form>
+<div style="clear: both"></div>
+</li></ul></div><div class="content">
+<span id="TObjectListenerHelper"></span><h1 class="cio">Class TObjectListenerHelper</h1>
+<div class="sections">
+<div class="one_section"><a class="section" href="#PasDoc-Description">Description</a></div><div class="one_section"><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></div><div class="one_section">Fields</div><div class="one_section"><a class="section" href="#PasDoc-Methods">Methods</a></div><div class="one_section">Properties</div></div>
+<span id="PasDoc-Description"></span><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a href="Obj.Listener.html">Obj.Listener</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TObjectListenerHelper = class helper(TObject) for TObject</code></p>
+<h2 class="description">Description</h2>
+<p>
+TObjectListenerHelper</p>
+<span id="PasDoc-Hierarchy"></span><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="thisitem">TObjectListenerHelper</li></ul><h2 class="overview">Overview</h2>
+<span id="PasDoc-Methods"></span><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#Listeners">Listeners</a></strong>: <a href="Obj.Listener.TEventListenerMap.html">TEventListenerMap</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#Listener">Listener</a></strong>(const _event: string): <a href="Obj.Listener.TListenerProcList.html">TListenerProcList</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _event: string; constref _subscriber: TObject; constref _handler: <a href="Obj.Listener.html#TListenerMethod">TListenerMethod</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _events: TStringArray; constref _subscriber: TObject; constref _handler: <a href="Obj.Listener.html#TListenerMethod">TListenerMethod</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _event: string; constref _subscriber: TObject; constref _handlers: <a href="Obj.Listener.html#TArrayListenerMethod">TArrayListenerMethod</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _event: string; constref _handler: <a href="Obj.Listener.html#TListenerProc">TListenerProc</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _events: TStringArray; constref _handler: <a href="Obj.Listener.html#TListenerProc">TListenerProc</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _event: string; constref _handlers: <a href="Obj.Listener.html#TArrayListenerProc">TArrayListenerProc</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _event: string; constref _subscriber: TObject; constref _handler: TNotifyEvent; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _events: TStringArray; constref _subscriber: TObject; constref _handler: TNotifyEvent; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#addListener">addListener</a></strong>(const _event: string; constref _subscriber: TObject; constref _handlers: array of TNotifyEvent; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Obj.Listener.TObjectListenerHelper.html#rmListeners">rmListeners</a></strong>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Obj.Listener.TObjectListenerHelper.html#rmListeners">rmListeners</a></strong>(const _event: string);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Obj.Listener.TObjectListenerHelper.html#rmListeners">rmListeners</a></strong>(constref _subscriber: TObject);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Obj.Listener.TObjectListenerHelper.html#signal">signal</a></strong>(const _event: string; constref _params: TJSONObject = nil; _freeParams: boolean = True);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#signals">signals</a></strong>: TStringArray;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#memdump">memdump</a></strong>: TJSONArray;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#activeSignalCount">activeSignalCount</a></strong>: integer;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="Obj.Listener.TObjectListenerHelper.html#objectAlive">objectAlive</a></strong>: boolean;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Obj.Listener.TObjectListenerHelper.html#stopListening">stopListening</a></strong>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="Obj.Listener.TObjectListenerHelper.html#beforeDestruction">beforeDestruction</a></strong>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Listeners"></span><code>function <strong>Listeners</strong>: <a href="Obj.Listener.TEventListenerMap.html">TEventListenerMap</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Listener"></span><code>function <strong>Listener</strong>(const _event: string): <a href="Obj.Listener.TListenerProcList.html">TListenerProcList</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Returns the list of listeners for this particular object!</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _event: string; constref _subscriber: TObject; constref _handler: <a href="Obj.Listener.html#TListenerMethod">TListenerMethod</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+================================================================</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _events: TStringArray; constref _subscriber: TObject; constref _handler: <a href="Obj.Listener.html#TListenerMethod">TListenerMethod</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of events -&gt; single listener Method</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _event: string; constref _subscriber: TObject; constref _handlers: <a href="Obj.Listener.html#TArrayListenerMethod">TArrayListenerMethod</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of Listener Methods</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _event: string; constref _handler: <a href="Obj.Listener.html#TListenerProc">TListenerProc</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+================================================================</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _events: TStringArray; constref _handler: <a href="Obj.Listener.html#TListenerProc">TListenerProc</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of events -&gt; single listener Proc</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _event: string; constref _handlers: <a href="Obj.Listener.html#TArrayListenerProc">TArrayListenerProc</a>; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of Listener Procs</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _event: string; constref _subscriber: TObject; constref _handler: TNotifyEvent; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+================================================================</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _events: TStringArray; constref _subscriber: TObject; constref _handler: TNotifyEvent; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of events -&gt; single listener Notify Event</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="addListener"></span><code>function <strong>addListener</strong>(const _event: string; constref _subscriber: TObject; constref _handlers: array of TNotifyEvent; constref _sigType: <a href="Obj.Listener.html#TInvokeType">TInvokeType</a> = <a href="Obj.Listener.html#qAsync">qAsync</a>; constref _ignoreduplicates: boolean = True): TObject; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Array of Notify Events</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="rmListeners"></span><code>procedure <strong>rmListeners</strong>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+================================================================</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="rmListeners"></span><code>procedure <strong>rmListeners</strong>(const _event: string);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Removes all listeners on this object</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="rmListeners"></span><code>procedure <strong>rmListeners</strong>(constref _subscriber: TObject);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Removes listeners on this event of this object</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="signal"></span><code>procedure <strong>signal</strong>(const _event: string; constref _params: TJSONObject = nil; _freeParams: boolean = True);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Removes listeners that belong to this subscriber Invokes listeners</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="signals"></span><code>function <strong>signals</strong>: TStringArray;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Returns a list of signal names that have been registered</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="memdump"></span><code>function <strong>memdump</strong>: TJSONArray;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="activeSignalCount"></span><code>function <strong>activeSignalCount</strong>: integer;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+TODO &ndash; still evaluating if this is a good idea. &mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;- function async(_p: TProcedure; _invoke: TInvokeType = qAsync): int64; function async(_p: TProcedureOfObject; _invoke: TInvokeType = qAsync): int64; function async(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64; function async(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64; function async(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64; function await(_p: TProcedure; _invoke: TInvokeType = qAsync): int64; function await(_p: TProcedureOfObject; _invoke: TInvokeType = qAsync): int64; function await(_p: TDataEvent; _invoke: TInvokeType = qAsync): int64; function await(_p: TNotifyEvent; _invoke: TInvokeType = qAsync): int64; function await(_p: TNotifyCallBack; _invoke: TInvokeType = qAsync): int64;</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="objectAlive"></span><code>function <strong>objectAlive</strong>: boolean;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Returns total number of all signals that are active at the present moment. This is not the count of active signals of this object. Is this object currenly alive ? hack to handle cases where the memory address will be accessed but we don't know if the object has been freed.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="stopListening"></span><code>procedure <strong>stopListening</strong>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+You should call this in the destructor of your objects that are listening to signals. This is for listener objects, not signalling. It removes all methods that were added as listeners across all objects in the library.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="beforeDestruction"></span><code>procedure <strong>beforeDestruction</strong>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Implicitly hiding beforeDestruction so that we can hack into object destruction and remove listeners</p>
+</td></tr>
+</table>
+(c) 2024. Rubrican Research. 
+https://github.com/rubrican-research/saph<hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0</a>. </em>
+</span>
+</div></div></body></html>

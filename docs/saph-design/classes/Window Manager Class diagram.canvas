@@ -1,0 +1,19 @@
+{
+	"nodes":[
+		{"id":"8aa739607b3206f2","x":-220,"y":300,"width":250,"height":60,"type":"text","text":""},
+		{"id":"4e50a3b920417215","type":"text","text":"TFormList\n```\nTFormList = class(specialize TFPGMap<string, TFormMap>); // List by ClassName\n```","x":-500,"y":20,"width":340,"height":180,"color":"3"},
+		{"id":"902cc921a1eca13e","x":-694,"y":-814,"width":319,"height":154,"type":"text","text":"### procedure \n#### registerWind(TFormClass)"},
+		{"id":"0f38ccc7911c4e98","x":-330,"y":-814,"width":360,"height":154,"type":"text","text":"### function\n#### getForm(className) : TForm"},
+		{"id":"2011fa76af077fc6","type":"text","text":"TFormClassMap\n```\n TFormClassMap = class(specialize TFPGMap<string, TFormClass>);\n```","x":-900,"y":-265,"width":340,"height":175},
+		{"id":"b1173f8b647fdb99","x":-1120,"y":-477,"width":250,"height":60,"type":"text","text":"TFormClass"},
+		{"id":"4a041d62fe2180fd","x":-1245,"y":-690,"width":250,"height":60,"type":"text","text":"TForm"},
+		{"id":"7c1721c71e1a3d19","type":"text","text":"TFormMap\n```\nTFormMap  = class(specialize TFPGMap<string, TForm>);\n```","x":40,"y":-265,"width":270,"height":185},
+		{"id":"6d9e5c6900b8a895","type":"text","text":"TWindowManager\n\n?","x":-455,"y":-242,"width":250,"height":140}
+	],
+	"edges":[
+		{"id":"5ef0e8d70fbc501a","fromNode":"b1173f8b647fdb99","fromSide":"top","toNode":"4a041d62fe2180fd","toSide":"bottom","color":"6","label":"class of"},
+		{"id":"5127f99fd7ce93ab","fromNode":"b1173f8b647fdb99","fromSide":"bottom","toNode":"2011fa76af077fc6","toSide":"top","color":"6","label":"maps Classname to TFormClass"},
+		{"id":"b13ee0919453bb96","fromNode":"4e50a3b920417215","fromSide":"right","toNode":"7c1721c71e1a3d19","toSide":"bottom","label":"maps ClassName to a list of form objects (mapped by address)"},
+		{"id":"265efa80a9cc0b55","fromNode":"902cc921a1eca13e","fromSide":"bottom","toNode":"2011fa76af077fc6","toSide":"top","label":"registers a TFormClass"}
+	]
+}

@@ -8,7 +8,8 @@ unit saph30;
 interface
 
 uses
-    Controls.Listener, saph.lists, LazarusPackageIntf;
+    Controls.Listener, saph.lists, Obj.Listener, saph.reactive, saph.winman, 
+    LazarusPackageIntf;
 
 implementation
 
