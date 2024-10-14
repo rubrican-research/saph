@@ -36,6 +36,10 @@
         <Filename Value="src\saph.reactive.pas"/>
         <UnitName Value="saph.reactive"/>
       </Item>
+      <Item>
+        <Filename Value="saph.winman.pas"/>
+        <UnitName Value="saph.winman"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

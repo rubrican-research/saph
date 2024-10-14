@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Saph Documentation: saph.lists: Class TSelectList</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="PasDoc 0.16.0">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="tipuesearch/tipuesearch.css">
+
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body>
+<div class="container"><div class="navigation">
+<h2><a href="index.html">Saph Documentation</a></h2><ul><li><a href="AllUnits.html">Units</a></li><li><a href="ClassHierarchy.html">Class Hierarchy</a></li><li><a href="AllClasses.html">Classes, Interfaces, Objects and Records</a></li><li><a href="AllTypes.html">Types</a></li><li><a href="AllVariables.html">Variables</a></li><li><a href="AllConstants.html">Constants</a></li><li><a href="AllFunctions.html">Functions and Procedures</a></li><li><a href="AllIdentifiers.html">Identifiers</a></li><li><form class="search-form" action="tipue_results.html"><div class="search-input"><input type="text" name="q" id="tipue_search_input" pattern=".{3,}" title="At least 3 characters" required><div class="search-button"><input type="button" id="tipue_search_button" onclick="this.form.submit();"></div></div></form>
+<div style="clear: both"></div>
+</li></ul></div><div class="content">
+<span id="TSelectList"></span><h1 class="cio">Class TSelectList</h1>
+<div class="sections">
+<div class="one_section"><a class="section" href="#PasDoc-Description">Description</a></div><div class="one_section"><a class="section" href="#PasDoc-Hierarchy">Hierarchy</a></div><div class="one_section"><a class="section" href="#PasDoc-NestedTypes">Nested Types</a></div><div class="one_section">Fields</div><div class="one_section"><a class="section" href="#PasDoc-Methods">Methods</a></div><div class="one_section"><a class="section" href="#PasDoc-Properties">Properties</a></div></div>
+<span id="PasDoc-Description"></span><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a href="saph.lists.html">saph.lists</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type generic TSelectList&lt;GItem:TObject&gt; = class(TObject)</code></p>
+<h2 class="description">Description</h2>
+<p>
+TSelectList</p>
+<span id="PasDoc-Hierarchy"></span><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TObject</li>
+<li class="thisitem">TSelectList</li></ul><h2 class="overview">Overview</h2>
+<span id="PasDoc-NestedTypes"></span><h3 class="summary">Nested Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><strong><a href="saph.lists.TSelectList.html#GItemList">GItemList</a></strong> = specialize TFPGObjectList&lt;GItem&gt;;</code></td>
+</tr>
+</table>
+<span id="PasDoc-Methods"></span><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <strong><a href="saph.lists.TSelectList.html#Create">Create</a></strong>(_OwnObjects: boolean = true);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <strong><a href="saph.lists.TSelectList.html#Destroy">Destroy</a></strong>; override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="saph.lists.TSelectList.html#add">add</a></strong>(_item: GItem);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="saph.lists.TSelectList.html#remove">remove</a></strong>(_item: GItem);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="saph.lists.TSelectList.html#listAll">listAll</a></strong>: <a href="saph.lists.TSelectList.html#GItemList">GItemList</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="saph.lists.TSelectList.html#listSelected">listSelected</a></strong>: <a href="saph.lists.TSelectList.html#GItemList">GItemList</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="saph.lists.TSelectList.html#listUnselected">listUnselected</a></strong>:<a href="saph.lists.TSelectList.html#GItemList">GItemList</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="saph.lists.TSelectList.html#resetSelection">resetSelection</a></strong>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <strong><a href="saph.lists.TSelectList.html#clear">clear</a></strong>(_freeObj: boolean = true);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="saph.lists.TSelectList.html#exists">exists</a></strong>(item: GItem): boolean;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <strong><a href="saph.lists.TSelectList.html#indexOf">indexOf</a></strong>(item: GItem): integer;</code></td>
+</tr>
+</table>
+<span id="PasDoc-Properties"></span><h3 class="summary">Properties</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#selected">selected</a></strong>[constref_item:GItem]: boolean read getSelected write setSelected;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#all">all</a></strong>        [_index:integer]: GItem read getItemFromAll;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#selItems">selItems</a></strong>   [_index:integer]: GItem read getItemFromSelected;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#unselItems">unselItems</a></strong> [_index:integer]: GItem read getItemFromUnselected;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#allCount">allCount</a></strong>: integer read getAllCount;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#selCount">selCount</a></strong>: integer read getSelCount;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <strong><a href="saph.lists.TSelectList.html#unselCount">unselCount</a></strong>: integer read getUnselCount;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Nested Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="GItemList"></span><code><strong>GItemList</strong> = specialize TFPGObjectList&lt;GItem&gt;;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+To return lists from this class. To use, you have to declare variables as: &lt;SpecializedClassName&gt;.GItemList</p>
+</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Create"></span><code>constructor <strong>Create</strong>(_OwnObjects: boolean = true);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Count of unselected items</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="Destroy"></span><code>destructor <strong>Destroy</strong>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="add"></span><code>procedure <strong>add</strong>(_item: GItem);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="remove"></span><code>procedure <strong>remove</strong>(_item: GItem);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Add an Item to the list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="listAll"></span><code>function <strong>listAll</strong>: <a href="saph.lists.TSelectList.html#GItemList">GItemList</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Remove an item from the list. Requires the item object as a parameter Returns a specialized TFPGObjectList object with the items in the same order as the main list. The list object does not own the items. You have to free the list object after you are done.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="listSelected"></span><code>function <strong>listSelected</strong>: <a href="saph.lists.TSelectList.html#GItemList">GItemList</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="listUnselected"></span><code>function <strong>listUnselected</strong>:<a href="saph.lists.TSelectList.html#GItemList">GItemList</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="resetSelection"></span><code>procedure <strong>resetSelection</strong>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="clear"></span><code>procedure <strong>clear</strong>(_freeObj: boolean = true);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Unselects all selected items</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="exists"></span><code>function <strong>exists</strong>(item: GItem): boolean;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Returns true if this object is present in the list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="indexOf"></span><code>function <strong>indexOf</strong>(item: GItem): integer;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Properties</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="selected"></span><code>property <strong>selected</strong>[constref_item:GItem]: boolean read getSelected write setSelected;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="all"></span><code>property <strong>all</strong>        [_index:integer]: GItem read getItemFromAll;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="selItems"></span><code>property <strong>selItems</strong>   [_index:integer]: GItem read getItemFromSelected;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+retrieves the item from the full list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="unselItems"></span><code>property <strong>unselItems</strong> [_index:integer]: GItem read getItemFromUnselected;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+retrieves the item from the list of selected items</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="allCount"></span><code>property <strong>allCount</strong>: integer read getAllCount;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+retrieves the item from the list of unselected items. For debug. I presume that this won't be needed in production property keyall [_index: integer]: string read getKeyItemFromAll; // property keyselItems [_index: integer]: string read getKeyItemFromSelected; property keyunselItems [_index: integer]: string read getKeyItemFromUnselected;</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="selCount"></span><code>property <strong>selCount</strong>: integer read getSelCount;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Count of total items</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><span id="unselCount"></span><code>property <strong>unselCount</strong>: integer read getUnselCount;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Count of selected items</p>
+</td></tr>
+</table>
+(c) 2024. Rubrican Research. 
+https://github.com/rubrican-research/saph<hr><span class="appinfo"><em>Generated by <a href="https://pasdoc.github.io/">PasDoc 0.16.0</a>. </em>
+</span>
+</div></div></body></html>

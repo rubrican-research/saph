@@ -40,6 +40,8 @@ type
         function unlock(_req: string; _key: string): boolean;
         function undo: TReactive;
         function redo: TReactive;
+
+
     published
         property name: string read getName write setName;
         property locked: boolean read myLocked;
@@ -214,7 +216,7 @@ type
 
 implementation
 uses
-    obj.Listener, strutils;
+    obj.Listener, strutils, sugar.logger;
 
 {============ MANAGED VARIABLES =========================}
 type
@@ -244,6 +246,7 @@ end;
 
 function rmFromStore(_r: TReactive): integer; // Index where it was located
 begin
+    log('rmFromStore of ' + _r.ClassName);
     Result := rStore.IndexOf(pointerAsHex(_r));
     if Result > -1 then
         rStore.Delete(Result);

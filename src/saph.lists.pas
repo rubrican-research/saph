@@ -91,9 +91,9 @@ type
     public
         property selected[constref _item: GItem] : boolean read getSelected write setSelected;
 
-        property all        [_index: integer]: GItem read getItemFromAll;           // retrieves the item from the full list
-        property selItems   [_index: integer]: GItem read getItemFromSelected;      // retrieves the item from the list of selected items
-        property unselItems [_index: integer]: GItem read getItemFromUnselected;   // retrieves the item from the list of unselected items.
+        property all        [_index: integer]: GItem read getItemFromAll;        // retrieves the item from the full list
+        property selItems   [_index: integer]: GItem read getItemFromSelected;   // retrieves the item from the list of selected items
+        property unselItems [_index: integer]: GItem read getItemFromUnselected; // retrieves the item from the list of unselected items.
 
         //For debug. I presume that this won't be needed in production
         //property keyall        [_index: integer]: string read getKeyItemFromAll;    //

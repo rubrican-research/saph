@@ -8,7 +8,7 @@
       <Unit>
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
-        <CursorPos X="15"/>
+        <CursorPos Y="32"/>
         <UsageCount Value="126"/>
         <Loaded Value="True"/>
       </Unit>
@@ -20,7 +20,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="1"/>
         <TopLine Value="132"/>
-        <CursorPos Y="135"/>
+        <CursorPos X="5" Y="173"/>
         <UsageCount Value="126"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -64,9 +64,10 @@
       <Unit>
         <Filename Value="..\src\obj.listener.pas"/>
         <UnitName Value="Obj.Listener"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="93"/>
-        <CursorPos X="108" Y="114"/>
+        <TopLine Value="1132"/>
+        <CursorPos X="14" Y="1047"/>
         <UsageCount Value="43"/>
         <Bookmarks Count="1">
           <Item0 X="5" Y="372" ID="1"/>
@@ -288,10 +289,9 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="494"/>
-        <CursorPos X="21" Y="519"/>
+        <CursorPos X="5" Y="514"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
       </Unit>
@@ -308,10 +308,6 @@
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="463" Column="5" TopLine="460"/>
-      </Position>
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="48" Column="22" TopLine="34"/>
@@ -427,6 +423,10 @@
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="519" Column="21" TopLine="494"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\obj.listener.pas"/>
+        <Caret Line="312" Column="25" TopLine="286"/>
       </Position>
     </JumpHistory>
     <RunParams>

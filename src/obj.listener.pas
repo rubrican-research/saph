@@ -309,6 +309,10 @@ type
         // It removes all methods that were added as listeners across all
         // objects in the library.
         procedure stopListening;
+
+        // Implicitly hiding beforeDestruction so that we can hack into object destruction and remove listeners
+        procedure beforeDestruction;
+
     end;
 
     TListenerSignalMode = (lmSingleton, lmDynamic);
@@ -328,7 +332,7 @@ implementation
 
 uses
     StrUtils
-    {, sugar.logger}
+    , sugar.logger
     ;
 
 type
@@ -1029,6 +1033,18 @@ begin
     end;
     subscriberObjectMap.delete(_i);
 end;
+
+procedure TObjectListenerHelper.beforeDestruction;
+begin
+    stopListening;
+ //   try
+ //       log('before destruction ' + ClassName)
+	//except
+ //
+	//end;
+    inherited beforeDestruction;
+end;
+
 
 
 { TListener }
