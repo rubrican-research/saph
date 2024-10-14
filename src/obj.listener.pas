@@ -1015,12 +1015,7 @@ var
     _signaler : TObject;
     _i, _j: integer;
 begin
-
-    if Application.Terminated then
-    begin
-        //log('Exiting stopListening because application is terminated');
-        exit;
-	end;
+    if Application.Terminated then exit;
 
     _i := subscriberObjectMap.IndexOf(pointerAsHex(self));
     if _i = -1 then exit;
@@ -1037,11 +1032,6 @@ end;
 procedure TObjectListenerHelper.beforeDestruction;
 begin
     stopListening;
- //   try
- //       log('before destruction ' + ClassName)
-	//except
- //
-	//end;
     inherited beforeDestruction;
 end;
 

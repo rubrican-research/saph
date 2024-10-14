@@ -22,6 +22,14 @@ procedure registerWind(_FC: TFormClass);
 function isWindRegistered(_FC: TFormClass): boolean;
 function isWindRegistered(_className: string): boolean;
 
+// If the Form Class has been registered, this function returns:
+//      if a form with with "_name" has not been instantiated before
+//          then returns a new form of that class
+//      else
+//          returns the object with that name
+//
+//      If no name has been supplied, a name of the format
+//          "_" + 16 hex string of the forms address is used as the name
 function getForm(const _className: string; _name: string): TForm;
 
 implementation
@@ -41,7 +49,7 @@ begin
     Result := PtrUInt(_obj).ToHexString(16);
 end;
 
-function sanitize(const _str: string): string;
+function sanitizeFormName(const _str: string): string;
 var
     i : integer;
 begin
@@ -63,8 +71,10 @@ begin
     if _name = '' then
         _name := '_'
     else
-        _name := sanitize(_name);
-    Result := _name + pointerAsHex(f)
+        _name := sanitizeFormName(_name);
+    Result := _name + pointerAsHex(f);
+
+    log('generated form name = %s', [Result]);
 end;
 
 function genFormCaption(constref f: TForm; _name: string = '') : string;
@@ -162,6 +172,7 @@ begin
                     if _i > -1 then
                         _formMap.Delete(_i);
 				end;
+                _form.stopListening;
 			end;
 		end;
 	end;
