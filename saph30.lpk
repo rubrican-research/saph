@@ -37,7 +37,8 @@
         <UnitName Value="saph.reactive"/>
       </Item>
       <Item>
-        <Filename Value="saph.winman.pas"/>
+        <Filename Value="src\saph.winman.pas"/>
+        <AddToUsesPkgSection Value="False"/>
         <UnitName Value="saph.winman"/>
       </Item>
     </Files>
