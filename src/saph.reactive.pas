@@ -1044,32 +1044,32 @@ function TReactive.toIndex(_step: integer): integer;
 var
     _t: integer;
 begin
-    _t := myCurr + step;
+    _t := myHistCurr + _step;
     if myHistHead < UNDOSIZE then begin
-        if myCurr <= myHistHead then begin
+        if myHistCurr <= myHistHead then begin
             if _t > myHistHead then
-                Result ;= myHistHead
+                Result := myHistHead
             else
                 Result := min(0, _t);
 		end
-        else begin {myCurr >= myHistHead}
+        else begin {myHistCurr >= myHistHead}
             // Not possible
 		end;
 	end
     else begin {myHistHead >= UNDOSIZE}
-        if myCurr <= myHistHead then begin
+        if myHistCurr <= myHistHead then begin
             if _t > myHistHead then
                 if _t > myHistHead then
-                    Result = myHistHead
+                    Result := myHistHead
                 else
-                    Result := min(0, _t);
+                    Result := min(0, _t)
             else {_t <= myHistHead}
                 Result := min(
                                 min(0, myHistHead - UNDOSIZE),
-                                max(_t, mHistHead)
+                                max(_t, myHistHead)
                              );
     	end
-        else begin {myCurr >= myHistHead}
+        else begin {myHistCurr >= myHistHead}
             // Not possible
     	end;
 	end;
@@ -1081,32 +1081,32 @@ function TReactive.currToIndex(_step: integer): integer;
 var
     _t: integer;
 begin
-    _t := myCurr + step;
+    _t := myHistCurr + _step;
     if myHistHead < UNDOSIZE then begin
-        if myCurr <= myHistHead then begin
+        if myHistCurr <= myHistHead then begin
             if _t > myHistHead then
-                Result ;= myHistHead
+                Result := myHistHead
             else
                 Result := min(0, _t);
 		end
-        else begin {myCurr >= myHistHead}
+        else begin {myHistCurr >= myHistHead}
             // Not possible
 		end;
 	end
     else begin {myHistHead >= UNDOSIZE}
-        if myCurr <= myHistHead then begin
+        if myHistCurr <= myHistHead then begin
             if _t > myHistHead then
                 if _t > myHistHead then
-                    Result = myHistHead
+                    Result := myHistHead
                 else
-                    Result := min(0, _t);
+                    Result := min(0, _t)
             else {_t <= myHistHead}
                 Result := min(
                                 min(0, myHistHead - UNDOSIZE),
-                                max(_t, mHistHead)
+                                max(_t, myHistHead)
                              );
     	end
-        else begin {myCurr >= myHistHead}
+        else begin {myHistCurr >= myHistHead}
             // Not possible
     	end;
 	end;
@@ -1122,7 +1122,7 @@ begin
     inc(myHistHead);
 
     if myHistHead = UPPER_LIM then
-        myHistHead = UNDOSIZE;
+        myHistHead := UNDOSIZE;
 
     myHistCurr := myHistHead;
 end;
@@ -1176,12 +1176,16 @@ begin
 end;
 
 procedure GReactive.value(_v: T);
+var
+	_index: Integer;
 begin
     if canChangeValue then begin
         if _v <> myValue then begin
             enterCS;
             myValue := _v;
             signal(SGWRITE);
+            _index := histForward;
+            myHistory[_index] := _v;
             leaveCS;
 	    end;
 	end
@@ -1205,15 +1209,30 @@ begin
 end;
 
 function GReactive.undo(_count: integer): T;
+var
+	_minVal: Integer;
 begin
-    if _count
+    EnterCS;
     myHistCurr := myHistCurr - _count;
-    val := histVal(-count);
+    if myHistHead > UNDOSIZE then
+        _minVal := myHistHead - UNDOSIZE
+    else
+        _minVal := 0;
+    myHistCurr :=  Min(_minVal, myHistCurr);
+    myValue   := histVal(myHistCurr);
+    signal(SGWRITE);
+    leaveCS;
+
 end;
 
 function GReactive.redo(_count: integer): T;
 begin
-    val := histVal(count);
+    EnterCS;
+    myHistCurr := myHistCurr + _count;
+    myHistCurr := Min(myHistCurr,myHistHead);
+    myValue    := histVal(myHistCurr);
+    signal(SGWRITE);
+    LeaveCS;
 end;
 
 
