@@ -17,6 +17,7 @@ type
 		Button4: TButton;
 		Button5: TButton;
 		Button6: TButton;
+		Label1: TLabel;
 		Memo1: TMemo;
 		procedure Button1Click(Sender: TObject);
 		procedure Button2Click(Sender: TObject);
@@ -48,6 +49,8 @@ type
         procedure sCRead (sender:TObject);
         procedure sCWrite(sender:TObject);
         procedure appListner(const _sender: TObject; const _event: string; constref _params: TJSONObject);
+
+        procedure log(_str: string);
     public
 
     end;
@@ -86,7 +89,7 @@ end;
 procedure TForm2.Button1Click(Sender: TObject);
 begin
     iA.value(0);
-    while iA.value < 32 do iA.Value(iA.Value + 1)
+    while iA.value < 32 do iA.Val := iA.Val + 1)
 end;
 
 procedure TForm2.Button2Click(Sender: TObject);
@@ -210,6 +213,11 @@ procedure TForm2.appListner(const _sender: TObject; const _event: string;
 	constref _params: TJSONObject);
 begin
     Memo1.Lines.Add(Format('event: %s; data: %s', [_event, _params.FormatJSON(AsCompactJSON)]));
+end;
+
+procedure TForm2.log(_str: string);
+begin
+    Memo1.Lines.Add(_str);
 end;
 
 end.

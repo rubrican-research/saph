@@ -33,6 +33,7 @@ type
 		Button1: TButton;
 		Button2: TButton;
 		Label10: TLabel;
+		Label11: TLabel;
 		Label6: TLabel;
 		Label7: TLabel;
 		Label8: TLabel;

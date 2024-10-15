@@ -73,4 +73,19 @@ object Form2: TForm2
     TabOrder = 6
     OnClick = Button6Click
   end
+  object Label1: TLabel
+    Left = 7
+    Height = 30
+    Top = 7
+    Width = 533
+    Align = alTop
+    Alignment = taCenter
+    BorderSpacing.Around = 7
+    Caption = 'TEST RStore'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -21
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
 end

@@ -18,9 +18,10 @@
         <ComponentName Value="Form1"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="132"/>
-        <CursorPos X="5" Y="173"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="133"/>
+        <CursorPos X="5" Y="174"/>
         <UsageCount Value="126"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -32,8 +33,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="13"/>
-        <CursorPos X="49" Y="26"/>
+        <TopLine Value="87"/>
+        <CursorPos X="4" Y="114"/>
         <UsageCount Value="41"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -64,9 +65,8 @@
       <Unit>
         <Filename Value="..\src\obj.listener.pas"/>
         <UnitName Value="Obj.Listener"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
-        <TopLine Value="1132"/>
+        <TopLine Value="1130"/>
         <CursorPos X="14" Y="1047"/>
         <UsageCount Value="43"/>
         <Bookmarks Count="1">
@@ -246,9 +246,9 @@
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\components\lazutils\lazmethodlist.pas"/>
         <UnitName Value="LazMethodList"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="200"/>
-        <CursorPos Y="222"/>
+        <CursorPos X="29" Y="221"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
       </Unit>
@@ -308,18 +308,6 @@
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="48" Column="22" TopLine="34"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="512" TopLine="509"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="27" Column="28"/>
-      </Position>
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="451" Column="85" TopLine="446"/>
@@ -427,6 +415,18 @@
       <Position>
         <Filename Value="..\src\obj.listener.pas"/>
         <Caret Line="312" Column="25" TopLine="286"/>
+      </Position>
+      <Position>
+        <Filename Value="reactive.pas"/>
+        <Caret Line="26" Column="43" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="reactive.pas"/>
+        <Caret Line="88" Column="5" TopLine="86"/>
+      </Position>
+      <Position>
+        <Filename Value="main_multi.pas"/>
+        <Caret Line="173" Column="5" TopLine="132"/>
       </Position>
     </JumpHistory>
     <RunParams>
