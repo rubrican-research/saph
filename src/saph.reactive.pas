@@ -35,11 +35,10 @@ type
     public
         constructor Create;
         destructor Destroy; override;
+
     public
         function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
         function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
-        function undo: TReactive;
-        function redo: TReactive;
 
         // Crtical section
         procedure enterCS;
@@ -57,6 +56,27 @@ type
         function canChangeValue: boolean;
         function isMyLock: boolean; // returns true if locked by the process and thread.
 
+    {History}
+    private
+        const UNDOSIZE  = 32;
+        const MAXUNDO   = UNDOSIZE-1 ;
+        const UPPER_LIM = 2 * UNDOSIZE;
+    private
+        myHistHead: integer; // Index to the most recent value
+        myHistCurr: integer; // Index to the current value. myHistHead is set to myHistCurr, when an edit is/
+
+        function toIndex (_step: integer): integer; // Maps curr to array index;
+        function currToIndex (_step: integer): integer; // Maps _step positions from curr to array index;
+        function histForward: integer; // returns the new value
+
+    public
+        function histCount: integer; // count of history;
+        // hostVal: returns the value at a particular step; 0 is latest.
+        // 1 is the immediate previous and so on until MAXUNDO;
+        // does not change the object state;
+        function histVal(_curr: integer = 0): variant; virtual;
+        function undo(_count: integer = 1): TReactive; virtual;
+        function redo(_count: integer = 1): TReactive; virtual;
 
     published
         property name: string read getName write setName;
@@ -76,12 +96,21 @@ type
     generic GReactive<T> = class(TReactive)
 	private
 		myValue: T;
+        myHistory : array[0..MAXUNDO] of T;
+
     public
         function value: T; overload; reintroduce;      // getter
         procedure value(_v: T); overload; reintroduce; // setter
         procedure value(_v: T; _req: string; _key: string); // writes a value without unlocking
+        function memdump: string;
+
+        function histVal(_delta: integer = 0): T; reintroduce;
+        function undo(_count: integer = 1): T; reintroduce;
+        function redo(_count: integer = 1): T; reintroduce;
+
     public
         property val: T read value write value;
+
 
 	end;
 
@@ -147,7 +176,6 @@ type
 
     // Destructors
     function rFree(var _r: TReactive): integer; // syntax sugar for rmFromStore()
-
     function rFree(var _r: TRInt): integer; // syntax sugar for rmFromStore()
     function rFree(var _r: TRInt64): integer; // syntax sugar for rmFromStore()
     function rFree(var _r: TRDWord): integer; // syntax sugar for rmFromStore()
@@ -162,21 +190,100 @@ type
     function rmFromStore(_r: TReactive): integer; // Index where it was located
 
 
+    // Cloner
+    function rClone(var _r: TRInt): TRInt;
+    function rClone(var _r: TRInt64): TRInt64;
+    function rClone(var _r: TRDWord): TRDWord;
+    function rClone(var _r: TRQWord): TRQWord;
+    function rClone(var _r: TRFloat): TRFloat;
+    function rClone(var _r: TRStr): TRStr;
+    function rClone(var _r: TRBool): TRBool;
+    function rClone(var _r: TRDateTime): TRDateTime;
+
 
 {========= OPERATOR OVERLOADING ============================}
+{TRInt      }
+    operator :=(v: TRInt) : integer;
+    operator =(v: TRInt; a: integer): boolean;
+    operator =(a: integer; v: TRInt): boolean;
+    {ADDITION}
+    operator +(a: TRInt): TRInt;    // unary operator. Returns a new object
+    operator +(b: TRInt; a: integer): TRInt;
+    operator +(a: integer; b: TRInt): TRInt;
+    operator +(a: TRInt; b: TRInt): TRInt;
+    {SUBTRACTION}
+    operator -(b: TRInt; a: integer): TRInt;
+    operator -(a: integer; b: TRInt): TRInt;
+    operator -(a: TRInt; b: TRInt): TRInt;
+    operator -(a: TRInt): TRInt;
+    {MULTIPLICATION}
+    operator *(b: TRInt; a: integer): TRInt;
+    operator *(a: integer; b: TRInt): TRInt;
+    operator *(a: TRInt; b: TRInt): TRInt;
+    {DIVISION}
+    operator /(b: TRInt; a: integer): TRInt; // integer division. for normal division, use a.val / b.val
+    operator /(a: integer; b: TRInt): TRInt;
+    operator /(a: TRInt; b: TRInt): TRInt;
+
+{TRInt64    }
+    operator :=(v: TRInt64) : int64;
+    operator =(v: TRInt64; a: int64): boolean;
+    operator =( a: int64; v: TRInt64): boolean;
+    operator +(b: TRInt64; a: int64): TRInt64;
+    operator +(a: int64; b: TRInt64): TRInt64;
+    operator +(a: TRInt64; b: TRInt64): TRInt64;
+
+{TRDWord    }
+    operator :=(v: TRDWord) : DWord;
+    operator =(v: TRDWord; a: DWord): boolean;
+    operator =(a: DWord; v: TRDWord): boolean;
+    operator +(b: TRDWord; a: DWord): TRDWord;
+    operator +(a: DWord; b: TRDWord): TRDWord;
+    operator +(a: TRDWord; b: TRDWord): TRDWord;
+
+{TRQWord    }
+    operator :=(v: TRQWord) : QWord;
+    operator =(v: TRQWord; a: QWord): boolean;
+    operator =(a: QWord; v: TRQWord): boolean;
+    operator +(b: TRQWord; a: QWord): TRQWord;
+    operator +(a: QWord; b: TRQWord): TRQWord;
+    operator +(a: TRQWord; b: TRQWord): TRQWord;
+
+{TRFloat    }
+    operator :=(v: TRFloat) : Double;
+    operator =(v: TRFloat; a: Double): boolean;
+    operator =(a: Double; v: TRFloat): boolean;
+    operator +(b: TRFloat; a: Double): TRFloat;
+    operator +(a: Double; b: TRFloat): TRFloat;
+    operator +(a: TRFloat; b: TRFloat): TRFloat;
+
 {TRStr}
     operator :=(v: TRStr) : string;
     operator =(v: TRStr; a: string): boolean;
+    operator =(a: string; v: TRStr): boolean;
     operator +(b: TRStr; a: string): TRStr;
     operator +(a: string; b: TRStr): TRStr;
     operator +(a: TRStr; b: TRStr): TRStr;
+
+{TRBool}
+    operator :=(v: TRBool) : Boolean;
+    operator =(v: TRBool; a: Boolean): boolean;
+    operator =(a: Boolean; v: TRBool): boolean;
+
+{TRDateTime}
+    operator :=(v: TRDateTime) : TDateTime;
+    operator =(v: TRDateTime; a: TDateTime): boolean;
+    operator =(a: TDateTime; v: TRDateTime): boolean;
+    operator +(b: TRDateTime; a: TDateTime): TRDateTime;
+    operator +(a: TDateTime; b: TRDateTime): TRDateTime;
+    operator +(a: TRDateTime; b: TRDateTime): TRDateTime;
 
 var
     rStoreCS: TRTLCriticalSection;
 
 implementation
 uses
-    obj.Listener, strutils, sugar.logger;
+    obj.Listener, strutils, sugar.logger, Math;
 
 {============ MANAGED VARIABLES =========================}
 type
@@ -213,6 +320,338 @@ begin
         rStore.Delete(Result);
 end;
 
+function rClone(var _r: TRInt): TRInt;
+begin
+    Result := RInt();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+end;
+
+function rClone(var _r: TRInt64): TRInt64;
+begin
+    Result := RInt64();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+end;
+
+function rClone(var _r: TRDWord): TRDWord;
+begin
+    Result := RDWord();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+
+end;
+
+function rClone(var _r: TRQWord): TRQWord;
+begin
+    Result := RQWord();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+
+end;
+
+function rClone(var _r: TRFloat): TRFloat;
+begin
+    Result := RFloat();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+
+end;
+
+function rClone(var _r: TRStr): TRStr;
+begin
+    Result := RStr();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+
+end;
+
+function rClone(var _r: TRBool): TRBool;
+begin
+    Result := RBool();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+
+end;
+
+function rClone(var _r: TRDateTime): TRDateTime;
+begin
+    Result := RDateTime();
+	Result.myEnableHistory := _r.myEnableHistory  ;
+    Result.myManaged       := _r.myManaged        ;
+    Result.myName          := _r.myName           ;
+    Result.myLockExclusive := _r.myLockExclusive  ;
+    Result.myLockProcessID := _r.myLockProcessID  ;
+    Result.myLockThreadID  := _r.myLockThreadID   ;
+    Result.myKey           := _r.myKey            ;
+	Result.mySilentLock    := _r.mySilentLock     ;
+	Result.myValue         := _r.myValue          ;
+	Result.myHistory       := _r.myHistory        ;
+
+end;
+
+operator:=(v: TRInt): integer;
+begin
+    Result := v.value();
+end;
+
+operator=(v: TRInt; a: integer): boolean;
+begin
+    Result := (v.value = a)
+end;
+
+operator=(a: integer; v: TRInt): boolean;
+begin
+    Result := a = v.value();
+end;
+
+operator+(a: TRInt): TRInt;
+begin
+    Result := RInt(a.val);
+end;
+
+operator+(b: TRInt; a: integer): TRInt;
+begin
+    Result := RInt(b.Value + a);
+end;
+
+operator+(a: integer; b: TRInt): TRInt;
+begin
+    Result := RInt(a + b.Value);
+end;
+
+operator+(a: TRInt; b: TRInt): TRInt;
+begin
+    Result:= RInt(a.value + b.value);
+end;
+
+operator-(b: TRInt; a: integer): TRInt;
+begin
+
+end;
+
+operator-(a: integer; b: TRInt): TRInt;
+begin
+
+end;
+
+operator-(a: TRInt; b: TRInt): TRInt;
+begin
+
+end;
+
+operator-(a: TRInt): TRInt;
+begin
+    Result := RInt(-1 * (a.val));
+end;
+
+operator*(b: TRInt; a: integer): TRInt;
+begin
+
+end;
+
+operator*(a: integer; b: TRInt): TRInt;
+begin
+
+end;
+
+operator*(a: TRInt; b: TRInt): TRInt;
+begin
+
+end;
+
+operator/(b: TRInt; a: integer): TRInt;
+begin
+
+end;
+
+operator/(a: integer; b: TRInt): TRInt;
+begin
+
+end;
+
+operator/(a: TRInt; b: TRInt): TRInt;
+begin
+
+end;
+
+
+operator:=(v: TRInt64): int64;
+begin
+    Result := v.value;
+end;
+
+operator=(v: TRInt64; a: int64): boolean;
+begin
+    Result := v.value = a;
+end;
+
+operator=(a: int64; v: TRInt64): boolean;
+begin
+    Result := a = v.value;
+end;
+
+operator+(b: TRInt64; a: int64): TRInt64;
+begin
+    Result := RInt64(b.value + a);
+end;
+
+operator+(a: int64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a + b.value);
+end;
+
+operator+(a: TRInt64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a.value + b.value);
+end;
+
+operator:=(v: TRDWord): DWord;
+begin
+    Result := v.value;
+end;
+
+operator=(v: TRDWord; a: DWord): boolean;
+begin
+    Result := v.value = a;
+end;
+
+operator=(a: DWord; v: TRDWord): boolean;
+begin
+    Result := a = v.value;
+end;
+
+operator+(b: TRDWord; a: DWord): TRDWord;
+begin
+    Result := RDWord(b.value + a);
+end;
+
+operator+(a: DWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a + b.value);
+end;
+
+operator+(a: TRDWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a.value + b.value);
+end;
+
+operator:=(v: TRQWord): QWord;
+begin
+    Result := v.value;
+end;
+
+operator=(v: TRQWord; a: QWord): boolean;
+begin
+    Result := v.value = a;
+end;
+
+operator=(a: QWord; v: TRQWord): boolean;
+begin
+    Result := a = v.value;
+end;
+
+operator+(b: TRQWord; a: QWord): TRQWord;
+begin
+    Result := RQWord(b.value + a);
+end;
+
+operator+(a: QWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a + b.value);
+end;
+
+operator+(a: TRQWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a.value + b.value);
+end;
+
+operator:=(v: TRFloat): Double;
+begin
+    Result := v.value;
+end;
+
+operator=(v: TRFloat; a: Double): boolean;
+begin
+    Result := v.value  = a;
+end;
+
+operator=(a: Double; v: TRFloat): boolean;
+begin
+    Result := a = v.value;
+end;
+
+operator+(b: TRFloat; a: Double): TRFloat;
+begin
+    Result := RFloat(b.value + a);
+end;
+
+operator+(a: Double; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a + b.value);
+end;
+
+operator+(a: TRFloat; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a.value + b.value);
+end;
+
 operator:=(v: TRStr): string;
 begin
     Result := v.val;
@@ -221,6 +660,11 @@ end;
 operator=(v: TRStr; a: string): boolean;
 begin
     Result := (v.val = a);
+end;
+
+operator=(a: string; v: TRStr): boolean;
+begin
+    Result := a = v.Value;
 end;
 
 operator+(b: TRStr; a: string): TRStr;
@@ -238,6 +682,51 @@ end;
 operator+(a: TRStr; b: TRStr): TRStr;
 begin
     Result := RStr(a.val + b.val);
+end;
+
+operator:=(v: TRBool): Boolean;
+begin
+    Result:= v.value;
+end;
+
+operator=(v: TRBool; a: Boolean): boolean;
+begin
+    Result := v.value = a;
+end;
+
+operator=(a: Boolean; v: TRBool): boolean;
+begin
+    Result := a = v.value;
+end;
+
+operator:=(v: TRDateTime): TDateTime;
+begin
+    Result := v.value;
+end;
+
+operator=(v: TRDateTime; a: TDateTime): boolean;
+begin
+    result := v.value = a;
+end;
+
+operator=(a: TDateTime; v: TRDateTime): boolean;
+begin
+    Result := a = v.value;
+end;
+
+operator+(b: TRDateTime; a: TDateTime): TRDateTime;
+begin
+    Result := RDateTime(b.value + a);
+end;
+
+operator+(a: TDateTime; b: TRDateTime): TRDateTime;
+begin
+    Result := RDateTime(a + b.value);
+end;
+
+operator+(a: TRDateTime; b: TRDateTime): TRDateTime;
+begin
+    Result := RDateTime(a.value + b.value);
 end;
 
 
@@ -551,14 +1040,114 @@ begin
     Result := (myLockProcessID = GetProcessID) and (myLockThreadID = ThreadID);
 end;
 
-function TReactive.undo: TReactive;
+function TReactive.toIndex(_step: integer): integer;
+var
+    _t: integer;
 begin
+    _t := myCurr + step;
+    if myHistHead < UNDOSIZE then begin
+        if myCurr <= myHistHead then begin
+            if _t > myHistHead then
+                Result ;= myHistHead
+            else
+                Result := min(0, _t);
+		end
+        else begin {myCurr >= myHistHead}
+            // Not possible
+		end;
+	end
+    else begin {myHistHead >= UNDOSIZE}
+        if myCurr <= myHistHead then begin
+            if _t > myHistHead then
+                if _t > myHistHead then
+                    Result = myHistHead
+                else
+                    Result := min(0, _t);
+            else {_t <= myHistHead}
+                Result := min(
+                                min(0, myHistHead - UNDOSIZE),
+                                max(_t, mHistHead)
+                             );
+    	end
+        else begin {myCurr >= myHistHead}
+            // Not possible
+    	end;
+	end;
 
+    Result := Result div UNDOSIZE;
 end;
 
-function TReactive.redo: TReactive;
+function TReactive.currToIndex(_step: integer): integer;
+var
+    _t: integer;
 begin
+    _t := myCurr + step;
+    if myHistHead < UNDOSIZE then begin
+        if myCurr <= myHistHead then begin
+            if _t > myHistHead then
+                Result ;= myHistHead
+            else
+                Result := min(0, _t);
+		end
+        else begin {myCurr >= myHistHead}
+            // Not possible
+		end;
+	end
+    else begin {myHistHead >= UNDOSIZE}
+        if myCurr <= myHistHead then begin
+            if _t > myHistHead then
+                if _t > myHistHead then
+                    Result = myHistHead
+                else
+                    Result := min(0, _t);
+            else {_t <= myHistHead}
+                Result := min(
+                                min(0, myHistHead - UNDOSIZE),
+                                max(_t, mHistHead)
+                             );
+    	end
+        else begin {myCurr >= myHistHead}
+            // Not possible
+    	end;
+	end;
 
+    Result := Result div UNDOSIZE;
+end;
+
+function TReactive.histForward: integer;
+begin
+    if myHistCurr < myHistHead then
+        myHistHead := myHistCurr;
+
+    inc(myHistHead);
+
+    if myHistHead = UPPER_LIM then
+        myHistHead = UNDOSIZE;
+
+    myHistCurr := myHistHead;
+end;
+
+function TReactive.histCount: integer;
+begin
+    if myHistHead < UNDOSIZE then
+        result := myHistHead
+    else
+        Result := UNDOSIZE;
+end;
+
+function TReactive.histVal(_curr: integer): variant;
+begin
+    Result := nil;
+end;
+
+function TReactive.undo(_count: integer): TReactive;
+begin
+    Result := self;
+end;
+
+function TReactive.redo(_count: integer): TReactive;
+begin
+    Result := self;
 end;
 
 function TReactive.value: variant;
@@ -579,6 +1168,7 @@ end;
 
 
 { GReactive }
+
 
 function GReactive.value: T;
 begin
@@ -602,6 +1192,28 @@ end;
 procedure GReactive.value(_v: T; _req: string; _key: string);
 begin
 
+end;
+
+function GReactive.memdump: string;
+begin
+    Result := '';
+end;
+
+function GReactive.histVal(_delta: integer): T;
+begin
+    Result := myHistory[currToIndex(_delta)];
+end;
+
+function GReactive.undo(_count: integer): T;
+begin
+    if _count
+    myHistCurr := myHistCurr - _count;
+    val := histVal(-count);
+end;
+
+function GReactive.redo(_count: integer): T;
+begin
+    val := histVal(count);
 end;
 
 

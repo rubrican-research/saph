@@ -20,6 +20,8 @@ type
 		Button5: TButton;
 		Button6: TButton;
 		Button7: TButton;
+		Button8: TButton;
+		Button9: TButton;
 		Label1: TLabel;
 		Memo1: TMemo;
 		procedure Button1Click(Sender: TObject);
@@ -29,6 +31,8 @@ type
 		procedure Button5Click(Sender: TObject);
 		procedure Button6Click(Sender: TObject);
 		procedure Button7Click(Sender: TObject);
+		procedure Button8Click(Sender: TObject);
+		procedure Button9Click(Sender: TObject);
         procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
     private
@@ -180,6 +184,61 @@ begin
         Caption := 'Test 3';
         Show;
     end;
+end;
+
+procedure TForm2.Button8Click(Sender: TObject);
+const
+    MAX = 6;
+type
+    SS = array[0..MAX] of string;
+    strptr = ^string;
+var
+    source : SS = ('1', '2', '3', '4', '5', '6', '7');
+    dest: SS;
+	a: String;
+	i: Integer;
+
+    _start, _curr, _end : strptr;
+
+begin
+    dest := source;
+
+    _start := @source[0];
+    _end   := @source[MAX];
+    _curr  := _start;
+
+    for i := 0 to 6 do begin
+        source[i] := '--';
+
+	end;
+
+    for a in dest do begin
+        Memo1.Lines.Add(a);
+	end;
+
+    for a in source do begin
+        Memo1.Lines.Add(a);
+	end;
+
+    Memo1.Lines.Add('=================================');
+    for i := 0 to MAX do begin
+        _curr := @dest[i];
+        Memo1.Lines.Add('>> ' + _curr^);
+	end;
+
+end;
+
+procedure TForm2.Button9Click(Sender: TObject);
+var
+    _r: TRStr;
+	x: TRInt;
+begin
+    _r := rClone(sB);
+    Memo1.lines.Add('cloned');
+    Memo1.lines.Add(_r);
+    rFree(_r);
+    x := -iA;
+    Memo1.Lines.Add(Format('Pred of -5 is %d', [pred(-5)]));
 end;
 
 procedure TForm2.iARead(sender: TObject);

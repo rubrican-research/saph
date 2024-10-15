@@ -1,19 +1,19 @@
 object Form2: TForm2
   Left = 445
-  Height = 463
+  Height = 499
   Top = 246
   Width = 974
   Caption = 'Form2'
-  ClientHeight = 463
+  ClientHeight = 499
   ClientWidth = 974
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '3.4.0.0'
   object Memo1: TMemo
-    Left = 40
-    Height = 402
+    Left = 7
+    Height = 454
     Top = 40
-    Width = 637
+    Width = 665
     Anchors = [akTop, akLeft, akRight, akBottom]
     Lines.Strings = (
       'Memo1'
@@ -105,5 +105,25 @@ object Form2: TForm2
     Caption = 'Thread Test'
     TabOrder = 7
     OnClick = Button7Click
+  end
+  object Button8: TButton
+    Left = 678
+    Height = 25
+    Top = 248
+    Width = 280
+    Anchors = [akTop, akRight]
+    Caption = 'Test Array Copy'
+    TabOrder = 8
+    OnClick = Button8Click
+  end
+  object Button9: TButton
+    Left = 678
+    Height = 25
+    Top = 276
+    Width = 280
+    Anchors = [akTop, akRight]
+    Caption = 'Clone test'
+    TabOrder = 9
+    OnClick = Button9Click
   end
 end
