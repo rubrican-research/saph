@@ -18,6 +18,9 @@
           <OptimizationLevel Value="2"/>
         </Optimizations>
       </CodeGeneration>
+      <Other>
+        <CustomOptions Value="-d__:=+#13#10+"/>
+      </Other>
     </CompilerOptions>
     <Files>
       <Item>

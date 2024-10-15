@@ -10,6 +10,8 @@ uses
 type
 	{ TForm2 }
 
+	{ TReactiveThreadTest }
+
     TForm2 = class(TForm)
 		Button1: TButton;
 		Button2: TButton;
@@ -17,6 +19,7 @@ type
 		Button4: TButton;
 		Button5: TButton;
 		Button6: TButton;
+		Button7: TButton;
 		Label1: TLabel;
 		Memo1: TMemo;
 		procedure Button1Click(Sender: TObject);
@@ -25,12 +28,10 @@ type
 		procedure Button4Click(Sender: TObject);
 		procedure Button5Click(Sender: TObject);
 		procedure Button6Click(Sender: TObject);
+		procedure Button7Click(Sender: TObject);
         procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
     private
-        iA, iB, iC: TRInt;
-        sA, sB, sC: TRStr;
-
         procedure iARead (sender:TObject);
         procedure iAWrite(sender:TObject);
 
@@ -50,29 +51,45 @@ type
         procedure sCWrite(sender:TObject);
         procedure appListner(const _sender: TObject; const _event: string; constref _params: TJSONObject);
 
-        procedure log(_str: string);
     public
 
     end;
 
 var
     Form2: TForm2;
+    iA, iB, iC: TRInt;
+    sA, sB, sC: TRStr;
 
 implementation
 
 {$R *.lfm}
 uses
-    obj.Listener;
+    sugar.logger, obj.Listener, threadtestform;
+
+
 { TForm2 }
 
 procedure TForm2.FormCreate(Sender: TObject);
 begin
-    iA := RInt().listenRead(self, @iARead).listenWrite(self, @iAWrite);
-    iB := RInt().listenRead(self, @iBRead).listenWrite(self, @iBWrite);
-    iC := RInt().listenRead(self, @iCRead).listenWrite(self, @iCWrite);
-    sA := RStr().listenRead(self, @sARead).listenWrite(self, @sAWrite);
-    sB := RStr().listenRead(self, @sBRead).listenWrite(self, @sBWrite);
-    sc := RStr().listenRead(self, @sCRead).listenWrite(self, @sCWrite);
+    iA := RInt();
+    iA .listenRead(self, @iARead).listenWrite(self, @iAWrite);
+
+    iB := RInt();
+    iB.listenRead(self, @iBRead).listenWrite(self, @iBWrite);
+
+    iC := RInt();
+    iC.listenRead(self, @iCRead).listenWrite(self, @iCWrite);
+
+    sA := RStr();
+    sA.listenRead(self, @sARead).listenWrite(self, @sAWrite);
+
+    sB := RStr();
+    sB.silentLock:=True;
+    sB.listenRead(self, @sBRead).listenWrite(self, @sBWrite);
+
+    sC := RStr();
+    sC.listenRead(self, @sCRead).listenWrite(self, @sCWrite);
+
     application.addListener('wow', self, @appListner);
 end;
 
@@ -89,7 +106,7 @@ end;
 procedure TForm2.Button1Click(Sender: TObject);
 begin
     iA.value(0);
-    while iA.value < 32 do iA.Val := iA.Val + 1)
+    while iA.value < 32 do iA.Val := iA.Val + 1;
 end;
 
 procedure TForm2.Button2Click(Sender: TObject);
@@ -147,6 +164,24 @@ begin
     Application.signal('wow', TJSONObject.Create(['sender', 'me', 'data', 'something']));
 end;
 
+procedure TForm2.Button7Click(Sender: TObject);
+begin
+    with TTestForm.Create(Application) do begin
+        Caption := 'Test 1';
+        Show;
+	end;
+
+	with TTestForm.Create(Application) do begin
+        Caption := 'Test 2';
+        Show;
+	end;
+
+	with TTestForm.Create(Application) do begin
+        Caption := 'Test 3';
+        Show;
+    end;
+end;
+
 procedure TForm2.iARead(sender: TObject);
 begin
 
@@ -196,7 +231,8 @@ end;
 
 procedure TForm2.sBWrite(sender: TObject);
 begin
-
+    if sender is TRStr then
+        memo1.lines.Add(TRStr(Sender).val);
 end;
 
 procedure TForm2.sCRead(sender: TObject);
@@ -215,10 +251,6 @@ begin
     Memo1.Lines.Add(Format('event: %s; data: %s', [_event, _params.FormatJSON(AsCompactJSON)]));
 end;
 
-procedure TForm2.log(_str: string);
-begin
-    Memo1.Lines.Add(_str);
-end;
 
 end.
 

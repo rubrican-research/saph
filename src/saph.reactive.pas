@@ -12,15 +12,20 @@ type
     TReactive = class
     private
 		myEnableHistory: boolean;
-        myLockReq: string;
-        myKey: string;
-		myLocked: boolean;
         myManaged : boolean; // Determines if this unit handles freeing the objects after use.
         myName: string;
+        {locking}
+        myLockExclusive: boolean;
+        myLockProcessID: SizeUInt;
+        myLockThreadID: TThreadID;
+        myKey: string;
 		mySilentLock: boolean;
         function getName: string; overload;
 		procedure setEnableHistory(AValue: boolean);
         procedure setName(const _n: string); overload;
+        function getLocked: boolean;
+        function setLock: string;
+        procedure clearLock;
     protected
         function makeKey(): string;
     public
@@ -31,140 +36,90 @@ type
         constructor Create;
         destructor Destroy; override;
     public
-        function value: variant; overload; virtual;       // getter
-        procedure value(_v: variant); overload; virtual;   // setter
-        procedure value(_v: variant; _req: string; _key: string); // writes a value without unlocking
         function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
         function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
-        function lock(_req: string): string; // locks the value and returns a key. Returns empty string if already locked;
-        function unlock(_req: string; _key: string): boolean;
         function undo: TReactive;
         function redo: TReactive;
+
+        // Crtical section
+        procedure enterCS;
+        procedure leaveCS;
+
+        function  value: variant; overload; virtual;     // getter
+        procedure value(_v: variant); overload; virtual; // setter
+        procedure value(_v: variant; _req: string; _key: string); overload; virtual;// writes a value without unlocking
+
+        {lock function}
+        function lock(): string; // locks the value and returns a key. Returns empty string if already locked;
+        function lockEx(): string; // locks the value exclusively. cannot be borrowed.
+        function unlock(_key: string): boolean;
+        function borrow: string; // Forces change of lock
+        function canChangeValue: boolean;
+        function isMyLock: boolean; // returns true if locked by the process and thread.
 
 
     published
         property name: string read getName write setName;
-        property locked: boolean read myLocked;
+        property locked: boolean read getLocked;
         // silentLock
         //      true: raises an exception when assigning a value to locked object
         //      false: does not change value. exits silently.
         property silentLock: boolean read mySilentLock write mySilentLock;
         // Enables undo and redo
         property enableHistory: boolean read myEnableHistory write setEnableHistory;
+    public
+        property val: variant read value write value;
 	end;
+
+	{ GReactive }
+
+    generic GReactive<T> = class(TReactive)
+	private
+		myValue: T;
+    public
+        function value: T; overload; reintroduce;      // getter
+        procedure value(_v: T); overload; reintroduce; // setter
+        procedure value(_v: T; _req: string; _key: string); // writes a value without unlocking
+    public
+        property val: T read value write value;
+
+	end;
+
 
 	{ TRInt }
 
-    TRInt = class(TReactive)
-    protected
-        myValue: integer;
-    public
-        function value: integer; overload; reintroduce;
-        procedure value(_v: integer); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRInt; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRInt; reintroduce;
-    published
-        property val: integer read value write value;
-    end;
+    TRInt = class(specialize GReactive<integer>);
 
 	{ TRInt64 }
 
-    TRInt64 = class(TReactive)
-    protected
-        myValue: int64;
-    public
-        function value: int64; overload; reintroduce;
-        procedure value(_v: int64); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRInt64; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRInt64; reintroduce;
-    published
-            property val: int64 read value write value;
-    end;
+    TRInt64 = class(specialize GReactive<int64>);
 
 	{ TRDWord }
 
-    TRDWord = class(TReactive)
-    protected
-        myValue: DWord;
-    public
-        function value: DWord; overload; reintroduce;
-        procedure value(_v: DWord); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRDWord; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRDWord; reintroduce;
-    published
-        property val: DWord read value write value;
-    end;
+    TRDWord = class(specialize GReactive<DWord>);
 
 	{ TRQWord }
 
-    TRQWord = class(TReactive)
-    protected
-        myValue: QWord;
-    public
-        function value: QWord; overload; reintroduce;
-        procedure value(_v: QWord); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRQWord; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRQWord; reintroduce;
-    published
-        property val: QWord read value write value;
-    end;
+    TRQWord = class(specialize GReactive<QWord>);
 
 
 	{ TRFloat }
 
-    TRFloat = class(TReactive)
-    protected
-        myValue: double;
-    public
-        function value: double; overload; reintroduce;
-        procedure value(_v: double); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRFloat; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRFloat; reintroduce;
-    published
-        property val: double read value write value;
-    end;
+    TRFloat = class(specialize GReactive<double>);
 
 	{ TRStr }
 
-    TRStr = class(TReactive)
-    protected
-        myValue: string;
-    public
-        function value: string; overload; reintroduce;
-        procedure value(_v: string); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRStr; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRStr; reintroduce;
-    published
-        property val: string read value write value;
-    end;
+    TRStr = class(specialize GReactive<string>);
 
 	{ TRBool }
 
-    TRBool = class(TReactive)
-    protected
-        myValue: boolean;
-    public
-        function value: boolean; overload; reintroduce;
-        procedure value(_v: boolean); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRBool; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRBool; reintroduce;
-    published
-        property val: boolean read value write value;
-    end;
+    TRBool = class(specialize GReactive<boolean>);
 
 	{ TRDateTime }
 
-    TRDateTime = class(TReactive)
-    protected
-        myValue: TDateTime;
-    public
-        function value: TDateTime; overload; reintroduce;
-        procedure value(_v: TDateTime); overload; reintroduce;
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TRDateTime; reintroduce;
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TRDateTime; reintroduce;
-    published
-        property val: TDateTime read value write value;
-    end;
+    TRDateTime = class(specialize GReactive<TDateTime>);
+
+
     // Factory functions
     function RInt : TRInt; overload;
     function RInt(_default: integer; _name: string = '') : TRInt; overload;
@@ -192,6 +147,7 @@ type
 
     // Destructors
     function rFree(var _r: TReactive): integer; // syntax sugar for rmFromStore()
+
     function rFree(var _r: TRInt): integer; // syntax sugar for rmFromStore()
     function rFree(var _r: TRInt64): integer; // syntax sugar for rmFromStore()
     function rFree(var _r: TRDWord): integer; // syntax sugar for rmFromStore()
@@ -205,6 +161,8 @@ type
     function addToStore(_r: TReactive): TReactive;
     function rmFromStore(_r: TReactive): integer; // Index where it was located
 
+
+
 {========= OPERATOR OVERLOADING ============================}
 {TRStr}
     operator :=(v: TRStr) : string;
@@ -213,6 +171,8 @@ type
     operator +(a: string; b: TRStr): TRStr;
     operator +(a: TRStr; b: TRStr): TRStr;
 
+var
+    rStoreCS: TRTLCriticalSection;
 
 implementation
 uses
@@ -224,6 +184,7 @@ type
 
 var
     rStore : TRStore; // initialization, finalization
+
 
     function pointerAsHex(_obj: pointer): string;
     begin
@@ -244,7 +205,7 @@ begin
     rStore.Add(pointerAsHex(Result), Result);
 end;
 
-function rmFromStore(_r: TReactive): integer; // Index where it was located
+function rmFromStore(_r: TReactive): integer;
 begin
     log('rmFromStore of ' + _r.ClassName);
     Result := rStore.IndexOf(pointerAsHex(_r));
@@ -386,7 +347,7 @@ begin
     if not _name.isEmpty then Result.setName(_name);
 end;
 
-function rFree(var _r: TReactive): integer;
+generic function rFree(var _r: TReactive): integer; // syntax sugar for rmFromStore()
 begin
     Result := rmFromStore(_r);
     _r := nil;
@@ -456,6 +417,42 @@ begin
         + 'Right now Name = "' + myName+'"');
 end;
 
+function TReactive.getLocked: boolean;
+begin
+    result := not myKey.IsEmpty;
+end;
+
+function TReactive.setLock: string;
+begin
+    EnterCriticalSection(rStoreCS);
+    myLockProcessID := GetProcessID;
+    myLockThreadID  := ThreadID;
+    myLockExclusive := false;
+    myKey           := makeKey();
+    LeaveCriticalSection(rStoreCS);
+    Result          := myKey;
+end;
+
+procedure TReactive.clearLock;
+begin
+    EnterCriticalSection(rStoreCS);
+    myLockProcessID := 0;
+    myLockThreadID  := 0;
+    myLockExclusive := false;
+    myKey           := '';
+    LeaveCriticalSection(rStoreCS);
+end;
+
+procedure TReactive.enterCS;
+begin
+    EnterCriticalSection(rStoreCS);
+end;
+
+procedure TReactive.leaveCS;
+begin
+    LeaveCriticalSection(rStoreCS);
+end;
+
 function TReactive.makeKey(): string;
 begin
     Result := IntToStr(getTickCount64());
@@ -467,28 +464,12 @@ begin
     myName:= '';
     myManaged := false;
     mySilentLock:= false; // Raise exception if value is being changed after locking
+    clearLock;
 end;
 
 destructor TReactive.Destroy;
 begin
-    stopListening;
     inherited Destroy;
-end;
-
-function TReactive.value: variant;
-begin
-    //signal(SGREAD);
-    Result := nil;
-end;
-
-procedure TReactive.value(_v: variant);
-begin
-    signal(SGWRITE);
-end;
-
-procedure TReactive.value(_v: variant; _req: string; _key: string);
-begin
-
 end;
 
 function TReactive.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
@@ -502,30 +483,72 @@ function TReactive.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
 	): TReactive;
 begin
     Result := self;
-    addListener(SGWRITE, _subscriber, _e);
+    addListener(SGWRITE, _subscriber, _e, qSerial);
 end;
 
-function TReactive.lock(_req: string): string;
+function TReactive.lock: string;
 begin
     if myKey.isEmpty then begin
-        myLocked:= true;
-        myLockReq := _req;
-        myKey     := makeKey();
+        Result := setLock;
 	end
     else
         Result := '';
 end;
 
-function TReactive.unlock(_req: string; _key: string): boolean;
+function TReactive.lockEx(): string;
 begin
-    if UnicodeSameStr(_key, myKey) and UnicodeSameStr(_req, myLockReq)then begin
-        myLockReq:= _req;
-        myKey:='';
-        myLocked:=False;
-        Result := true;
+    if myKey.isEmpty then begin
+        Result          := setLock;
+
+        //EnterCriticalSection(myLockCS);
+        myLockExclusive := true;
+        //LeaveCriticalSection(myLockCS);
 	end
     else
+        Result := '';
+end;
+
+function TReactive.unlock(_key: string): boolean;
+begin
+    if
+        (UnicodeSameStr(_key, myKey))
+        and (myLockProcessID = GetProcessID)
+        and (myLockThreadID = ThreadID) then
+    begin
+        clearLock;
+        Result := true;
+	end
+    else begin
+        log('FAIL UNLOCK::: same key: %s; processID: %s, thread id: %s',[ BoolToStr(UnicodeSameStr(_key, myKey)), BoolToStr((myLockProcessID = GetProcessID)), BoolToStr((myLockThreadID = ThreadID))]);
+        log('FAIL UNLOCK::: _key: "%s"; myKey: "%s"',[ _key, myKey]);
+        log('FAIL UNLOCK::: myLockPID: "%d"; getProcessID: "%d"',[ myLockProcessID ,GetProcessID]);
+        log('FAIL UNLOCK::: myLockThreadID: "%d"; ThreadID: "%d"',[ myLockThreadID,ThreadID]);
         Result := false;
+	end;
+end;
+
+function TReactive.borrow: string;
+begin
+    if not myLockExclusive then begin
+        result := setLock;
+	end
+    else if not mySilentLock then begin
+        raise Exception.Create(Format('TReactive.borrow() %s "%s" is exclusively locked.', [ClassName, Name]));
+	end;
+end;
+
+function TReactive.canChangeValue: boolean;
+begin
+    Result :=  myKey.isEmpty; // yes, change because it is not locked.
+    if not Result then // it is locked. Allow changes to be made by the process and thread that has locked this
+    begin
+        Result := isMyLock;
+	end;
+end;
+
+function TReactive.isMyLock: boolean;
+begin
+    Result := (myLockProcessID = GetProcessID) and (myLockThreadID = ThreadID);
 end;
 
 function TReactive.undo: TReactive;
@@ -538,239 +561,59 @@ begin
 
 end;
 
-{ TRInt }
-
-function TRInt.value: integer;
+function TReactive.value: variant;
 begin
-    inherited;
+    raise Exception.Create('TReactive:: Value should not be called from TReactive');
+    Result := nil;
+end;
+
+procedure TReactive.value(_v: variant);
+begin
+    raise Exception.Create('TReactive:: Value(_v) should not be called from TReactive');
+end;
+
+procedure TReactive.value(_v: variant; _req: string; _key: string);
+begin
+    raise Exception.Create('TReactive:: Value(_v, _req, _key) should not be called from TReactive');
+end;
+
+
+{ GReactive }
+
+function GReactive.value: T;
+begin
     Result := myValue;
 end;
 
-procedure TRInt.value(_v: integer);
+procedure GReactive.value(_v: T);
 begin
-    if myLocked then begin
-
-        exit;
-    end;
-
-    if (myValue <> _v) then begin
-        myValue := _v;
-        signal(SGWRITE);
-	end;
+    if canChangeValue then begin
+        if _v <> myValue then begin
+            enterCS;
+            myValue := _v;
+            signal(SGWRITE);
+            leaveCS;
+	    end;
+	end
+    else if not mySilentLock then
+        raise Exception.Create(Format('Reactive variable(%s) "%s" is locked. Value cannot be written', [ClassName, Name]));
 end;
 
-function TRInt.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRInt;
+procedure GReactive.value(_v: T; _req: string; _key: string);
 begin
-    Result := TRInt(inherited);
+
 end;
 
-function TRInt.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRInt;
-begin
-    Result := TRInt(inherited);
-end;
-
-{ TRInt64 }
-
-function TRInt64.value: int64;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRInt64.value(_v: int64);
-begin
-    if (myValue <> _v) then begin
-          myValue := _v;
-          signal(SGWRITE);
-  	end;
-end;
-
-function TRInt64.listenRead(constref _subscriber: TObject; _e: TNotifyEvent): TRInt64;
-begin
-    Result := TRInt64(inherited);
-end;
-
-function TRInt64.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent): TRInt64;
-begin
-    Result := TRInt64(inherited);
-end;
-
-{ TRDWord }
-
-function TRDWord.value: DWord;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRDWord.value(_v: DWord);
-begin
-    if (myValue <> _v) then begin
-          myValue := _v;
-          signal(SGWRITE);
-  	end;
-end;
-
-function TRDWord.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRDWord;
-begin
-    Result := TRDWord(inherited);
-end;
-
-function TRDWord.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRDWord;
-begin
-    Result := TRDWord(inherited);
-end;
-
-{ TRQWord }
-
-function TRQWord.value: QWord;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRQWord.value(_v: QWord);
-begin
-    if (myValue <> _v) then begin
-          myValue := _v;
-          signal(SGWRITE);
-  	end;
-end;
-
-function TRQWord.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRQWord;
-begin
-    Result := TRQWord(inherited);
-end;
-
-function TRQWord.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRQWord;
-begin
-    Result := TRQWord(inherited);
-end;
-
-{ TRFloat }
-
-function TRFloat.value: double;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRFloat.value(_v: double);
-begin
-    if (myValue <> _v) then begin
-        myValue := _v;
-        signal(SGWRITE);
-	end;
-end;
-
-function TRFloat.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRFloat;
-begin
-    Result:= TRFloat(inherited);
-end;
-
-function TRFloat.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRFloat;
-begin
-    Result:= TRFloat(inherited);
-end;
-
-{ TRStr }
-
-function TRStr.value: string;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRStr.value(_v: string);
-begin
-    if (myValue <> _v) then begin
-        myValue := _v;
-        signal(SGWRITE);
-	end;
-end;
-
-function TRStr.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRStr;
-begin
-    Result := TRStr(inherited);
-end;
-
-function TRStr.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRStr;
-begin
-    Result := TRStr(inherited);
-end;
-
-{ TRBool }
-
-function TRBool.value: boolean;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRBool.value(_v: boolean);
-begin
-    if (myValue <> _v) then begin
-        myValue := _v;
-        signal(SGWRITE);
-	end;
-end;
-
-function TRBool.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRBool;
-begin
-    Result := TRBool(inherited);
-end;
-
-function TRBool.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRBool;
-begin
-    Result := TRBool(inherited);
-end;
-
-{ TRDateTime }
-function TRDateTime.value: TDateTime;
-begin
-    inherited;
-    Result := myValue;
-end;
-
-procedure TRDateTime.value(_v: TDateTime);
-begin
-    if (myValue <> _v) then begin
-          myValue := _v;
-          signal(SGWRITE);
-  	end;
-end;
-
-function TRDateTime.listenRead(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRDateTime;
-begin
-    Result := TRDateTime(inherited);
-end;
-
-function TRDateTime.listenWrite(constref _subscriber: TObject; _e: TNotifyEvent
-	): TRDateTime;
-begin
-    Result := TRDateTime(inherited);
-end;
 
 initialization
+    InitCriticalSection(rStoreCS);
     RStore := TRStore.Create(true);
     RStore.Sorted := True;
     RStore.Duplicates := TDuplicates.dupAccept;
 
 finalization
     RStore.Free;
+    DoneCriticalSection(rStoreCS);
 
 end.
 

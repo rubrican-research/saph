@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 98
+  Left = 566
   Height = 652
-  Top = 104
+  Top = 222
   Width = 1168
   Caption = 'Form1'
   ClientHeight = 652
@@ -74,9 +74,10 @@ object Form1: TForm1
   end
   object Edit2: TEdit
     Left = 16
-    Height = 25
+    Height = 27
     Top = 376
     Width = 288
+    BorderSpacing.InnerBorder = 1
     TabOrder = 3
     Text = 'Edit2'
     OnChange = Edit1Change
@@ -190,8 +191,8 @@ object Form1: TForm1
   end
   object Memo1: TMemo
     Left = 674
-    Height = 608
-    Top = 44
+    Height = 614
+    Top = 38
     Width = 494
     Align = alRight
     Lines.Strings = (
@@ -216,12 +217,13 @@ object Form1: TForm1
     Caption = 'Invoke Signal As:'
   end
   object Label11: TLabel
-    Left = 7
+    Left = 13
     Height = 30
-    Top = 7
-    Width = 1154
+    Top = 4
+    Width = 1151
     Align = alTop
-    BorderSpacing.Around = 7
+    BorderSpacing.Left = 9
+    BorderSpacing.Around = 4
     Caption = 'Test Listeners'
     Font.CharSet = ANSI_CHARSET
     Font.Height = -21

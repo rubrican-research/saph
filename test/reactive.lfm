@@ -1,74 +1,82 @@
 object Form2: TForm2
-  Left = 136
+  Left = 445
   Height = 463
-  Top = 247
-  Width = 547
+  Top = 246
+  Width = 974
   Caption = 'Form2'
   ClientHeight = 463
-  ClientWidth = 547
+  ClientWidth = 974
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   LCLVersion = '3.4.0.0'
   object Memo1: TMemo
     Left = 40
-    Height = 330
+    Height = 402
     Top = 40
-    Width = 150
+    Width = 637
+    Anchors = [akTop, akLeft, akRight, akBottom]
     Lines.Strings = (
       'Memo1'
     )
+    ScrollBars = ssAutoVertical
     TabOrder = 0
   end
   object Button1: TButton
-    Left = 200
+    Left = 678
     Height = 25
     Top = 40
     Width = 280
+    Anchors = [akTop, akRight]
     Caption = 'Add number and listen to change'
     TabOrder = 1
     OnClick = Button1Click
   end
   object Button2: TButton
-    Left = 200
+    Left = 678
     Height = 25
     Top = 64
     Width = 280
+    Anchors = [akTop, akRight]
     Caption = 'Free iC object'
     TabOrder = 2
     OnClick = Button2Click
   end
   object Button3: TButton
-    Left = 200
+    Left = 678
     Height = 25
     Top = 92
     Width = 280
+    Anchors = [akTop, akRight]
     Caption = 'Test name behaviour'
     TabOrder = 3
     OnClick = Button3Click
   end
   object Button4: TButton
-    Left = 200
+    Left = 678
     Height = 25
     Top = 120
     Width = 280
+    Anchors = [akTop, akRight]
     Caption = 'Test value with TReactive'
     TabOrder = 4
     OnClick = Button4Click
   end
   object Button5: TButton
-    Left = 200
+    Left = 678
     Height = 25
     Top = 152
     Width = 280
+    Anchors = [akTop, akRight]
     Caption = 'Assignments'
     TabOrder = 5
     OnClick = Button5Click
   end
   object Button6: TButton
-    Left = 200
+    Left = 678
     Height = 25
     Top = 180
     Width = 280
+    Anchors = [akTop, akRight]
     Caption = 'Application signal'
     TabOrder = 6
     OnClick = Button6Click
@@ -77,7 +85,7 @@ object Form2: TForm2
     Left = 7
     Height = 30
     Top = 7
-    Width = 533
+    Width = 960
     Align = alTop
     Alignment = taCenter
     BorderSpacing.Around = 7
@@ -87,5 +95,15 @@ object Form2: TForm2
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
+  end
+  object Button7: TButton
+    Left = 678
+    Height = 25
+    Top = 216
+    Width = 280
+    Anchors = [akTop, akRight]
+    Caption = 'Thread Test'
+    TabOrder = 7
+    OnClick = Button7Click
   end
 end

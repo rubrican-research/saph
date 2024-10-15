@@ -1,0 +1,21 @@
+object TestForm: TTestForm
+  Left = 858
+  Height = 240
+  Top = 298
+  Width = 320
+  Caption = 'Thread Test Form'
+  ClientHeight = 240
+  ClientWidth = 320
+  OnClose = FormClose
+  OnShow = FormShow
+  LCLVersion = '3.4.0.0'
+  object Terminate: TButton
+    Left = 40
+    Height = 25
+    Top = 176
+    Width = 75
+    Caption = 'Terminate'
+    TabOrder = 0
+    OnClick = TerminateClick
+  end
+end

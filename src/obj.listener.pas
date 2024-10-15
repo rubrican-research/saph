@@ -485,9 +485,11 @@ procedure Breathe(_hold : Qword = 0);
 begin
     //log('Breath : %s', [ IntToStr(getTickCount64() - lastBreath)]);
     if (getTickCount64() - lastBreath) >= _hold then begin
-        Application.ProcessMessages;
-        lastBreath := getTickCount64();
-        //log('...... whew() .......');
+        if ThreadID = MainThreadID then begin
+            Application.ProcessMessages;
+            lastBreath := getTickCount64();
+		end;
+		//log('...... whew() .......');
 	end;
 end;
 //============================================================
