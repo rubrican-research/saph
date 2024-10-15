@@ -1,5 +1,138 @@
-17:52:39:716:: -------------- START  -----------------------
-17:52:39:716:: 
-17:52:41:218:: rmFromStore of TRStr
-17:52:49:383:: 
-17:52:49:383:: -------------- STOP  -----------------------
+00:53:41:776:: -------------- START  -----------------------
+00:53:41:776:: 
+00:53:46:136:: TReactive.histForward()------>
+00:53:46:137:: 1) myhistHead: -1; myHistCurr: -1
+00:53:46:137:: 2) myhistHead: 0; myHistCurr: 0
+00:53:46:138:: 3) Result: 0
+00:53:46:138:: GReactive.value() _index: 0
+00:53:47:792:: TReactive.histForward()------>
+00:53:47:792:: 1) myhistHead: 0; myHistCurr: 0
+00:53:47:792:: 2) myhistHead: 1; myHistCurr: 1
+00:53:47:792:: 3) Result: 1
+00:53:47:794:: GReactive.value() _index: 1
+00:53:49:536:: TReactive.histForward()------>
+00:53:49:537:: 1) myhistHead: 1; myHistCurr: 1
+00:53:49:538:: 2) myhistHead: 2; myHistCurr: 2
+00:53:49:538:: 3) Result: 2
+00:53:49:538:: GReactive.value() _index: 2
+00:53:51:617:: TReactive.histForward()------>
+00:53:51:618:: 1) myhistHead: 2; myHistCurr: 2
+00:53:51:618:: 2) myhistHead: 3; myHistCurr: 3
+00:53:51:618:: 3) Result: 3
+00:53:51:618:: GReactive.value() _index: 3
+00:53:53:122:: TReactive.histForward()------>
+00:53:53:122:: 1) myhistHead: 3; myHistCurr: 3
+00:53:53:122:: 2) myhistHead: 4; myHistCurr: 4
+00:53:53:122:: 3) Result: 4
+00:53:53:122:: GReactive.value() _index: 4
+00:53:54:456:: TReactive.histForward()------>
+00:53:54:457:: 1) myhistHead: 4; myHistCurr: 4
+00:53:54:457:: 2) myhistHead: 5; myHistCurr: 5
+00:53:54:457:: 3) Result: 5
+00:53:54:457:: GReactive.value() _index: 5
+00:53:56:177:: TReactive.histForward()------>
+00:53:56:177:: 1) myhistHead: 5; myHistCurr: 5
+00:53:56:177:: 2) myhistHead: 6; myHistCurr: 6
+00:53:56:178:: 3) Result: 6
+00:53:56:178:: GReactive.value() _index: 6
+00:53:58:065:: TReactive.histForward()------>
+00:53:58:065:: 1) myhistHead: 6; myHistCurr: 6
+00:53:58:065:: 2) myhistHead: 7; myHistCurr: 7
+00:53:58:066:: 3) Result: 0
+00:53:58:066:: GReactive.value() _index: 0
+00:54:02:600:: TReactive.histForward()------>
+00:54:02:601:: 1) myhistHead: 7; myHistCurr: 7
+00:54:02:601:: 2) myhistHead: 8; myHistCurr: 8
+00:54:02:601:: 3) Result: 1
+00:54:02:601:: GReactive.value() _index: 1
+00:54:06:424:: TReactive.histForward()------>
+00:54:06:424:: 1) myhistHead: 8; myHistCurr: 8
+00:54:06:426:: 2) myhistHead: 9; myHistCurr: 9
+00:54:06:426:: 3) Result: 2
+00:54:06:426:: GReactive.value() _index: 2
+00:54:08:232:: ======== undo() start ========== 
+00:54:08:232:: --> histHead: 9, histCurr: 9 
+00:54:08:232:: == histHead: 9, histCurr: 2 
+00:54:08:233:: TReactive.currToIndex() ------------->
+00:54:08:233:: 1) myHistHead: 9; myHistCurr:2; _step: 2;
+00:54:08:233:: 2) myHistHead: 9; myHistCurr:2; _step: 2;
+00:54:08:234:: 3) Result: 0
+00:54:11:023:: ======== undo() start ========== 
+00:54:11:025:: --> histHead: 9, histCurr: 2 
+00:54:11:025:: == histHead: 9, histCurr: 1 
+00:54:11:025:: TReactive.currToIndex() ------------->
+00:54:11:025:: 1) myHistHead: 9; myHistCurr:1; _step: 1;
+00:54:11:026:: 2) myHistHead: 9; myHistCurr:1; _step: 1;
+00:54:11:026:: 3) Result: 0
+00:56:37:705:: TReactive.histForward()------>
+00:56:37:705:: 1) myhistHead: 9; myHistCurr: 1
+00:56:37:706:: 2) myhistHead: 2; myHistCurr: 2
+00:56:37:706:: 3) Result: 2
+00:56:37:706:: GReactive.value() _index: 2
+00:56:51:313:: TReactive.histForward()------>
+00:56:51:313:: 1) myhistHead: 2; myHistCurr: 2
+00:56:51:314:: 2) myhistHead: 3; myHistCurr: 3
+00:56:51:314:: 3) Result: 3
+00:56:51:314:: GReactive.value() _index: 3
+00:57:04:281:: TReactive.histForward()------>
+00:57:04:281:: 1) myhistHead: 3; myHistCurr: 3
+00:57:04:282:: 2) myhistHead: 4; myHistCurr: 4
+00:57:04:282:: 3) Result: 4
+00:57:04:282:: GReactive.value() _index: 4
+00:57:06:136:: TReactive.histForward()------>
+00:57:06:137:: 1) myhistHead: 4; myHistCurr: 4
+00:57:06:137:: 2) myhistHead: 5; myHistCurr: 5
+00:57:06:137:: 3) Result: 5
+00:57:06:137:: GReactive.value() _index: 5
+00:57:07:795:: TReactive.histForward()------>
+00:57:07:795:: 1) myhistHead: 5; myHistCurr: 5
+00:57:07:796:: 2) myhistHead: 6; myHistCurr: 6
+00:57:07:796:: 3) Result: 6
+00:57:07:796:: GReactive.value() _index: 6
+00:57:15:529:: TReactive.histForward()------>
+00:57:15:529:: 1) myhistHead: 6; myHistCurr: 6
+00:57:15:531:: 2) myhistHead: 7; myHistCurr: 7
+00:57:15:531:: 3) Result: 0
+00:57:15:531:: GReactive.value() _index: 0
+00:57:21:056:: TReactive.histForward()------>
+00:57:21:057:: 1) myhistHead: 7; myHistCurr: 7
+00:57:21:057:: 2) myhistHead: 8; myHistCurr: 8
+00:57:21:057:: 3) Result: 1
+00:57:21:057:: GReactive.value() _index: 1
+00:57:22:536:: TReactive.histForward()------>
+00:57:22:536:: 1) myhistHead: 8; myHistCurr: 8
+00:57:22:537:: 2) myhistHead: 9; myHistCurr: 9
+00:57:22:537:: 3) Result: 2
+00:57:22:537:: GReactive.value() _index: 2
+00:57:24:568:: TReactive.histForward()------>
+00:57:24:568:: 1) myhistHead: 9; myHistCurr: 9
+00:57:24:568:: 2) myhistHead: 10; myHistCurr: 10
+00:57:24:569:: 3) Result: 3
+00:57:24:569:: GReactive.value() _index: 3
+00:57:45:736:: TReactive.histForward()------>
+00:57:45:736:: 1) myhistHead: 10; myHistCurr: 10
+00:57:45:736:: 2) myhistHead: 11; myHistCurr: 11
+00:57:45:737:: 3) Result: 4
+00:57:45:737:: GReactive.value() _index: 4
+00:57:54:992:: TReactive.histForward()------>
+00:57:54:992:: 1) myhistHead: 11; myHistCurr: 11
+00:57:54:993:: 2) myhistHead: 12; myHistCurr: 12
+00:57:54:993:: 3) Result: 5
+00:57:54:993:: GReactive.value() _index: 5
+00:57:58:962:: TReactive.histForward()------>
+00:57:58:962:: 1) myhistHead: 12; myHistCurr: 12
+00:57:58:962:: 2) myhistHead: 13; myHistCurr: 13
+00:57:58:962:: 3) Result: 6
+00:57:58:963:: GReactive.value() _index: 6
+00:58:10:521:: TReactive.histForward()------>
+00:58:10:521:: 1) myhistHead: 13; myHistCurr: 13
+00:58:10:521:: 2) myhistHead: 7; myHistCurr: 7
+00:58:10:522:: 3) Result: 0
+00:58:10:522:: GReactive.value() _index: 0
+00:58:23:440:: TReactive.histForward()------>
+00:58:23:440:: 1) myhistHead: 7; myHistCurr: 7
+00:58:23:441:: 2) myhistHead: 8; myHistCurr: 8
+00:58:23:441:: 3) Result: 1
+00:58:23:441:: GReactive.value() _index: 1
+00:58:47:740:: 
+00:58:47:740:: -------------- STOP  -----------------------

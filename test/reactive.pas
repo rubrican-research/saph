@@ -14,6 +14,7 @@ type
 
     TForm2 = class(TForm)
 		Button1: TButton;
+		undo: TButton;
 		Button2: TButton;
 		Button3: TButton;
 		Button4: TButton;
@@ -22,8 +23,10 @@ type
 		Button7: TButton;
 		Button8: TButton;
 		Button9: TButton;
+		Edit1: TEdit;
 		Label1: TLabel;
 		Memo1: TMemo;
+		redo: TButton;
 		procedure Button1Click(Sender: TObject);
 		procedure Button2Click(Sender: TObject);
 		procedure Button3Click(Sender: TObject);
@@ -33,8 +36,11 @@ type
 		procedure Button7Click(Sender: TObject);
 		procedure Button8Click(Sender: TObject);
 		procedure Button9Click(Sender: TObject);
+		procedure Edit1EditingDone(Sender: TObject);
         procedure FormCreate(Sender: TObject);
 		procedure FormDestroy(Sender: TObject);
+		procedure redoClick(Sender: TObject);
+		procedure undoClick(Sender: TObject);
     private
         procedure iARead (sender:TObject);
         procedure iAWrite(sender:TObject);
@@ -105,6 +111,18 @@ begin
     //sA.Free;
     //sB.Free;
     //sc.Free;
+end;
+
+procedure TForm2.redoClick(Sender: TObject);
+begin
+    sC.Redo;
+    Edit1.Text := sC.val;
+end;
+
+procedure TForm2.undoClick(Sender: TObject);
+begin
+    sC.undo();
+    Edit1.Text := sC.Val;
 end;
 
 procedure TForm2.Button1Click(Sender: TObject);
@@ -241,6 +259,11 @@ begin
     Memo1.Lines.Add(Format('Pred of -5 is %d', [pred(-5)]));
 end;
 
+procedure TForm2.Edit1EditingDone(Sender: TObject);
+begin
+    sC.val := edit1.Text;
+end;
+
 procedure TForm2.iARead(sender: TObject);
 begin
 
@@ -301,6 +324,9 @@ end;
 
 procedure TForm2.sCWrite(sender: TObject);
 begin
+    Memo1.Lines.Add(TRStr(Sender).val);
+    Memo1.Lines.Add(TRStr(Sender).histDump);
+    Memo1.Lines.Add('');
 
 end;
 

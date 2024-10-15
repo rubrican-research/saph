@@ -58,7 +58,7 @@ type
 
     {History}
     private
-        const UNDOSIZE  = 32;
+        const UNDOSIZE  = 7;
         const MAXUNDO   = UNDOSIZE-1 ;
         const UPPER_LIM = 2 * UNDOSIZE;
     private
@@ -107,6 +107,7 @@ type
         function histVal(_delta: integer = 0): T; reintroduce;
         function undo(_count: integer = 1): T; reintroduce;
         function redo(_count: integer = 1): T; reintroduce;
+        function histDump: string; virtual;
 
     public
         property val: T read value write value;
@@ -138,7 +139,9 @@ type
 
 	{ TRStr }
 
-    TRStr = class(specialize GReactive<string>);
+    TRStr = class(specialize GReactive<string>)
+        function histDump: string; override;
+    end;
 
 	{ TRBool }
 
@@ -953,6 +956,8 @@ begin
     myName:= '';
     myManaged := false;
     mySilentLock:= false; // Raise exception if value is being changed after locking
+    myHistCurr := -1;
+    myHistHead := -1;
     clearLock;
 end;
 
@@ -1081,6 +1086,8 @@ function TReactive.currToIndex(_step: integer): integer;
 var
     _t: integer;
 begin
+    log('TReactive.currToIndex() ------------->');
+    log('1) myHistHead: %d; myHistCurr:%d; _step: %d;', [myHistHead, myHistCurr, _step]);
     _t := myHistCurr + _step;
     if myHistHead < UNDOSIZE then begin
         if myHistCurr <= myHistHead then begin
@@ -1110,12 +1117,16 @@ begin
             // Not possible
     	end;
 	end;
-
+    log('2) myHistHead: %d; myHistCurr:%d; _step: %d;', [myHistHead, myHistCurr, _step]);
     Result := Result div UNDOSIZE;
+    log('3) Result: %d', [Result]);
 end;
 
 function TReactive.histForward: integer;
 begin
+    log('TReactive.histForward()------>');
+    log('1) myhistHead: %d; myHistCurr: %d', [myHistHead, myHistCurr]);
+
     if myHistCurr < myHistHead then
         myHistHead := myHistCurr;
 
@@ -1125,6 +1136,9 @@ begin
         myHistHead := UNDOSIZE;
 
     myHistCurr := myHistHead;
+    log('2) myhistHead: %d; myHistCurr: %d', [myHistHead, myHistCurr]);
+    Result := myHistCurr mod UNDOSIZE;
+    log('3) Result: %d', [Result]);
 end;
 
 function TReactive.histCount: integer;
@@ -1183,9 +1197,10 @@ begin
         if _v <> myValue then begin
             enterCS;
             myValue := _v;
-            signal(SGWRITE);
             _index := histForward;
             myHistory[_index] := _v;
+            log('GReactive.value() _index: %d',[_index]);
+            signal(SGWRITE);
             leaveCS;
 	    end;
 	end
@@ -1212,6 +1227,8 @@ function GReactive.undo(_count: integer): T;
 var
 	_minVal: Integer;
 begin
+    log('======== undo() start ========== ');
+    log('--> histHead: %d, histCurr: %d ', [myHistHead, myHistCurr]);
     EnterCS;
     myHistCurr := myHistCurr - _count;
     if myHistHead > UNDOSIZE then
@@ -1219,9 +1236,12 @@ begin
     else
         _minVal := 0;
     myHistCurr :=  Min(_minVal, myHistCurr);
+
+    log('== histHead: %d, histCurr: %d ', [myHistHead, myHistCurr]);
     myValue   := histVal(myHistCurr);
     signal(SGWRITE);
     leaveCS;
+    Result := myValue;
 
 end;
 
@@ -1233,6 +1253,28 @@ begin
     myValue    := histVal(myHistCurr);
     signal(SGWRITE);
     LeaveCS;
+    Result := myValue;
+end;
+
+function GReactive.histDump: string;
+begin
+    Result := 'not implemented';
+end;
+
+{ TRStr }
+
+function TRStr.histDump: string;
+var
+	a: String;
+    i : integer;
+begin
+    //for a in myHistory do begin
+    Result := '';
+    for i := 0 to MAXUNDO do begin
+        if not Result.isEmpty then Result := Result + ', ';
+	    Result := Result + format('"%s"', [myHistory[i]]);
+	end;
+
 end;
 
 
