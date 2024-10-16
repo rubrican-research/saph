@@ -29,9 +29,10 @@
         <ComponentName Value="Form2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="300"/>
-        <CursorPos X="45" Y="328"/>
+        <CursorPos X="40" Y="327"/>
         <UsageCount Value="70"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -284,7 +285,6 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="9"/>
         <TopLine Value="1254"/>
         <CursorPos X="14" Y="1272"/>
@@ -353,10 +353,6 @@
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="1245" Column="33" TopLine="1222"/>
-      </Position>
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="143" Column="45" TopLine="110"/>
@@ -472,6 +468,10 @@
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="143" Column="18" TopLine="108"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1272" Column="14" TopLine="1254"/>
       </Position>
     </JumpHistory>
     <RunParams>
