@@ -1,7 +1,7 @@
 # Saph: Lazarus package for complex GUI
 This is a library to make coding complex GUIs in Lazarus easier. Broad functional goals:
 
-### [Object listeners]()
+### [Object listeners](https://github.com/rubrican-research/saph/wiki/Object-Listeners)
 Implemented as a type helper on TObject. To include the signal/listen functionality, just add **obj.listener** to your uses clause. 
 Add a listener to any object by simply calling objvar.addListener('event string case sensitive', @listenProc/listenMethod); Whenever you call objvar.signal('event string case sensitive'), the object calls all the attached listener procs/methods.
 You can control how the signals are sent:
@@ -12,20 +12,20 @@ You can control how the signals are sent:
 ### [Control listeners (depreciated)](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
 Control Listeners was the first version of the signal/listen library. It is no longer used. All functionality has been implemented in the obj.listener library.
 
-### [Selection Manager]()
+### [Selection Manager](https://github.com/rubrican-research/saph/wiki/Select-List)
 This is a generic object list that allows you to implement complex select/unselect behaviours in Gui. A good usecase for this library is selecting different subjects (object) for a student from a list of available courses. With each course that is selected, the next list of available selections should only show the remaining, unselected subjects. If you are implementing this with dynamically created panels that are displayed in a scroll box, it becomes tricky to filter out the previously selected items (in another panel object).
 
-### [Undo history]()
+### [Undo history](https://github.com/rubrican-research/saph/wiki/Undo-History)
 A generic class that implements undo/redo for basic data types. Object level undo/redo is not supported.
 
-### [Reactive store]()
+### [Reactive store](https://github.com/rubrican-research/saph/wiki/Reactive-variables-TRInt,-TRStr-etc)
 Imagine a variable that you can use like a normal integer, string, boolean, float or string in code but is actually an object that can:
   - signal when the value is changed
   - supports undo/redo, with signaling
 This library allows you to create classes where each field signals their change state and supports undo/redo.
 Also implemented is a locking mechanism that allows you to lock the variable such that you can only write to it if you are the owner. (the first version is working. still to be refined).
 
-### [Window Manager]()
+### [Window Manager](https://github.com/rubrican-research/saph/wiki/Win-Manager)
 This library was built to hel build a multi-window app, similar to the Lazarus IDE. Each form in the app can be registered in the initialization section of its unit **procedure registerWind(_FC: TFormClass);** and then you can call **getForm('TForm1').Show:** to instantiate the form. You can also manage multiple instances of the same form class to dynamically build a "show windows" menu to retrieve a window that got buried in the backgroud.
 
 Using the obj.listener library, you can use Application.addListener() to listen to signals anywhere in your app. And you can call Application.signal() from anywhere in your app to inform other listeners of an event in your form/logic. This allows you to be able to update a variable change (together with Reactive Store) across multiple windows in an asynchronous manner.
