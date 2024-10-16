@@ -44,6 +44,10 @@
         <AddToUsesPkgSection Value="False"/>
         <UnitName Value="saph.winman"/>
       </Item>
+      <Item>
+        <Filename Value="src\saph.undo.pas"/>
+        <UnitName Value="saph.undo"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>
