@@ -325,9 +325,6 @@ end;
 procedure TForm2.sCWrite(sender: TObject);
 begin
     Memo1.Lines.Add(TRStr(Sender).val);
-    Memo1.Lines.Add(TRStr(Sender).histDump);
-    Memo1.Lines.Add('');
-
 end;
 
 procedure TForm2.appListner(const _sender: TObject; const _event: string;
