@@ -9,7 +9,7 @@ You can control how the signals are sent:
   - _qThreads_: signal() returns without waiting for the procs/methods to complete. This runs each of the attached listener procs/methods in a separate thread. The method runner uses a critical section**runnerCS** when running in qThread mode. If needed, you can use this in your own methods that will be called by the signal.
   - _qSerial_: This runs each of the attached listener procs/methods in a non breaking loop. signal() returns after all the listener methods have been executed.
 
-### [Control listeners (depreciated)](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
+### [Control listeners (deprecated)](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
 Control Listeners was the first version of the signal/listen library. It is no longer used. All functionality has been implemented in the obj.listener library.
 
 ### [Selection Manager](https://github.com/rubrican-research/saph/wiki/Select-List)
