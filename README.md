@@ -6,10 +6,22 @@ This is a library to make coding complex GUIs in Lazarus easier. Broad functiona
 
 ### [Object listeners](https://github.com/rubrican-research/saph/wiki/Object-Listeners)
 Implemented as a type helper on TObject. To include the signal/listen functionality, just add **obj.listener** to your uses clause. 
-Add a listener to any object by simply calling objvar.addListener('event string case sensitive', @listenProc/listenMethod); Whenever you call objvar.signal('event string case sensitive'), the object calls all the attached listener procs/methods.
-You can control how the signals are sent:
+Add a listener to any object by simply calling 
+```
+objvar.addListener('event string case sensitive', @listenProc/listenMethod); // psuedo code :-)
+```
+Whenever you call 
+```
+objvar.signal('event string case sensitive'),
+```
+the object calls all the attached listener procs/methods. You can also send event parameters to the listening function (if it does not use TNotifyEvent) as a JSON Object like so:
+```
+objvar.signal('file downloaded', TJSONObject.Create(['filepath', '\this\is\the\file\path.txt', 'fingerprint', '773kkdh88344jd']));
+```
+**Sending signals**
+You can control how the signals are sent when  you add a listener. You can mix up the modes as you add listeners. Each listener gets called by invocation type that was specified when the listener was defined. The invocation types are:
   - _qAsynch_:(default). signal() returns without waiting for the procs/methods to complete. This queues the listener proc/method in the Application object's asynch queue. This way is best for GUI applications where you want to signal user actions to multiple subscribers.
-  - _qThreads_: signal() returns without waiting for the procs/methods to complete. This runs each of the attached listener procs/methods in a separate thread. The method runner uses a critical section**runnerCS** when running in qThread mode. If needed, you can use this in your own methods that will be called by the signal.
+  - _qThreads_: signal() returns without waiting for the procs/methods to complete. This runs each of the attached listener procs/methods in a separate thread. The method runner uses a critical section **runnerCS** (global variable that is managed in the initialization and finalization sections of the unit) when running in _qThread_ mode. If needed, you can use this in your own methods that will be called by the signal.
   - _qSerial_: This runs each of the attached listener procs/methods in a non breaking loop. signal() returns after all the listener methods have been executed.
 
 ### [Control listeners (deprecated)](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
@@ -25,8 +37,8 @@ A generic class that implements undo/redo for basic data types. Object level und
 Imagine a variable that you can use like a normal integer, string, boolean, float or string in code but is actually an object that can:
   - signal when the value is changed
   - supports undo/redo, with signaling
-This library allows you to create classes where each field signals their change state and supports undo/redo.
-Also implemented is a locking mechanism that allows you to lock the variable such that you can only write to it if you are the owner. (the first version is working. still to be refined).
+    
+This library allows you to create classes where each field signals their change state and supports undo/redo. Also implemented is a locking mechanism that allows you to lock the variable such that you can only write to it if you are the owner. (the first version is working. still to be refined).
 
 ### [Window Manager](https://github.com/rubrican-research/saph/wiki/Win-Manager)
 This library was built to hel build a multi-window app, similar to the Lazarus IDE. Each form in the app can be registered in the initialization section of its unit **procedure registerWind(_FC: TFormClass);** and then you can call **getForm('TForm1').Show:** to instantiate the form. You can also manage multiple instances of the same form class to dynamically build a "show windows" menu to retrieve a window that got buried in the backgroud.
