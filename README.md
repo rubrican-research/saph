@@ -1,8 +1,35 @@
+**Note**: This library depends on "sugar" (https://github.com/stanley643212/sugar). You will need to clone this repository as well.
+The plan is to remove the dependency before release.
+
 # Saph: Lazarus package for complex GUI
 This is a library to make coding complex GUIs in Lazarus easier. Broad functional goals:
 
-### [Event listeners](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
-The ability to add multiple event listeners to any LCL control (objects will be supported in a future upgrade)and signal the event as needed.
+### [Object listeners](https://github.com/rubrican-research/saph/wiki/Object-Listeners)
+Implemented as a type helper on TObject. To include the signal/listen functionality, just add **obj.listener** to your uses clause. 
+Add a listener to any object by simply calling objvar.addListener('event string case sensitive', @listenProc/listenMethod); Whenever you call objvar.signal('event string case sensitive'), the object calls all the attached listener procs/methods.
+You can control how the signals are sent:
+  - _qAsynch_:(default). signal() returns without waiting for the procs/methods to complete. This queues the listener proc/method in the Application object's asynch queue. This way is best for GUI applications where you want to signal user actions to multiple subscribers.
+  - _qThreads_: signal() returns without waiting for the procs/methods to complete. This runs each of the attached listener procs/methods in a separate thread. The method runner uses a critical section**runnerCS** when running in qThread mode. If needed, you can use this in your own methods that will be called by the signal.
+  - _qSerial_: This runs each of the attached listener procs/methods in a non breaking loop. signal() returns after all the listener methods have been executed.
 
-### Manage multiple selections
-The library makes it easy to implement the gui to support a use cases similar to selecting subjects for a student from a list of available courses. With each course that is selected, the next list of available selections should only show the remaining, unselected subjects. If you are implementing this with dynamically created panels that are displayed in a scroll box, it becomes tricky to filter out the previously selected items (in another panel object).
+### [Control listeners (deprecated)](https://github.com/rubrican-research/saph/wiki/Event-Listeners)
+Control Listeners was the first version of the signal/listen library. It is no longer used. All functionality has been implemented in the obj.listener library.
+
+### [Selection Manager](https://github.com/rubrican-research/saph/wiki/Select-List)
+This is a generic object list that allows you to implement complex select/unselect behaviours in Gui. A good usecase for this library is selecting different subjects (object) for a student from a list of available courses. With each course that is selected, the next list of available selections should only show the remaining, unselected subjects. If you are implementing this with dynamically created panels that are displayed in a scroll box, it becomes tricky to filter out the previously selected items (in another panel object).
+
+### [Undo history](https://github.com/rubrican-research/saph/wiki/Undo-History)
+A generic class that implements undo/redo for basic data types. Object level undo/redo is not supported.
+
+### [Reactive store](https://github.com/rubrican-research/saph/wiki/Reactive-variables-TRInt,-TRStr-etc)
+Imagine a variable that you can use like a normal integer, string, boolean, float or string in code but is actually an object that can:
+  - signal when the value is changed
+  - supports undo/redo, with signaling
+This library allows you to create classes where each field signals their change state and supports undo/redo.
+Also implemented is a locking mechanism that allows you to lock the variable such that you can only write to it if you are the owner. (the first version is working. still to be refined).
+
+### [Window Manager](https://github.com/rubrican-research/saph/wiki/Win-Manager)
+This library was built to hel build a multi-window app, similar to the Lazarus IDE. Each form in the app can be registered in the initialization section of its unit **procedure registerWind(_FC: TFormClass);** and then you can call **getForm('TForm1').Show:** to instantiate the form. You can also manage multiple instances of the same form class to dynamically build a "show windows" menu to retrieve a window that got buried in the backgroud.
+
+Using the obj.listener library, you can use Application.addListener() to listen to signals anywhere in your app. And you can call Application.signal() from anywhere in your app to inform other listeners of an event in your form/logic. This allows you to be able to update a variable change (together with Reactive Store) across multiple windows in an asynchronous manner.
+
