@@ -5,7 +5,8 @@ https://github.com/rubrican-research/saph
 
 This library is released under the MIT License.
 
-to freely define event listeners - which is text based, case-sensitive - on any object.
+Purpose:
+To freely define event listeners - which is text based, case-sensitive - on any object.
 This is implemented as a Type Helper on TObject.
 
 Implement event listeners in your units with the following signature

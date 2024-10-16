@@ -191,7 +191,7 @@ type
     operator =(v: TRInt; a: integer): boolean;
     operator =(a: integer; v: TRInt): boolean;
     {ADDITION}
-    operator +(a: TRInt): TRInt;    // unary operator. Returns a new object
+    operator +(a: TRInt): TRInt;        // unary operator. Returns a new object
     operator +(b: TRInt; a: integer): TRInt;
     operator +(a: integer; b: TRInt): TRInt;
     operator +(a: TRInt; b: TRInt): TRInt;
@@ -199,7 +199,7 @@ type
     operator -(b: TRInt; a: integer): TRInt;
     operator -(a: integer; b: TRInt): TRInt;
     operator -(a: TRInt; b: TRInt): TRInt;
-    operator -(a: TRInt): TRInt;
+    operator -(a: TRInt): TRInt;        // unary operator. Returns a new object
     {MULTIPLICATION}
     operator *(b: TRInt; a: integer): TRInt;
     operator *(a: integer; b: TRInt): TRInt;
@@ -209,37 +209,94 @@ type
     operator /(a: integer; b: TRInt): TRInt;
     operator /(a: TRInt; b: TRInt): TRInt;
 
+
 {TRInt64    }
     operator :=(v: TRInt64) : int64;
     operator =(v: TRInt64; a: int64): boolean;
     operator =( a: int64; v: TRInt64): boolean;
+    {ADDITION}
     operator +(b: TRInt64; a: int64): TRInt64;
     operator +(a: int64; b: TRInt64): TRInt64;
     operator +(a: TRInt64; b: TRInt64): TRInt64;
+    {SUBTRACTION}
+    operator -(b: TRInt64; a: int64): TRInt64;
+    operator -(a: int64; b: TRInt64): TRInt64;
+    operator -(a: TRInt64; b: TRInt64): TRInt64;
+    operator -(a: TRInt64): TRInt64;
+    {MULTIPLICATION}
+    operator *(b: TRInt64; a: int64): TRInt64;
+    operator *(a: int64; b: TRInt64): TRInt64;
+    operator *(a: TRInt64; b: TRInt64): TRInt64;
+    {DIVISION}
+    operator /(b: TRInt64; a: int64): TRInt64; // integer division. for normal division, use a.val / b.val
+    operator /(a: int64; b: TRInt64): TRInt64;
+    operator /(a: TRInt64; b: TRInt64): TRInt64;
 
 {TRDWord    }
     operator :=(v: TRDWord) : DWord;
     operator =(v: TRDWord; a: DWord): boolean;
     operator =(a: DWord; v: TRDWord): boolean;
+    {ADDITION}
     operator +(b: TRDWord; a: DWord): TRDWord;
     operator +(a: DWord; b: TRDWord): TRDWord;
     operator +(a: TRDWord; b: TRDWord): TRDWord;
+    {SUBTRACTION}
+    operator -(b: TRDWord; a: DWord): TRDWord;
+    operator -(a: DWord; b: TRDWord): TRDWord;
+    operator -(a: TRDWord; b: TRDWord): TRDWord;
+    operator -(a: TRDWord): TRDWord;
+    {MULTIPLICATION}
+    operator *(b: TRDWord; a: DWord): TRDWord;
+    operator *(a: DWord; b: TRDWord): TRDWord;
+    operator *(a: TRDWord; b: TRDWord): TRDWord;
+    {DIVISION}
+    operator /(b: TRDWord; a: DWord): TRDWord; // integer division. for normal division, use a.val / b.val
+    operator /(a: DWord; b: TRDWord): TRDWord;
+    operator /(a: TRDWord; b: TRDWord): TRDWord;
 
 {TRQWord    }
     operator :=(v: TRQWord) : QWord;
     operator =(v: TRQWord; a: QWord): boolean;
     operator =(a: QWord; v: TRQWord): boolean;
+    {ADDITION}
     operator +(b: TRQWord; a: QWord): TRQWord;
     operator +(a: QWord; b: TRQWord): TRQWord;
     operator +(a: TRQWord; b: TRQWord): TRQWord;
+    {SUBTRACTION}
+    operator -(b: TRQWord; a: QWord): TRQWord;
+    operator -(a: QWord; b: TRQWord): TRQWord;
+    operator -(a: TRQWord; b: TRQWord): TRQWord;
+    operator -(a: TRQWord): TRQWord;
+    {MULTIPLICATION}
+    operator *(b: TRQWord; a: QWord): TRQWord;
+    operator *(a: QWord; b: TRQWord): TRQWord;
+    operator *(a: TRQWord; b: TRQWord): TRQWord;
+    {DIVISION}
+    operator /(b: TRQWord; a: QWord): TRQWord; // integer division. for normal division, use a.val / b.val
+    operator /(a: QWord; b: TRQWord): TRQWord;
+    operator /(a: TRQWord; b: TRQWord): TRQWord;
 
 {TRFloat    }
     operator :=(v: TRFloat) : Double;
     operator =(v: TRFloat; a: Double): boolean;
     operator =(a: Double; v: TRFloat): boolean;
+    {ADDITION}
     operator +(b: TRFloat; a: Double): TRFloat;
     operator +(a: Double; b: TRFloat): TRFloat;
     operator +(a: TRFloat; b: TRFloat): TRFloat;
+    {SUBTRACTION}
+    operator -(b: TRFloat; a: Double): TRFloat;
+    operator -(a: Double; b: TRFloat): TRFloat;
+    operator -(a: TRFloat; b: TRFloat): TRFloat;
+    operator -(a: TRFloat): TRFloat;
+    {MULTIPLICATION}
+    operator *(b: TRFloat; a: Double): TRFloat;
+    operator *(a: Double; b: TRFloat): TRFloat;
+    operator *(a: TRFloat; b: TRFloat): TRFloat;
+    {DIVISION}
+    operator /(b: TRFloat; a: Double): TRFloat; // integer division. for normal division, use a.val / b.val
+    operator /(a: Double; b: TRFloat): TRFloat;
+    operator /(a: TRFloat; b: TRFloat): TRFloat;
 
 {TRStr}
     operator :=(v: TRStr) : string;
@@ -258,9 +315,15 @@ type
     operator :=(v: TRDateTime) : TDateTime;
     operator =(v: TRDateTime; a: TDateTime): boolean;
     operator =(a: TDateTime; v: TRDateTime): boolean;
+    {ADDITION}
     operator +(b: TRDateTime; a: TDateTime): TRDateTime;
     operator +(a: TDateTime; b: TRDateTime): TRDateTime;
     operator +(a: TRDateTime; b: TRDateTime): TRDateTime;
+    {SUBTRACTION}
+    operator -(b: TRDateTime; a: TDateTime): TRDateTime;
+    operator -(a: TDateTime; b: TRDateTime): TRDateTime;
+    operator -(a: TRDateTime; b: TRDateTime): TRDateTime;
+
 
 var
     rStoreCS: TRTLCriticalSection;
@@ -467,17 +530,17 @@ end;
 
 operator-(b: TRInt; a: integer): TRInt;
 begin
-
+    Result := RInt(b.val - a);
 end;
 
 operator-(a: integer; b: TRInt): TRInt;
 begin
-
+    Result:= RInt(a - b.val);
 end;
 
 operator-(a: TRInt; b: TRInt): TRInt;
 begin
-
+    Result := RInt(a.val - b.val);
 end;
 
 operator-(a: TRInt): TRInt;
@@ -487,32 +550,32 @@ end;
 
 operator*(b: TRInt; a: integer): TRInt;
 begin
-
+    Result := RInt(b.val * a);
 end;
 
 operator*(a: integer; b: TRInt): TRInt;
 begin
-
+    Result := RInt(a * b.Val);
 end;
 
 operator*(a: TRInt; b: TRInt): TRInt;
 begin
-
+    Result := RInt(a.val * b.val);
 end;
 
 operator/(b: TRInt; a: integer): TRInt;
 begin
-
+    Result := RInt(b.val div a);
 end;
 
 operator/(a: integer; b: TRInt): TRInt;
 begin
-
+    Result := RInt(a div b.val);
 end;
 
 operator/(a: TRInt; b: TRInt): TRInt;
 begin
-
+    Result := RInt(a.val div b.val);
 end;
 
 
@@ -546,6 +609,56 @@ begin
     Result := RInt64(a.value + b.value);
 end;
 
+operator-(b: TRInt64; a: int64): TRInt64;
+begin
+    Result := RInt64(b.val - a);
+end;
+
+operator-(a: int64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a - b.val);
+end;
+
+operator-(a: TRInt64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a.val - b.val);
+end;
+
+operator-(a: TRInt64): TRInt64;
+begin
+    Result := RInt64(-1 * a.val);
+end;
+
+operator*(b: TRInt64; a: int64): TRInt64;
+begin
+    Result := RInt64(b.val * a);
+end;
+
+operator*(a: int64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a * b.val);
+end;
+
+operator*(a: TRInt64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a.val * b.val);
+end;
+
+operator/(b: TRInt64; a: int64): TRInt64;
+begin
+    Result := RInt64(b.val div a);
+end;
+
+operator/(a: int64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a div b.val);
+end;
+
+operator/(a: TRInt64; b: TRInt64): TRInt64;
+begin
+    Result := RInt64(a.val div b.val);
+end;
+
 operator:=(v: TRDWord): DWord;
 begin
     Result := v.value;
@@ -574,6 +687,56 @@ end;
 operator+(a: TRDWord; b: TRDWord): TRDWord;
 begin
     Result := RDWord(a.value + b.value);
+end;
+
+operator-(b: TRDWord; a: DWord): TRDWord;
+begin
+    Result := RDWord(b.val - a);
+end;
+
+operator-(a: DWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a - b.val);
+end;
+
+operator-(a: TRDWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a.val - b.val);
+end;
+
+operator-(a: TRDWord): TRDWord;
+begin
+    Result := RDWord(-1 * a.val);
+end;
+
+operator*(b: TRDWord; a: DWord): TRDWord;
+begin
+    Result := RDWord(b.val * a);
+end;
+
+operator*(a: DWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a * b.val);
+end;
+
+operator*(a: TRDWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a.val * b.val);
+end;
+
+operator/(b: TRDWord; a: DWord): TRDWord;
+begin
+    Result := RDWord(b.val div a);
+end;
+
+operator/(a: DWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a div b.val);
+end;
+
+operator/(a: TRDWord; b: TRDWord): TRDWord;
+begin
+    Result := RDWord(a.val div b.val);
 end;
 
 operator:=(v: TRQWord): QWord;
@@ -606,6 +769,56 @@ begin
     Result := RQWord(a.value + b.value);
 end;
 
+operator-(b: TRQWord; a: QWord): TRQWord;
+begin
+    Result := RQWord(b.val - a);
+end;
+
+operator-(a: QWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a - b.val);
+end;
+
+operator-(a: TRQWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a.val - b.val);
+end;
+
+operator-(a: TRQWord): TRQWord;
+begin
+    Result := RQWord(-1 * a.val);
+end;
+
+operator*(b: TRQWord; a: QWord): TRQWord;
+begin
+    Result := RQWord(b.val * a);
+end;
+
+operator*(a: QWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a * b.val);
+end;
+
+operator*(a: TRQWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a.val * b.val);
+end;
+
+operator/(b: TRQWord; a: QWord): TRQWord;
+begin
+    Result := RQWord(b.val div a);
+end;
+
+operator/(a: QWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a div b.val);
+end;
+
+operator/(a: TRQWord; b: TRQWord): TRQWord;
+begin
+    Result := RQWord(a.val div b.val);
+end;
+
 operator:=(v: TRFloat): Double;
 begin
     Result := v.value;
@@ -634,6 +847,56 @@ end;
 operator+(a: TRFloat; b: TRFloat): TRFloat;
 begin
     Result := RFloat(a.value + b.value);
+end;
+
+operator-(b: TRFloat; a: Double): TRFloat;
+begin
+    Result := RFloat(b.val - a);
+end;
+
+operator-(a: Double; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a - b.val);
+end;
+
+operator-(a: TRFloat; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a.val - b.val);
+end;
+
+operator-(a: TRFloat): TRFloat;
+begin
+    Result := RFloat(-1 * a.val);
+end;
+
+operator*(b: TRFloat; a: Double): TRFloat;
+begin
+    Result := RFloat(b.val * a);
+end;
+
+operator*(a: Double; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a * b.val);
+end;
+
+operator*(a: TRFloat; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a.val * b.val);
+end;
+
+operator/(b: TRFloat; a: Double): TRFloat;
+begin
+    Result := RFloat(b.val/a);
+end;
+
+operator/(a: Double; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a/b.val);
+end;
+
+operator/(a: TRFloat; b: TRFloat): TRFloat;
+begin
+    Result := RFloat(a.val/b.val);
 end;
 
 operator:=(v: TRStr): string;
@@ -713,6 +976,20 @@ begin
     Result := RDateTime(a.value + b.value);
 end;
 
+operator-(b: TRDateTime; a: TDateTime): TRDateTime;
+begin
+    Result := RDateTime(b.val - a);
+end;
+
+operator-(a: TDateTime; b: TRDateTime): TRDateTime;
+begin
+    Result := RDateTime(a - b.val);
+end;
+
+operator-(a: TRDateTime; b: TRDateTime): TRDateTime;
+begin
+    Result := RDateTime(a.val - b.val);
+end;
 
 function RInt: TRInt;
 begin
