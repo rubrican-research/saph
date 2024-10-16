@@ -29,9 +29,8 @@
         <ComponentName Value="Form2"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="6"/>
-        <TopLine Value="300"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="288"/>
         <CursorPos X="40" Y="327"/>
         <UsageCount Value="70"/>
         <Loaded Value="True"/>
@@ -43,7 +42,7 @@
         <ComponentName Value="TestForm"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="10"/>
         <CursorPos Y="22"/>
         <UsageCount Value="43"/>
         <Loaded Value="True"/>
@@ -113,7 +112,7 @@
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.utils.pas"/>
-        <EditorIndex Value="18"/>
+        <EditorIndex Value="15"/>
         <TopLine Value="1286"/>
         <CursorPos Y="1296"/>
         <UsageCount Value="57"/>
@@ -121,19 +120,17 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\application.inc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="407"/>
         <CursorPos Y="428"/>
         <UsageCount Value="37"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32callback.inc"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="67"/>
-        <CursorPos X="32" Y="76"/>
+        <CursorPos X="50" Y="78"/>
         <UsageCount Value="36"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\heaph.inc"/>
@@ -165,7 +162,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="17"/>
+        <EditorIndex Value="14"/>
         <TopLine Value="1805"/>
         <CursorPos X="15" Y="1824"/>
         <UsageCount Value="49"/>
@@ -173,7 +170,7 @@
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.logger.pas"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="291"/>
         <CursorPos X="43" Y="261"/>
         <UsageCount Value="53"/>
@@ -202,7 +199,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\thread.inc"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="220"/>
         <CursorPos X="18" Y="238"/>
         <UsageCount Value="23"/>
@@ -210,7 +207,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\threadh.inc"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="8"/>
         <TopLine Value="142"/>
         <CursorPos X="22" Y="176"/>
         <UsageCount Value="23"/>
@@ -257,11 +254,10 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32object.inc"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="406"/>
         <CursorPos Y="427"/>
         <UsageCount Value="21"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.ddlmodel.pas"/>
@@ -285,12 +281,13 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
-        <EditorIndex Value="9"/>
-        <TopLine Value="1254"/>
-        <CursorPos X="14" Y="1272"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="70"/>
+        <CursorPos Y="71"/>
         <UsageCount Value="35"/>
         <Bookmarks Count="1">
-          <Item0 X="42" Y="1070" ID="1"/>
+          <Item0 X="42" Y="1025" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
       </Unit>
@@ -318,7 +315,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\win\tthread.inc"/>
-        <EditorIndex Value="16"/>
+        <EditorIndex Value="13"/>
         <TopLine Value="83"/>
         <CursorPos X="3" Y="97"/>
         <UsageCount Value="21"/>
@@ -326,7 +323,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\system.inc"/>
-        <EditorIndex Value="15"/>
+        <EditorIndex Value="12"/>
         <TopLine Value="579"/>
         <CursorPos X="3" Y="598"/>
         <UsageCount Value="21"/>
@@ -335,7 +332,7 @@
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\lclmessageglue.pas"/>
         <UnitName Value="LCLMessageGlue"/>
-        <EditorIndex Value="14"/>
+        <EditorIndex Value="11"/>
         <TopLine Value="87"/>
         <CursorPos Y="108"/>
         <UsageCount Value="20"/>
@@ -348,47 +345,18 @@
         <CursorPos Y="715"/>
         <UsageCount Value="8"/>
       </Unit>
+      <Unit>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <WindowIndex Value="1"/>
+        <CursorPos X="19" Y="10"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="143" Column="45" TopLine="110"/>
-      </Position>
-      <Position>
-        <Filename Value="reactive.pas"/>
-        <Caret Line="138" Column="23" TopLine="122"/>
-      </Position>
-      <Position>
-        <Filename Value="reactive.pas"/>
-        <Caret Line="61" Column="26" TopLine="40"/>
-      </Position>
-      <Position>
-        <Filename Value="reactive.pas"/>
-        <Caret Line="328" Column="45" TopLine="300"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="1219" Column="61" TopLine="1200"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="1228" Column="42" TopLine="1199"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="1256" Column="9" TopLine="1235"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="1257" Column="59" TopLine="1238"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="1190" Column="35" TopLine="1172"/>
-      </Position>
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="1191" Column="28" TopLine="1171"/>
@@ -472,6 +440,42 @@
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="1272" Column="14" TopLine="1254"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1268" Column="28" TopLine="1253"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="132" Column="18" TopLine="108"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1259" Column="5" TopLine="1253"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="132" Column="29" TopLine="95"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="114" Column="19" TopLine="66"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="181" Column="5" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1071" TopLine="845"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="8" Column="45"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="10" Column="19"/>
       </Position>
     </JumpHistory>
     <RunParams>
