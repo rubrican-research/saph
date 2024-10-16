@@ -37,8 +37,8 @@ A generic class that implements undo/redo for basic data types. Object level und
 Imagine a variable that you can use like a normal integer, string, boolean, float or string in code but is actually an object that can:
   - signal when the value is changed
   - supports undo/redo, with signaling
-This library allows you to create classes where each field signals their change state and supports undo/redo.
-Also implemented is a locking mechanism that allows you to lock the variable such that you can only write to it if you are the owner. (the first version is working. still to be refined).
+    
+This library allows you to create classes where each field signals their change state and supports undo/redo. Also implemented is a locking mechanism that allows you to lock the variable such that you can only write to it if you are the owner. (the first version is working. still to be refined).
 
 ### [Window Manager](https://github.com/rubrican-research/saph/wiki/Win-Manager)
 This library was built to hel build a multi-window app, similar to the Lazarus IDE. Each form in the app can be registered in the initialization section of its unit **procedure registerWind(_FC: TFormClass);** and then you can call **getForm('TForm1').Show:** to instantiate the form. You can also manage multiple instances of the same form class to dynamically build a "show windows" menu to retrieve a window that got buried in the backgroud.
