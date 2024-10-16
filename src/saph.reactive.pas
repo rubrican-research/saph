@@ -33,7 +33,7 @@ type
         const SGREAD =  'sig_r_read';
         const SGWRITE = 'sig_r_write';
     public
-        constructor Create;
+        constructor Create; virtual;
         destructor Destroy; override;
 
     public
@@ -56,28 +56,6 @@ type
         function canChangeValue: boolean;
         function isMyLock: boolean; // returns true if locked by the process and thread.
 
-    {History}
-    private
-        const UNDOSIZE  = 7;
-        const MAXUNDO   = UNDOSIZE-1 ;
-        const UPPER_LIM = 2 * UNDOSIZE;
-    private
-        myHistHead: integer; // Index to the most recent value
-        myHistCurr: integer; // Index to the current value. myHistHead is set to myHistCurr, when an edit is/
-
-        function toIndex (_step: integer): integer; // Maps curr to array index;
-        function currToIndex (_step: integer): integer; // Maps _step positions from curr to array index;
-        function histForward: integer; // returns the new value
-
-    public
-        function histCount: integer; // count of history;
-        // hostVal: returns the value at a particular step; 0 is latest.
-        // 1 is the immediate previous and so on until MAXUNDO;
-        // does not change the object state;
-        function histVal(_curr: integer = 0): variant; virtual;
-        function undo(_count: integer = 1): TReactive; virtual;
-        function redo(_count: integer = 1): TReactive; virtual;
-
     published
         property name: string read getName write setName;
         property locked: boolean read getLocked;
@@ -91,12 +69,58 @@ type
         property val: variant read value write value;
 	end;
 
+    {GUndoHistory                                                                           }
+    {DESIGN NOTE                                                                            }
+    {=======================================================================================}
+
+
+    generic GUndoHistory<T> = class
+	public
+	    const UNDOSIZE  = 7;
+	    const MAXUNDO   = UNDOSIZE-1 ;
+	    const UPPER_LIM = 2 * UNDOSIZE;
+    private type
+        RHistoryItem = record
+            timestamp: TDateTime;
+            val: T
+        end;
+	private
+        myHistory : array[0..MAXUNDO] of RHistoryItem; // list of history values
+	    myHistHead: integer; // position to the latest value
+	    myHistCurr: integer; // position of the current pointer that changed during undo/redo
+	    function posToIndex (_step: integer): integer; // Maps the current position to the index array
+        function upperPos: integer; // Max position value possible
+        function lowerPos: integer; // lowest position value possible
+        function nextHeadPos: integer; // moves the head forward and returns the current position
+
+	public
+	    function histCount: integer; // count of history;
+
+        // hostVal: returns the value at a particular step; 0 is latest.
+	    // 1 is the immediate previous and so on until MAXUNDO;
+	    // does not change the object state;
+
+	    function histVal(_pos: integer = 0): T; virtual;
+	    function undo   (_count: integer = 1): integer; // returns the current position after undo
+	    function redo   (_count: integer = 1): integer; // returns the current position after redo
+
+        function add(_val: T): integer; // returns the current position after addition
+
+        function currVal    : T;
+        function currPos    : integer;
+        function currHead   : integer;
+
+    public
+        constructor Create;
+    end;
+
 	{ GReactive }
 
     generic GReactive<T> = class(TReactive)
+    private type SUndoHistory = class(specialize GUndoHistory<T>);
 	private
 		myValue: T;
-        myHistory : array[0..MAXUNDO] of T;
+        myHistory : SUndoHistory;
 
     public
         function value: T; overload; reintroduce;      // getter
@@ -104,16 +128,18 @@ type
         procedure value(_v: T; _req: string; _key: string); // writes a value without unlocking
         function memdump: string;
 
-        function histVal(_delta: integer = 0): T; reintroduce;
+        function histVal(_pos: integer): T;
         function undo(_count: integer = 1): T; reintroduce;
         function redo(_count: integer = 1): T; reintroduce;
-        function histDump: string; virtual;
 
     public
         property val: T read value write value;
-
-
+    public
+        constructor Create; override;
+        destructor Destroy; override;
 	end;
+
+
 
 
 	{ TRInt }
@@ -140,7 +166,7 @@ type
 	{ TRStr }
 
     TRStr = class(specialize GReactive<string>)
-        function histDump: string; override;
+
     end;
 
 	{ TRBool }
@@ -956,8 +982,6 @@ begin
     myName:= '';
     myManaged := false;
     mySilentLock:= false; // Raise exception if value is being changed after locking
-    myHistCurr := -1;
-    myHistHead := -1;
     clearLock;
 end;
 
@@ -1045,124 +1069,10 @@ begin
     Result := (myLockProcessID = GetProcessID) and (myLockThreadID = ThreadID);
 end;
 
-function TReactive.toIndex(_step: integer): integer;
-var
-    _t: integer;
-begin
-    _t := myHistCurr + _step;
-    if myHistHead < UNDOSIZE then begin
-        if myHistCurr <= myHistHead then begin
-            if _t > myHistHead then
-                Result := myHistHead
-            else
-                Result := min(0, _t);
-		end
-        else begin {myHistCurr >= myHistHead}
-            // Not possible
-		end;
-	end
-    else begin {myHistHead >= UNDOSIZE}
-        if myHistCurr <= myHistHead then begin
-            if _t > myHistHead then
-                if _t > myHistHead then
-                    Result := myHistHead
-                else
-                    Result := min(0, _t)
-            else {_t <= myHistHead}
-                Result := min(
-                                min(0, myHistHead - UNDOSIZE),
-                                max(_t, myHistHead)
-                             );
-    	end
-        else begin {myHistCurr >= myHistHead}
-            // Not possible
-    	end;
-	end;
 
-    Result := Result div UNDOSIZE;
-end;
 
-function TReactive.currToIndex(_step: integer): integer;
-var
-    _t: integer;
-begin
-    log('TReactive.currToIndex() ------------->');
-    log('1) myHistHead: %d; myHistCurr:%d; _step: %d;', [myHistHead, myHistCurr, _step]);
-    _t := myHistCurr + _step;
-    if myHistHead < UNDOSIZE then begin
-        if myHistCurr <= myHistHead then begin
-            if _t > myHistHead then
-                Result := myHistHead
-            else
-                Result := min(0, _t);
-		end
-        else begin {myHistCurr >= myHistHead}
-            // Not possible
-		end;
-	end
-    else begin {myHistHead >= UNDOSIZE}
-        if myHistCurr <= myHistHead then begin
-            if _t > myHistHead then
-                if _t > myHistHead then
-                    Result := myHistHead
-                else
-                    Result := min(0, _t)
-            else {_t <= myHistHead}
-                Result := min(
-                                min(0, myHistHead - UNDOSIZE),
-                                max(_t, myHistHead)
-                             );
-    	end
-        else begin {myHistCurr >= myHistHead}
-            // Not possible
-    	end;
-	end;
-    log('2) myHistHead: %d; myHistCurr:%d; _step: %d;', [myHistHead, myHistCurr, _step]);
-    Result := Result div UNDOSIZE;
-    log('3) Result: %d', [Result]);
-end;
 
-function TReactive.histForward: integer;
-begin
-    log('TReactive.histForward()------>');
-    log('1) myhistHead: %d; myHistCurr: %d', [myHistHead, myHistCurr]);
 
-    if myHistCurr < myHistHead then
-        myHistHead := myHistCurr;
-
-    inc(myHistHead);
-
-    if myHistHead = UPPER_LIM then
-        myHistHead := UNDOSIZE;
-
-    myHistCurr := myHistHead;
-    log('2) myhistHead: %d; myHistCurr: %d', [myHistHead, myHistCurr]);
-    Result := myHistCurr mod UNDOSIZE;
-    log('3) Result: %d', [Result]);
-end;
-
-function TReactive.histCount: integer;
-begin
-    if myHistHead < UNDOSIZE then
-        result := myHistHead
-    else
-        Result := UNDOSIZE;
-end;
-
-function TReactive.histVal(_curr: integer): variant;
-begin
-    Result := nil;
-end;
-
-function TReactive.undo(_count: integer): TReactive;
-begin
-    Result := self;
-end;
-
-function TReactive.redo(_count: integer): TReactive;
-begin
-    Result := self;
-end;
 
 function TReactive.value: variant;
 begin
@@ -1178,6 +1088,129 @@ end;
 procedure TReactive.value(_v: variant; _req: string; _key: string);
 begin
     raise Exception.Create('TReactive:: Value(_v, _req, _key) should not be called from TReactive');
+end;
+
+{ GUndoHistory }
+
+function GUndoHistory.posToIndex(_step: integer): integer;
+begin
+    Result := _step mod UNDOSIZE;
+end;
+
+function GUndoHistory.upperPos: integer;
+begin
+    Result := myHistHead;
+end;
+
+function GUndoHistory.lowerPos: integer;
+var
+    _t: integer;
+begin
+    _t := upperPos - MAXUNDO;
+    Result := Max(0, _t);
+end;
+
+function GUndoHistory.nextHeadPos: integer;
+begin
+    {Our current position is not at the head position:
+        this means that undo/redo has been performed
+        and the current value is not the latest value.
+
+        so, when we move our history forward, we must start a  new history
+        branch from the current position }
+    if myHistCurr < myHistHead then
+        myHistHead := myHistCurr;
+
+    {Move our history forward}
+    inc(myHistHead);
+
+    {If we are moving past 2 x UNDOSIZE, then
+        set it back to the UNDOSIZE position.
+
+    REASON:
+        This is built on a static array. We simulate
+        a undo/redo queue by moving the indexes.
+
+        To handle the queue when old items must be dropped from
+        from the array, we use the mod operator to cycle past
+        the UNDOSIZE position. This way, the mod operator points to the
+        correct position in the array (overwriting the first items)
+        but our position values indicate an asscending order of numbers.
+
+        SIZE = 5
+
+        ARRAY: [0] [1] [2] [3] [4]
+        POS  :                  ^
+        POS  :                      ^  <-- past the size of the array this translates to
+
+        ARRAY: [0] [1] [2] [3] [4] [0]
+        POS  :                      ^
+        POS  :  0   1   2   3   4   5  <-- the new value is written to [0].
+
+        Position 5 points to [0], overriting the first value.
+        When you undo, you get position (5-1) which is 4 and it points to item [4]
+
+        With this scheme, we keep incrementing head until we reach 2 x SIZE, which also points to item[0] after mod operation.
+        At ths point, we reset head to SIZE, we can keepy cycling through as shown previously.    }
+    if myHistHead = UPPER_LIM then
+        myHistHead := UNDOSIZE;
+
+    {Synchronize head and current postion, because the history now starts from here}
+    myHistCurr := myHistHead;
+    Result := myHistCurr;
+end;
+
+function GUndoHistory.histCount: integer;
+begin
+    Result := Min(UNDOSIZE, succ(myHistHead));
+end;
+
+function GUndoHistory.histVal(_pos: integer): T;
+begin
+    Result := myHistory[posToIndex(_pos)].val;
+end;
+
+function GUndoHistory.undo(_count: integer): integer;
+begin
+    myHistCurr := max(lowerPos,myHistCurr - _count);
+    Result := myHistCurr;
+end;
+
+function GUndoHistory.redo(_count: integer): integer;
+begin
+    myHistCurr := min(myHistHead, myHistCurr + _count);
+    Result := myHistCurr;
+end;
+
+function GUndoHistory.add(_val: T): integer;
+begin
+    Result := nextHeadPos;
+    with myHistory[posToIndex( Result)] do begin
+        timestamp:=Now();
+        val := _val;
+    end;
+end;
+
+function GUndoHistory.currVal: T;
+begin
+    Result := myHistory[posToIndex(myHistCurr)].val;
+end;
+
+function GUndoHistory.currPos: integer;
+begin
+    Result:= myHistCurr;
+end;
+
+function GUndoHistory.currHead: integer;
+begin
+    Result:= myHistHead;
+end;
+
+constructor GUndoHistory.Create;
+begin
+    // To init so that nextHeadPos points correctly
+    myHistHead:=-1;
+    myHistCurr:=-1;
 end;
 
 
@@ -1197,8 +1230,7 @@ begin
         if _v <> myValue then begin
             enterCS;
             myValue := _v;
-            _index := histForward;
-            myHistory[_index] := _v;
+            myHistory.add(_v);
             log('GReactive.value() _index: %d',[_index]);
             signal(SGWRITE);
             leaveCS;
@@ -1218,65 +1250,43 @@ begin
     Result := '';
 end;
 
-function GReactive.histVal(_delta: integer): T;
+function GReactive.histVal(_pos: integer): T;
 begin
-    Result := myHistory[currToIndex(_delta)];
+    Result := myHistory.histVal(_pos);
 end;
 
 function GReactive.undo(_count: integer): T;
-var
-	_minVal: Integer;
 begin
-    log('======== undo() start ========== ');
-    log('--> histHead: %d, histCurr: %d ', [myHistHead, myHistCurr]);
     EnterCS;
-    myHistCurr := myHistCurr - _count;
-    if myHistHead > UNDOSIZE then
-        _minVal := myHistHead - UNDOSIZE
-    else
-        _minVal := 0;
-    myHistCurr :=  Min(_minVal, myHistCurr);
-
-    log('== histHead: %d, histCurr: %d ', [myHistHead, myHistCurr]);
-    myValue   := histVal(myHistCurr);
+    myHistory.Undo(_count);
+    myValue := myHistory.currVal;
     signal(SGWRITE);
     leaveCS;
     Result := myValue;
-
 end;
 
 function GReactive.redo(_count: integer): T;
 begin
     EnterCS;
-    myHistCurr := myHistCurr + _count;
-    myHistCurr := Min(myHistCurr,myHistHead);
-    myValue    := histVal(myHistCurr);
+    myHistory.redo(_count);
+    myValue := myHistory.currVal;
     signal(SGWRITE);
-    LeaveCS;
+    leaveCS;
     Result := myValue;
 end;
 
-function GReactive.histDump: string;
+
+constructor GReactive.Create;
 begin
-    Result := 'not implemented';
+	inherited Create;
+    myHistory := SUndoHistory.Create;
 end;
 
-{ TRStr }
-
-function TRStr.histDump: string;
-var
-	a: String;
-    i : integer;
+destructor GReactive.Destroy;
 begin
-    //for a in myHistory do begin
-    Result := '';
-    for i := 0 to MAXUNDO do begin
-        if not Result.isEmpty then Result := Result + ', ';
-	    Result := Result + format('"%s"', [myHistory[i]]);
-	end;
-
+    myHistory.Free;
+	inherited Destroy;
 end;
-
 
 initialization
     InitCriticalSection(rStoreCS);

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="saphUnitTests.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <EditorIndex Value="4"/>
+        <CursorPos Y="4"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="saphHistory"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="188"/>
+        <CursorPos X="40" Y="219"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\components\fpcunit\guitestrunner.pas"/>
+        <UnitName Value="GuiTestRunner"/>
+        <EditorIndex Value="5"/>
+        <TopLine Value="31"/>
+        <CursorPos X="3" Y="50"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="89"/>
+        <CursorPos X="39" Y="110"/>
+        <ExtraEditorCount Value="1"/>
+        <ExtraEditor1>
+          <WindowIndex Value="1"/>
+          <TopLine Value="1073"/>
+          <CursorPos Y="1074"/>
+        </ExtraEditor1>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\packages\fcl-fpcunit\src\fpcunit.pp"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="636"/>
+        <CursorPos X="3" Y="646"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\packages\fcl-fpcunit\src\DUnitCompatibleInterface.inc"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="209"/>
+        <CursorPos X="3" Y="227"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1241" Column="24" TopLine="1222"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="126" Column="26" TopLine="107"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1241" Column="5" TopLine="1239"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="126" Column="42" TopLine="107"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1241" Column="39" TopLine="1239"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="127" Column="18" TopLine="107"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1258" Column="20" TopLine="1244"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1284" Column="5" TopLine="1263"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1279" TopLine="1255"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="7"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="129" Column="44" TopLine="98"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="128" Column="60" TopLine="98"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="90" Column="30" TopLine="78"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="23" Column="41" TopLine="3"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="186" Column="15" TopLine="153"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="15" Column="5"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="23" Column="30"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="188" Column="25" TopLine="158"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1270" Column="12" TopLine="1250"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="108" Column="36" TopLine="86"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1198" Column="24" TopLine="1195"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="189" Column="25" TopLine="158"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="187" Column="10" TopLine="158"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="188" Column="10" TopLine="158"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="196" Column="44" TopLine="161"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="198" Column="10" TopLine="166"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="200" TopLine="160"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="195" Column="9" TopLine="177"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="196" Column="75" TopLine="177"/>
+      </Position>
+      <Position>
+        <Filename Value="src\saphUnitTests\saphhistory.pas"/>
+        <Caret Line="199" Column="129" TopLine="177"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>
