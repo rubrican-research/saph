@@ -1,3 +1,6 @@
+**Note**: This library depends on "sugar" (https://github.com/stanley643212/sugar). You will need to clone this repository as well.
+The plan is to remove the dependency before release.
+
 # Saph: Lazarus package for complex GUI
 This is a library to make coding complex GUIs in Lazarus easier. Broad functional goals:
 
