@@ -9,7 +9,7 @@
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos X="38" Y="23"/>
-        <UsageCount Value="162"/>
+        <UsageCount Value="164"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,7 +20,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="2"/>
-        <UsageCount Value="162"/>
+        <UsageCount Value="164"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -32,7 +32,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="288"/>
         <CursorPos X="40" Y="327"/>
-        <UsageCount Value="77"/>
+        <UsageCount Value="79"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -44,7 +44,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="11"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="50"/>
+        <UsageCount Value="52"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -54,7 +54,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="547"/>
         <CursorPos Y="753"/>
-        <UsageCount Value="82"/>
+        <UsageCount Value="83"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -63,7 +63,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="281"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="63"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -115,7 +115,7 @@
         <EditorIndex Value="16"/>
         <TopLine Value="1286"/>
         <CursorPos Y="1296"/>
-        <UsageCount Value="61"/>
+        <UsageCount Value="62"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -165,7 +165,7 @@
         <EditorIndex Value="15"/>
         <TopLine Value="1805"/>
         <CursorPos X="15" Y="1824"/>
-        <UsageCount Value="53"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -173,7 +173,7 @@
         <EditorIndex Value="10"/>
         <TopLine Value="291"/>
         <CursorPos X="43" Y="261"/>
-        <UsageCount Value="57"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -202,7 +202,7 @@
         <EditorIndex Value="8"/>
         <TopLine Value="220"/>
         <CursorPos X="18" Y="238"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="28"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -210,7 +210,7 @@
         <EditorIndex Value="9"/>
         <TopLine Value="142"/>
         <CursorPos X="22" Y="176"/>
-        <UsageCount Value="27"/>
+        <UsageCount Value="28"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -241,7 +241,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="200"/>
         <CursorPos X="29" Y="221"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -281,11 +281,10 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="7"/>
         <TopLine Value="964"/>
-        <CursorPos Y="995"/>
-        <UsageCount Value="39"/>
+        <CursorPos Y="978"/>
+        <UsageCount Value="40"/>
         <Bookmarks Count="1">
           <Item0 X="42" Y="1302" ID="1"/>
         </Bookmarks>
@@ -318,7 +317,7 @@
         <EditorIndex Value="14"/>
         <TopLine Value="83"/>
         <CursorPos X="3" Y="97"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -326,7 +325,7 @@
         <EditorIndex Value="13"/>
         <TopLine Value="579"/>
         <CursorPos X="3" Y="598"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="26"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -335,7 +334,7 @@
         <EditorIndex Value="12"/>
         <TopLine Value="87"/>
         <CursorPos Y="108"/>
-        <UsageCount Value="24"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -347,9 +346,10 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.undo.pas"/>
+        <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <CursorPos X="88" Y="32"/>
-        <UsageCount Value="14"/>
+        <CursorPos X="5" Y="29"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -357,18 +357,17 @@
         <EditorIndex Value="5"/>
         <TopLine Value="17"/>
         <CursorPos X="85" Y="41"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="14"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
-    <JumpHistory HistoryIndex="28">
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="754" Column="5" TopLine="752"/>
-      </Position>
+    <General>
+      <ActiveWindowIndexAtStart Value="1"/>
+    </General>
+    <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="299" Column="14" TopLine="269"/>
@@ -482,8 +481,12 @@
         <Caret Line="995" TopLine="964"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="137" Column="14" TopLine="115"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="49" Column="9" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="158" TopLine="138"/>
       </Position>
     </JumpHistory>
     <RunParams>

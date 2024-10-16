@@ -26,6 +26,7 @@ type
             timestamp: TDateTime;
             val: T
         end;
+
 	private
         myHistory : array[0..MAXUNDO] of RHistoryItem; // list of history values
 	    myHistHead: integer; // position to the latest value
@@ -37,12 +38,8 @@ type
 
 	public
 	    function histCount: integer; // count of history;
-
-        // hostVal: returns the value at a particular step; 0 is latest.
-	    // 1 is the immediate previous and so on until MAXUNDO;
-	    // does not change the object state;
-
 	    function histVal(_pos: integer = 0): T; virtual;
+
 	    function undo   (_count: integer = 1): integer; // returns the current position after undo
 	    function redo   (_count: integer = 1): integer; // returns the current position after redo
 
@@ -154,8 +151,10 @@ end;
 
 function GUndoHistory.add(_val: T): integer;
 begin
+    if currVal = _val then exit;
+
     Result := nextHeadPos;
-    with myHistory[posToIndex( Result)] do begin
+    with myHistory[posToIndex(Result)] do begin
         timestamp:=Now();
         val := _val;
     end;
