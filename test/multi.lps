@@ -9,7 +9,7 @@
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos X="38" Y="23"/>
-        <UsageCount Value="166"/>
+        <UsageCount Value="176"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,7 +20,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="2"/>
-        <UsageCount Value="166"/>
+        <UsageCount Value="176"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -32,7 +32,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="288"/>
         <CursorPos X="40" Y="327"/>
-        <UsageCount Value="81"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -44,7 +44,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="11"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -54,7 +54,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="547"/>
         <CursorPos Y="753"/>
-        <UsageCount Value="83"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -63,7 +63,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="281"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="63"/>
+        <UsageCount Value="69"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -72,21 +72,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1801"/>
         <CursorPos X="30" Y="1818"/>
-        <UsageCount Value="4"/>
-      </Unit>
-      <Unit>
-        <Filename Value="main_multi.lfm"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="13" Y="2"/>
-        <UsageCount Value="1"/>
-        <DefaultSyntaxHighlighter Value="LFM"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="1428"/>
         <CursorPos X="35" Y="1449"/>
-        <UsageCount Value="38"/>
+        <UsageCount Value="37"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\types.pp"/>
@@ -94,28 +87,28 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="147"/>
         <CursorPos X="20" Y="162"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="28"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\objpash.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="181"/>
         <CursorPos X="8" Y="201"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\objpas.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="322"/>
         <CursorPos X="12" Y="334"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="22"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.utils.pas"/>
         <EditorIndex Value="16"/>
         <TopLine Value="1286"/>
         <CursorPos Y="1296"/>
-        <UsageCount Value="62"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -123,49 +116,41 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="407"/>
         <CursorPos Y="428"/>
-        <UsageCount Value="36"/>
+        <UsageCount Value="35"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32callback.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="67"/>
         <CursorPos X="50" Y="78"/>
-        <UsageCount Value="35"/>
+        <UsageCount Value="34"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\heaph.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="67"/>
         <CursorPos X="11" Y="93"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="21"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\heap.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="315"/>
         <CursorPos X="3" Y="317"/>
-        <UsageCount Value="22"/>
+        <UsageCount Value="21"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\win\sysosh.inc"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="3" Y="25"/>
-        <UsageCount Value="8"/>
-      </Unit>
-      <Unit>
-        <Filename Value="R:\Apps\Lazarus\laz_conf\3.4\laz_indentation.pas"/>
-        <UnitName Value="Indentation"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="56"/>
-        <CursorPos Y="93"/>
-        <UsageCount Value="1"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
         <EditorIndex Value="15"/>
         <TopLine Value="1805"/>
         <CursorPos X="15" Y="1824"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -173,7 +158,7 @@
         <EditorIndex Value="10"/>
         <TopLine Value="291"/>
         <CursorPos X="43" Y="261"/>
-        <UsageCount Value="58"/>
+        <UsageCount Value="64"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -181,28 +166,28 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="36"/>
         <CursorPos Y="55"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\buttons.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="149"/>
         <CursorPos Y="169"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\control.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="5032"/>
         <CursorPos Y="5054"/>
-        <UsageCount Value="13"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\thread.inc"/>
         <EditorIndex Value="8"/>
         <TopLine Value="220"/>
         <CursorPos X="18" Y="238"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="34"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -210,7 +195,7 @@
         <EditorIndex Value="9"/>
         <TopLine Value="142"/>
         <CursorPos X="22" Y="176"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="34"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -219,21 +204,21 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="838"/>
         <CursorPos X="31" Y="838"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\classes\classes.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="937"/>
         <CursorPos X="3" Y="940"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\packages\fcl-json\src\fpjson.pp"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="54"/>
         <CursorPos X="19" Y="77"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\components\lazutils\lazmethodlist.pas"/>
@@ -241,7 +226,7 @@
         <EditorIndex Value="1"/>
         <TopLine Value="200"/>
         <CursorPos X="29" Y="221"/>
-        <UsageCount Value="43"/>
+        <UsageCount Value="49"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -250,41 +235,41 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="391"/>
         <CursorPos Y="412"/>
-        <UsageCount Value="6"/>
+        <UsageCount Value="5"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\win32object.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="406"/>
         <CursorPos Y="427"/>
-        <UsageCount Value="20"/>
+        <UsageCount Value="19"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.ddlmodel.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="217"/>
         <CursorPos Y="244"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\lcl\interfaces\win32\interfaces.pp"/>
         <UnitName Value="Interfaces"/>
         <EditorIndex Value="-1"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\webui\bulma.pas"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="179"/>
         <CursorPos X="38" Y="198"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
         <EditorIndex Value="7"/>
         <TopLine Value="40"/>
-        <CursorPos X="79" Y="56"/>
-        <UsageCount Value="40"/>
+        <CursorPos X="14" Y="63"/>
+        <UsageCount Value="46"/>
         <Bookmarks Count="1">
           <Item0 X="42" Y="1320" ID="1"/>
         </Bookmarks>
@@ -296,28 +281,28 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1965"/>
         <CursorPos X="3" Y="1987"/>
-        <UsageCount Value="4"/>
+        <UsageCount Value="3"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\win\syswin.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="553"/>
         <CursorPos X="5" Y="555"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\inc\systemh.inc"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="309"/>
         <CursorPos X="11" Y="330"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="7"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\win\tthread.inc"/>
         <EditorIndex Value="14"/>
         <TopLine Value="83"/>
         <CursorPos X="3" Y="97"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -325,7 +310,7 @@
         <EditorIndex Value="13"/>
         <TopLine Value="579"/>
         <CursorPos X="3" Y="598"/>
-        <UsageCount Value="26"/>
+        <UsageCount Value="32"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -334,7 +319,7 @@
         <EditorIndex Value="12"/>
         <TopLine Value="87"/>
         <CursorPos Y="108"/>
-        <UsageCount Value="25"/>
+        <UsageCount Value="31"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -342,15 +327,15 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="695"/>
         <CursorPos Y="715"/>
-        <UsageCount Value="7"/>
+        <UsageCount Value="6"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.undo.pas"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
         <TopLine Value="143"/>
-        <CursorPos Y="169"/>
-        <UsageCount Value="15"/>
+        <CursorPos Y="162"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -358,7 +343,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="17"/>
         <CursorPos X="85" Y="41"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>

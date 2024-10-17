@@ -9,7 +9,7 @@ interface
 
 uses
     Controls.Listener, saph.lists, Obj.Listener, saph.reactive, saph.winman, 
-    LazarusPackageIntf;
+    saph.undo, LazarusPackageIntf;
 
 implementation
 

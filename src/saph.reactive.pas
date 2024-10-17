@@ -270,7 +270,6 @@ type
     operator -(b: TRQWord; a: QWord): TRQWord;
     operator -(a: QWord; b: TRQWord): TRQWord;
     operator -(a: TRQWord; b: TRQWord): TRQWord;
-    operator -(a: TRQWord): TRQWord;
     {MULTIPLICATION}
     operator *(b: TRQWord; a: QWord): TRQWord;
     operator *(a: QWord; b: TRQWord): TRQWord;
@@ -788,10 +787,6 @@ begin
     Result := RQWord(a.val - b.val);
 end;
 
-operator-(a: TRQWord): TRQWord;
-begin
-    Result := RQWord(-1 * a.val);
-end;
 
 operator*(b: TRQWord; a: QWord): TRQWord;
 begin
@@ -1347,15 +1342,12 @@ begin
 end;
 
 procedure GReactive.value(_v: T);
-var
-	_index: Integer;
 begin
     if canChangeValue then begin
         if _v <> myValue then begin
             enterCS;
             myValue := _v;
             myHistory.add(_v);
-            log('GReactive.value() _index: %d',[_index]);
             signal(SGWRITE);
             leaveCS;
 	    end;
