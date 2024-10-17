@@ -9,7 +9,7 @@
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
         <CursorPos X="38" Y="23"/>
-        <UsageCount Value="164"/>
+        <UsageCount Value="166"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,7 +20,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="2"/>
-        <UsageCount Value="164"/>
+        <UsageCount Value="166"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -32,7 +32,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="288"/>
         <CursorPos X="40" Y="327"/>
-        <UsageCount Value="79"/>
+        <UsageCount Value="81"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -44,7 +44,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="11"/>
         <CursorPos Y="22"/>
-        <UsageCount Value="52"/>
+        <UsageCount Value="54"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -282,11 +282,11 @@
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="964"/>
-        <CursorPos Y="978"/>
+        <TopLine Value="40"/>
+        <CursorPos X="79" Y="56"/>
         <UsageCount Value="40"/>
         <Bookmarks Count="1">
-          <Item0 X="42" Y="1302" ID="1"/>
+          <Item0 X="42" Y="1320" ID="1"/>
         </Bookmarks>
         <Loaded Value="True"/>
       </Unit>
@@ -348,7 +348,8 @@
         <Filename Value="..\src\saph.undo.pas"/>
         <IsVisibleTab Value="True"/>
         <WindowIndex Value="1"/>
-        <CursorPos X="5" Y="29"/>
+        <TopLine Value="143"/>
+        <CursorPos Y="169"/>
         <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit>
@@ -357,7 +358,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="17"/>
         <CursorPos X="85" Y="41"/>
-        <UsageCount Value="14"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit>
     </Units>
@@ -368,46 +369,6 @@
       <ActiveWindowIndexAtStart Value="1"/>
     </General>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="299" Column="14" TopLine="269"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="799" Column="5" TopLine="797"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="276" Column="14" TopLine="266"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="764" Column="5" TopLine="762"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="254" Column="14" TopLine="244"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="734" Column="5" TopLine="732"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="232" Column="14" TopLine="227"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="654" Column="5" TopLine="652"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="209" Column="14" TopLine="202"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="573" Column="5" TopLine="571"/>
-      </Position>
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
         <Caret Line="201" Column="40" TopLine="179"/>
@@ -487,6 +448,46 @@
       <Position>
         <Filename Value="..\src\saph.undo.pas"/>
         <Caret Line="158" TopLine="138"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="974" Column="53" TopLine="964"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="89" Column="23" TopLine="57"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1371" Column="20" TopLine="822"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="45" Column="119" TopLine="38"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1246" TopLine="1242"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="45" Column="28" TopLine="24"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1252" Column="5" TopLine="1248"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="43" Column="9" TopLine="22"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1252" Column="6" TopLine="1175"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="45" Column="9" TopLine="9"/>
       </Position>
     </JumpHistory>
     <RunParams>

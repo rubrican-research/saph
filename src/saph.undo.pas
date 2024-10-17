@@ -42,6 +42,7 @@ type
 
 	    function undo   (_count: integer = 1): integer; // returns the current position after undo
 	    function redo   (_count: integer = 1): integer; // returns the current position after redo
+        function restore: integer; // cancels the undo and redo operations, points the current value to the currHead position.
 
         function add(_val: T): integer; // returns the current position after addition
 
@@ -147,6 +148,12 @@ function GUndoHistory.redo(_count: integer): integer;
 begin
     myHistCurr := min(myHistHead, myHistCurr + _count);
     Result := myHistCurr;
+end;
+
+function GUndoHistory.restore: integer;
+begin
+    myHistCurr := myHistHead;
+    Result := myHistHead;
 end;
 
 function GUndoHistory.add(_val: T): integer;

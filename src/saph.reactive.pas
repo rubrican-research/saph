@@ -29,9 +29,11 @@ type
     protected
         function makeKey(): string;
     public
-        const SGNAME =  'sig_r_name';
-        const SGREAD =  'sig_r_read';
+        const SGNAME  = 'sig_r_name';
+        const SGREAD  = 'sig_r_read';
         const SGWRITE = 'sig_r_write';
+        const SGUNDO  = 'sig_r_undo';
+        const SGREDO  = 'sig_r_redo';
     public
         constructor Create; virtual;
         destructor Destroy; override;
@@ -39,6 +41,8 @@ type
     public
         function listenRead(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Adding read listener
         function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add write listener
+        function listenUndo(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add Undo listener
+        function listenRedo(constref _subscriber: TObject; _e: TNotifyEvent):TReactive; virtual; // Add Redo listener
 
         // Crtical section
         procedure enterCS;
@@ -1236,6 +1240,20 @@ begin
     addListener(SGWRITE, _subscriber, _e, qSerial);
 end;
 
+function TReactive.listenUndo(constref _subscriber: TObject; _e: TNotifyEvent
+	): TReactive;
+begin
+    Result := self;
+    addListener(SGUNDO, _subscriber, _e, qSerial);
+end;
+
+function TReactive.listenRedo(constref _subscriber: TObject; _e: TNotifyEvent
+	): TReactive;
+begin
+    Result := self;
+    addListener(SGREDO, _subscriber, _e, qSerial);
+end;
+
 function TReactive.lock: string;
 begin
     if myKey.isEmpty then begin
@@ -1366,6 +1384,7 @@ begin
     EnterCS;
     myHistory.Undo(_count);
     myValue := myHistory.currVal;
+    signal(SGUNDO);
     signal(SGWRITE);
     leaveCS;
     Result := myValue;
@@ -1376,6 +1395,7 @@ begin
     EnterCS;
     myHistory.redo(_count);
     myValue := myHistory.currVal;
+    signal(SGREDO);
     signal(SGWRITE);
     leaveCS;
     Result := myValue;

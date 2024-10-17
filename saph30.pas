@@ -8,15 +8,8 @@ unit saph30;
 interface
 
 uses
-    Controls.Listener, saph.lists, Obj.Listener, saph.reactive, saph.undo, 
-    LazarusPackageIntf;
+    Controls.Listener, saph.lists, Obj.Listener, saph.reactive, saph.undo;
 
 implementation
 
-procedure Register;
-begin
-end;
-
-initialization
-  RegisterPackage('saph30', @Register);
 end.
