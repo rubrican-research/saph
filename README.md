@@ -1,3 +1,5 @@
+![saph-logo](https://github.com/user-attachments/assets/c755fca1-d85f-4423-bbc7-648b2280ac0e)
+
 **Note**: This library depends on "sugar" (https://github.com/stanley643212/sugar). You will need to clone this repository as well.
 The plan is to remove the dependency before release.
 
