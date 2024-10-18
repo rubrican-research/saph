@@ -32,7 +32,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="294"/>
         <CursorPos Y="338"/>
-        <UsageCount Value="129"/>
+        <UsageCount Value="130"/>
       </Unit>
       <Unit>
         <Filename Value="threadtestform.pas"/>
@@ -42,7 +42,7 @@
         <ResourceBaseClass Value="Form"/>
         <EditorIndex Value="-1"/>
         <CursorPos Y="19"/>
-        <UsageCount Value="102"/>
+        <UsageCount Value="103"/>
       </Unit>
       <Unit>
         <Filename Value="testpromise.pas"/>
@@ -51,11 +51,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="testPromise"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
-        <TopLine Value="23"/>
-        <CursorPos X="43" Y="142"/>
-        <UsageCount Value="57"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="89"/>
+        <CursorPos X="31" Y="113"/>
+        <UsageCount Value="58"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -77,10 +76,10 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <TopLine Value="1059"/>
         <CursorPos X="3" Y="1061"/>
-        <UsageCount Value="47"/>
+        <UsageCount Value="48"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -151,7 +150,7 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="1797"/>
         <CursorPos X="20" Y="1815"/>
-        <UsageCount Value="69"/>
+        <UsageCount Value="68"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\sugar\src\mod\sugar.logger.pas"/>
@@ -212,10 +211,11 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\packages\fcl-json\src\fpjson.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="54"/>
-        <CursorPos X="19" Y="77"/>
-        <UsageCount Value="1"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="571"/>
+        <CursorPos X="3" Y="604"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\components\lazutils\lazmethodlist.pas"/>
@@ -310,9 +310,10 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.promise.pas"/>
-        <TopLine Value="577"/>
-        <CursorPos X="6" Y="603"/>
-        <UsageCount Value="28"/>
+        <IsVisibleTab Value="True"/>
+        <TopLine Value="457"/>
+        <CursorPos X="25" Y="481"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -332,126 +333,122 @@
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
-    <JumpHistory HistoryIndex="29">
+    <JumpHistory HistoryIndex="28">
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="459" TopLine="439"/>
+        <Caret Line="196" Column="19" TopLine="170"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="456" Column="9" TopLine="436"/>
+        <Caret Line="492" Column="62" TopLine="466"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="36" Column="11" TopLine="20"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="122" Column="5" TopLine="104"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="460" Column="71" TopLine="436"/>
+        <Caret Line="496" Column="85" TopLine="476"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="183" Column="11" TopLine="150"/>
+        <Caret Line="701" Column="16" TopLine="681"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="412" Column="10" TopLine="407"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="110" Column="28" TopLine="89"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="413" TopLine="407"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="50" TopLine="28"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
+        <Filename Value="testpromise.pas"/>
         <Caret Line="7"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="221" Column="6" TopLine="203"/>
-      </Position>
-      <Position>
         <Filename Value="testpromise.pas"/>
-        <Caret Line="68" Column="18" TopLine="42"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="36" Column="29" TopLine="6"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="108" Column="13" TopLine="104"/>
+        <Caret Line="54" TopLine="13"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="455" Column="31" TopLine="440"/>
+        <Caret Line="466" TopLine="446"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="655" TopLine="617"/>
+        <Caret Line="488" Column="42" TopLine="450"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="142" Column="9" TopLine="121"/>
+        <Caret Line="17" Column="17"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="36" Column="27" TopLine="13"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="132" Column="47" TopLine="107"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="184" Column="35" TopLine="166"/>
+        <Caret Line="28" Column="49" TopLine="49"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="629" Column="20" TopLine="617"/>
+        <Caret Line="472" Column="28" TopLine="449"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="192" Column="15" TopLine="167"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="64" Column="13" TopLine="45"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="43" Column="61" TopLine="18"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="157" Column="46" TopLine="126"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="67" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="71" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="154" Column="5" TopLine="131"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="43" Column="60" TopLine="23"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="156" Column="69" TopLine="119"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="68" Column="41" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="testpromise.pas"/>
-        <Caret Line="154" Column="11" TopLine="119"/>
+        <Caret Line="547" TopLine="527"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="680" Column="37" TopLine="657"/>
+        <Caret Line="542" TopLine="527"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="211" Column="31" TopLine="182"/>
+        <Caret Line="473" Column="42" TopLine="455"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="604" Column="32" TopLine="577"/>
+        <Caret Line="22" Column="51"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="704" TopLine="696"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="23" Column="12"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="702" Column="7" TopLine="699"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="30" Column="75" TopLine="2"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="113" Column="31" TopLine="89"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="480" Column="32" TopLine="463"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="507" Column="54" TopLine="472"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.promise.pas"/>
+        <Caret Line="517" Column="45" TopLine="493"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -460,15 +457,6 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
-    <BreakPoints>
-      <Item>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="..\src\saph.promise.pas"/>
-        <Line Value="464"/>
-      </Item>
-    </BreakPoints>
     <Watches>
       <Item>
         <Expression Value="LeaveCriticalSection"/>

@@ -5,7 +5,7 @@ unit saph.promise;
 interface
 
 uses
-    Classes, SysUtils, fgl;
+    Classes, SysUtils, fgl, fpjson;
 type
 
     TPromise = class; // forward declaration
@@ -14,10 +14,21 @@ type
 	{ TPromiseCallBack }
 
     TPromiseCallBack = class
-        owner: TPromise;
+    private
+        myJsonData: TJSONObject; // to communicate data between promise exec functions. This will be freed in the destructor. Clone it to
+		myJSONOData: TJSONObject;
+        myOwner: TPromise;
+		procedure setJSONData(AValue: TJSONObject);
+    public
         constructor Create;
         constructor Create(constref _owner: TPromise);
+        destructor Destroy; override;
+        procedure setData(_jsonData: TJSONObject);
         procedure execute; virtual; abstract;
+    public
+        property Owner: TPromise read myOwner;
+        property jsonData: TJSONObject read myJSONOData write setJSONData;
+
 	end;
 
 	{ TPResolve }
@@ -25,6 +36,7 @@ type
     TPromiseErrorClass = class of TPromiseError;
 
     TPResolve = class(TPromiseCallBack)
+
 		procedure execute; override;
     end;
     TPResolveClass = class of TPResolve;
@@ -439,6 +451,7 @@ var
     _reject: TPReject;
     _catch , e: TPromiseError;
     _resolveCount: integer = 0;
+    _jsonResult: TJSONObject = nil; // store result.
 
     function createErrorObject(constref _reject: TPReject): TPromiseError;
     begin
@@ -457,20 +470,23 @@ begin
 	   	for i := 0 to pred(myExecFuncList.Count) do begin
 	   	    try
 	            _execFuncCaller := myExecFuncList.Items[i];
-                _resolve := _execFuncCaller.resolveClass.Create(Self);
-                _reject  := _execFuncCaller.rejectClass.Create(Self);
-
                 {RESOLVE INSTANCE}
-	            //if assigned(_execFuncCaller.resolveClass) then
-		           // _resolve := _execFuncCaller.resolveClass.Create(Self)
-	            //else
-	            //    _resolve := TPResolve.Create(Self);
-             //
-             //   {REJECT INSTANCE}
-	            //if assigned(_execFuncCaller.rejectClass) then
-		           // _reject  := _execFuncCaller.rejectClass.Create(Self)
-	            //else
-             //       _reject := TPReject.Create(Self);
+	            if assigned(_execFuncCaller.resolveClass) then
+		            _resolve := _execFuncCaller.resolveClass.Create(Self)
+				else
+	                _resolve := TPResolve.Create(Self);
+
+                if assigned(_jsonResult) then begin
+                    _resolve.jsonData :=
+                        _jsonResult.Clone as TJSONObject;
+                    freeAndNil(_jsonResult);
+                end;
+
+                {REJECT INSTANCE}
+	            if assigned(_execFuncCaller.rejectClass) then
+		            _reject  := _execFuncCaller.rejectClass.Create(Self)
+	            else
+                    _reject := TPReject.Create(Self);
 
                 {EXECUTE}
 	            try
@@ -487,13 +503,15 @@ begin
 	                    promiseResolved: begin // The action is resolved
 	                        inc(_resolveCount);
 	                        _resolve.execute;
+                            if assigned(_resolve.jsonData) then
+                                _jsonResult := _resolve.jsonData.Clone as TJSONObject;
 	                        doPromiseResolved(_resolve);
 	                    end;
 
 	                    promiseRejected: begin       // The action is rejected
 	                        myPromiseResult := promiseRejected;
 	                        e := createErrorObject(_reject);
-	                        doPromiseException(e);
+	                        doPromiseRejected(_reject);
 	                        raise e;
 	    				end;
 
@@ -542,13 +560,14 @@ begin
 		end;// For loop
 	finally
         myStatus := psDone;
+        freeAndNil(_jsonResult);
+
         if _resolveCount = myExecFuncList.Count then
              myPromiseResult := promiseResolved;
 
         {Call the finally}
         try
-            if assigned(myFinalMeth) then
-                myFinalMeth(Self);
+            if assigned(myFinalMeth) then myFinalMeth(Self);
             doPromiseFinally;
 		except
             ;
@@ -677,16 +696,35 @@ end;
 
 { TPromiseCallBack }
 
+procedure TPromiseCallBack.setJSONData(AValue: TJSONObject);
+begin
+    if assigned(myJSONData) then myJSONData.Free;
+	myJSONOData:= AValue;
+end;
+
 constructor TPromiseCallBack.Create;
 begin
     inherited;
+    jsonData:= nil;
 end;
 
 constructor TPromiseCallBack.Create(constref _owner: TPromise);
 begin
     Create;
-    Owner := _owner;
+    myOwner := _owner;
 end;
+
+destructor TPromiseCallBack.Destroy;
+begin
+    myJSONData.Free;
+	inherited Destroy;
+end;
+
+procedure TPromiseCallBack.setData(_jsonData: TJSONObject);
+begin
+
+end;
+
 
 { TPResolve }
 

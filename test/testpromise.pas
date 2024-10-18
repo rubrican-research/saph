@@ -49,6 +49,8 @@ var
 implementation
 
 {$R *.lfm}
+uses
+    fpjson;
 
 { TForm3 }
 
@@ -107,6 +109,7 @@ function TForm3.loadAppointments(constref _resolve: TPResolve;
 begin
     Memo1.lines.add('loadAppointments');
     _resolve.execute;
+    _resolve.jsonData := TJSONObject.Create(['appointments', TJSONArray.Create(['Amber', 'Amba', 'Aadira'])]);
     Result := promiseResolved;
 end;
 
@@ -114,15 +117,23 @@ function TForm3.sortAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
 begin
     Memo1.lines.add('sortAppointments');
-    _reject.reason := 'Not in a mood';
-    _reject.execute;
-    Result := promiseRejected;
+    if assigned(_resolve.jsonData) then
+    Memo1.Lines.Add(_resolve.jsonData.AsJSON);
+
+    _resolve.jsonData := TJSONObject.Create(['sorted', TJSONArray.Create(['A', 'B', 'C', 'D', 'E'])]);
+    _resolve.Execute;
+    Result := promiseResolved;
 end;
 
 function TForm3.filterAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
 begin
     Memo1.lines.add('filterAppointments');
+    if assigned(_resolve.jsonData) then
+    Memo1.Lines.Add(_resolve.jsonData.AsJSON);
+    _reject.reason := 'Not in a mood';
+    _reject.execute;
+    Result := promiseRejected;
 end;
 
 function TForm3.displayAppointments(constref _resolve: TPResolve;
