@@ -40,6 +40,7 @@ type
 
         procedure loadingFailed(const _error: TPromiseError);
         procedure doneLoadingAppointments(Sender: TObject);
+        procedure errorLoadingAppointments(constref E: TPromiseError);
     end;
 
 var
@@ -56,17 +57,16 @@ var
     _promise: TPromise;
 begin
     {Tests all the different ways in which we can define a promise}
-    _promise := Promise(@loadAppointments, TPResolve, TPReject)
+    _promise := Promise(@loadAppointments, TPResolve, TPReject);
+    _promise.then_(@sortAppointments)
+            .then_(@filterAppointments)
+            .then_(@displayAppointments)
 
-                    .then_(@sortAppointments)
-                    .then_(@filterAppointments)
-                    .then_(@displayAppointments)
+            .catch_(TPromiseError)
+            .finally_(@doneLoadingAppointments);
 
-                    .catch_(TPromiseError)
-                    .finally_(@doneLoadingAppointments);
-
+    _promise.OnPromiseException:= @errorLoadingAppointments;
     _promise.run;
-
 end;
 
 Type
@@ -105,35 +105,55 @@ end;
 function TForm3.loadAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
 begin
-
+    Memo1.lines.add('loadAppointments');
+    _resolve.execute;
+    Result := promiseResolved;
 end;
 
 function TForm3.sortAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
 begin
-
+    Memo1.lines.add('sortAppointments');
+    _reject.reason := 'Not in a mood';
+    _reject.execute;
+    Result := promiseRejected;
 end;
 
 function TForm3.filterAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
 begin
-
+    Memo1.lines.add('filterAppointments');
 end;
 
 function TForm3.displayAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
 begin
-
+    Memo1.lines.add('displayAppointments');
 end;
 
 procedure TForm3.loadingFailed(const _error: TPromiseError);
 begin
-
+    Memo1.lines.add('loadFailed');
 end;
 
 procedure TForm3.doneLoadingAppointments(Sender: TObject);
 begin
+    Memo1.lines.add('doneLoadingAppointments');
+    case TPromise(Sender).promiseResult of
+    	promiseUnknown:     Memo1.lines.add('Result unknown');
+        promiseInit:        Memo1.lines.add('Result Init');
+        promiseRunning:     Memo1.lines.add('Result Running');
+        promiseResolved:    Memo1.lines.add('Result Resolved');
+        promiseRejected:    Memo1.lines.add('Result Rejected');
+        promiseException:   Memo1.lines.add('Result Exception');
+        promiseTimeOut:     Memo1.lines.add('Result TimeOut');
+        promiseKilled:      Memo1.lines.add('Result Killed');
+    end;
+end;
 
+procedure TForm3.errorLoadingAppointments(constref E: TPromiseError);
+begin
+    Memo1.lines.add('errorLoadingAppointments because ' + E.reason);
 end;
 
 end.

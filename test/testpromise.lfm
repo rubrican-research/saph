@@ -1,7 +1,7 @@
 object Form3: TForm3
-  Left = 19
+  Left = 379
   Height = 516
-  Top = 102
+  Top = 120
   Width = 790
   Caption = 'Promise Tests'
   ClientHeight = 516
@@ -57,7 +57,7 @@ object Form3: TForm3
       Top = 40
       Width = 158
       BorderSpacing.Around = 5
-      Caption = 'Button2'
+      Caption = 'Test Raise Exception'
       TabOrder = 1
       OnClick = Button2Click
     end
@@ -153,10 +153,11 @@ object Form3: TForm3
     end
   end
   object Memo1: TMemo
-    Left = 152
-    Height = 90
-    Top = 128
-    Width = 150
+    Left = 0
+    Height = 488
+    Top = 28
+    Width = 610
+    Align = alClient
     Lines.Strings = (
       'Memo1'
     )

@@ -50,14 +50,14 @@ type
         property reject: TPReject read myReject write setReject;
     end;
 
-
-
-
-
     TPromiseClassArray = array of TPromiseClass;
     TPromiseArray = array of TPromise;
     TPromiseList = class(specialize TFPGObjectList<TPromise>);
 
+    TPromiseState = (   psCreated,
+                        psRunning,
+                        psDone
+                    );
 
     TPromiseResult = (  promiseUnknown,
                         promiseInit,                // Init value
@@ -137,6 +137,7 @@ RTLEventWaitFor: Wait for an event.
         TExecFuncList = class(specialize TFPGObjectList<TPromiseFuncCaller>);
 
     private
+        myStatus        : TPromiseState; // Indicates that the promise has started running
         myOwnObjects    : boolean;
         myExecFuncList  : TExecFuncList;
 
@@ -146,7 +147,7 @@ RTLEventWaitFor: Wait for an event.
         myExecFunc    : TPromiseExecFunction;
         myFinalMeth   : TNotifyEvent;
 
-        myStatus      : TPromiseResult;
+        myPromiseResult : TPromiseResult;
 
     protected
         procedure Init;
@@ -179,7 +180,6 @@ RTLEventWaitFor: Wait for an event.
         class function resolve(): TPResolve;
 
     public
-
         constructor Create(_execFunc: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil); overload;
         destructor Destroy; override;
 
@@ -192,13 +192,31 @@ RTLEventWaitFor: Wait for an event.
         procedure run;
         procedure runAsync;
         procedure runThread;
+
+        function promiseResult: TPromiseResult;
+
     public
-        OnPromiseResoved    : TPromiseResolvedMeth;
+        OnPromiseRunning    : TNotifyEvent;
+        OnPromiseResolved   : TPromiseResolvedMeth;
         OnPromiseRejected   : TPromiseRejectedMeth;
         OnPromiseException  : TPromiseCatchMeth;
         OnPromiseTimeOut    : TPromiseCatchMeth;
         OnPromiseKilled     : TPromiseCatchMeth;
+        OnPromiseFinally    : TNotifyEvent;
+
+    protected
+        procedure doPromiseRunning;
+        procedure doPromiseResolved(constref _resolve: TPResolve);
+        procedure doPromiseRejected(constref _reject: TPReject);
+        procedure doPromiseException(constref _catch:  TPromiseError);
+        procedure doPromiseTimeOut(constref _catch:  TPromiseError);
+        procedure doPromiseKilled(constref _catch:  TPromiseError);
+        procedure doPromiseFinally;
+
     end;
+
+    {EXCEPTIONS}
+    EPromiseInProgress = class(Exception);
 
     function Promise(_action: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil): TPromise;
 
@@ -296,7 +314,9 @@ end;
 
 procedure TPromise.Init;
 begin
-    myExecFuncList  := TExecFuncList.Create();
+    myExecFuncList  := TExecFuncList.Create(true);
+    myStatus        := psCreated;
+    myPromiseResult := promiseInit;
 end;
 
 function TPromise.doResolve(): TPResolve;
@@ -389,7 +409,7 @@ constructor TPromise.Create(_execFunc: TPromiseExecFunction;
 	_resolveClass: TPResolveClass; _rejectClass: TPRejectClass);
 begin
     inherited Create;
-    myExecFuncList := TExecFuncList.Create(true);
+    init;
 
     myExecFunc := _execFunc;
     if assigned(_resolveClass) then
@@ -402,22 +422,25 @@ begin
     else
         myRejectClass := TPReject;
 
-    myErrorClass := TPromiseError;
-    myStatus := promiseInit;
+    myErrorClass    := TPromiseError;
+    myPromiseResult := promiseInit;
+
     then_(myExecFunc, myResolveClass, myRejectClass); // Put this as the first item in the list
 
 end;
 
+
+
 procedure TPromise.run;
 var
-	i: Integer;
+	i, c: Integer;
 	_execFuncCaller: TPromiseFuncCaller;
     _resolve: TPResolve;
     _reject: TPReject;
-    _catch : TPromiseError;
+    _catch , e: TPromiseError;
     _resolveCount: integer = 0;
 
-    function createErrorObject(_reject: TPReject): TPromiseError;
+    function createErrorObject(constref _reject: TPReject): TPromiseError;
     begin
         if assigned(_reject.errClass) then
             Result := _reject.errClass.Create(Self)
@@ -429,76 +452,109 @@ var
 
 begin
     try
+        myStatus := psRunning;
+        c := myExecFuncList.Count;
 	   	for i := 0 to pred(myExecFuncList.Count) do begin
-	   	    _execFuncCaller := myExecFuncList.Items[i];
-	        _resolve := _execFuncCaller.resolveClass.Create(Self);
-	        _reject  := _execFuncCaller.rejectClass.Create(Self);
-            try
-    		    {Call the default action}
+	   	    try
+	            _execFuncCaller := myExecFuncList.Items[i];
+                _resolve := _execFuncCaller.resolveClass.Create(Self);
+                _reject  := _execFuncCaller.rejectClass.Create(Self);
 
-                case _execFuncCaller.execFunc(_resolve, _reject) of
-                    promiseUnknown:     begin
-                        myStatus := promiseUnknown;
-                        _catch := myErrorClass.Create(Self);
-                        _catch.reject := _reject;
-                        _catch.reason := ClassName + ' execFunc returned promiseUnknown';
-                        raise _catch;
-                    end;
+                {RESOLVE INSTANCE}
+	            //if assigned(_execFuncCaller.resolveClass) then
+		           // _resolve := _execFuncCaller.resolveClass.Create(Self)
+	            //else
+	            //    _resolve := TPResolve.Create(Self);
+             //
+             //   {REJECT INSTANCE}
+	            //if assigned(_execFuncCaller.rejectClass) then
+		           // _reject  := _execFuncCaller.rejectClass.Create(Self)
+	            //else
+             //       _reject := TPReject.Create(Self);
 
-                    promiseRunning:  begin // The action is still running
-                        myStatus := promiseException;
-                        _catch := myErrorClass.Create(Self);
-                        _catch.reject := _reject;
-                        _catch.reason := ClassName + ' execFunc returned promiseRunning';
-                        raise _catch;
-                    end;
+                {EXECUTE}
+	            try
+	    		    {Call the default action}
+	                case _execFuncCaller.execFunc(_resolve, _reject) of
+	                    promiseRunning:  begin // The action is still running
+	                        myPromiseResult := promiseException;
+	                        _catch := myErrorClass.Create(Self);
+	                        _catch.reject := _reject;
+	                        _catch.reason := ClassName + ' execFunc returned promiseRunning';
+	                        raise _catch;
+	                    end;
 
-                    promiseResolved: begin // The action is resolved
-                        inc(_resolveCount);
-                        _resolve.execute;
-                    end;
+	                    promiseResolved: begin // The action is resolved
+	                        inc(_resolveCount);
+	                        _resolve.execute;
+	                        doPromiseResolved(_resolve);
+	                    end;
 
-                    promiseRejected: begin       // The action is rejected
-                        myStatus := promiseRejected;
-                        raise createErrorObject(_reject);
-    				end;
+	                    promiseRejected: begin       // The action is rejected
+	                        myPromiseResult := promiseRejected;
+	                        e := createErrorObject(_reject);
+	                        doPromiseException(e);
+	                        raise e;
+	    				end;
 
-                    promiseException: begin
-                        myStatus := promiseException;
-                        raise createErrorObject(_reject);
-    				end;
+	                    promiseException: begin
+	                        myPromiseResult := promiseException;
+	                        e := createErrorObject(_reject);
+	                        doPromiseException(e);
+	                        raise e;
+	    				end;
 
-                    promiseTimeOut: begin
-                        myStatus := promiseTimeOut;
-                        raise createErrorObject(_reject);
-    				end;
+	                    promiseTimeOut: begin
+	                        myPromiseResult := promiseTimeOut;
+	                        e := createErrorObject(_reject);
+	                        doPromiseTimeOut(e);
+	                        raise e;
+	    				end;
 
-                    promiseKilled: begin
-                        myStatus := promiseKilled;
-                        raise createErrorObject(_reject);
-    				end;
-                end;
+	                    promiseKilled: begin
+	                        myPromiseResult := promiseKilled;
+	                        e := createErrorObject(_reject);
+	                        doPromiseKilled(e);
+	                        raise e;
+	    				end;
 
-    		except
-                on _e: TPromiseError do begin
-                    {Call the catch function}
-                    _e.execute;
-                    break;
+	                    else     begin
+	                        myPromiseResult := promiseUnknown;
+	                        _catch := myErrorClass.Create(Self);
+	                        _catch.reject := _reject;
+	                        _catch.reason := ClassName + ':: ExecFunc responded with an unexpected result.';
+	                        raise _catch;
+	                    end;
+
+	                end;
+
+	    		except
+	                on _e: TPromiseError do begin
+	                    {Call the catch function}
+	                    _e.execute;
+	                    break;
+					end;
 				end;
+			finally
+                _resolve.Free;
+                _reject.Free;
 			end;
-   	    end;// For loop
+		end;// For loop
 	finally
-
+        myStatus := psDone;
         if _resolveCount = myExecFuncList.Count then
-             myStatus := promiseResolved;
+             myPromiseResult := promiseResolved;
 
         {Call the finally}
         try
             if assigned(myFinalMeth) then
                 myFinalMeth(Self);
+            doPromiseFinally;
 		except
             ;
 		end;
+
+        Free; // The promise;
 	end;
 
 end;
@@ -511,6 +567,46 @@ end;
 procedure TPromise.runThread;
 begin
 
+end;
+
+function TPromise.promiseResult: TPromiseResult;
+begin
+    Result := myPromiseResult;
+end;
+
+procedure TPromise.doPromiseRunning;
+begin
+    if assigned(OnPromiseRunning) then OnPromiseRunning(self);
+end;
+
+procedure TPromise.doPromiseResolved(constref _resolve: TPResolve);
+begin
+    if assigned(OnPromiseResolved) then OnPromiseResolved(_resolve);
+end;
+
+procedure TPromise.doPromiseRejected(constref _reject: TPReject);
+begin
+    if assigned(OnPromiseRejected) then OnPromiseRejected(_reject);
+end;
+
+procedure TPromise.doPromiseException(constref _catch: TPromiseError);
+begin
+    if assigned(OnPromiseException) then OnPromiseException(_catch);
+end;
+
+procedure TPromise.doPromiseTimeOut(constref _catch: TPromiseError);
+begin
+    if assigned(OnPromiseTimeOut) then OnPromiseTimeOut(_catch);
+end;
+
+procedure TPromise.doPromiseKilled(constref _catch: TPromiseError);
+begin
+    if assigned(OnPromiseKilled) then OnPromiseKilled(_catch);
+end;
+
+procedure TPromise.doPromiseFinally;
+begin
+    if assigned(OnPromiseFinally) then OnPromiseFinally(Self)
 end;
 
 class function TPromise.withResolvers(): TPromise;
@@ -530,25 +626,29 @@ function TPromise.then_(_action: TPromiseExecFunction;
 var
     _execFuncCaller: TPromiseFuncCaller;
 begin
+    Result := Self;
 
-    if not assigneD(_action) then exit; // Don't add anything if there is no function
+    if myStatus > psCreated then begin
+        raise EPromiseInProgress.Create('TPromise:: then_() not allowed when promise.run() has been called');
+    end;
+
+    if not assigned(_action) then exit; // Don't add anything if there is no function
 
     _execFuncCaller := TPromiseFuncCaller.Create;
-    with myExecFuncList do begin
-        _execFuncCaller.execFunc:=_action;
 
-        if assigned(_resolveClass) then
-            _execFuncCaller.resolveClass := _resolveClass
-        else
-            _execFuncCaller.resolveClass :=myResolveClass;
+    _execFuncCaller.execFunc:=_action;
 
-        if assigned(_rejectClass) then
-            _execFuncCaller.rejectClass := _rejectClass
-        else
-            _execFuncCaller.rejectClass := myRejectClass;
+    if assigned(_resolveClass) then
+        _execFuncCaller.resolveClass := _resolveClass
+    else
+        _execFuncCaller.resolveClass :=myResolveClass;
 
-        Add(_execFuncCaller);
-	end;
+    if assigned(_rejectClass) then
+        _execFuncCaller.rejectClass := _rejectClass
+    else
+        _execFuncCaller.rejectClass := myRejectClass;
+
+    myExecFuncList.Add(_execFuncCaller);
 
 end;
 
@@ -557,6 +657,10 @@ end;
 
 function TPromise.catch_(_errClass: TPromiseErrorClass): TPromise;
 begin
+    if myStatus > psCreated then begin
+        raise EPromiseInProgress.Create('TPromise:: catch_() not allowed when promise.run() has been called');
+    end;
+
     if assigned(_errClass) then
         myErrorClass := _errClass;
 end;
@@ -564,6 +668,10 @@ end;
 
 function TPromise.finally_(_finalMeth: TNotifyEvent): TPromise;
 begin
+    if myStatus > psCreated then begin
+        raise EPromiseInProgress.Create('TPromise:: finally_() not allowed when promise.run() has been called');
+    end;
+
     myFinalMeth := _finalMeth;
 end;
 
