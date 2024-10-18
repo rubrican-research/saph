@@ -15,11 +15,9 @@ type
 
     TPromiseCallBack = class
     private
-        myJsonData: TJSONObject; // to communicate data between promise exec functions. This will be freed in the destructor. Clone it to
-		myJSONOData: TJSONObject;
         myOwner: TPromise;
-		procedure setJSONData(AValue: TJSONObject);
     public
+        json: TJSONObject;
         constructor Create;
         constructor Create(constref _owner: TPromise);
         destructor Destroy; override;
@@ -27,7 +25,7 @@ type
         procedure execute; virtual; abstract;
     public
         property Owner: TPromise read myOwner;
-        property jsonData: TJSONObject read myJSONOData write setJSONData;
+
 
 	end;
 
@@ -71,15 +69,24 @@ type
                         psDone
                     );
 
-    TPromiseResult = (  promiseUnknown,
-                        promiseInit,                // Init value
-                        promiseRunning,             // The action is still running
-                        promiseResolved,            // The action is resolved
-                        promiseRejected,            // The action is rejected
-                        promiseException,           // The action resulted in an error
-                        promiseTimeOut,
-                        promiseKilled
-                      );
+    NPromiseResult = (promiseUnknown,
+                      promiseInit,                // Init value
+                      promiseRunning,             // The action is still running
+                      promiseResolved,            // The action is resolved
+                      promiseRejected,            // The action is rejected
+                      promiseException,           // The action resulted in an error
+                      promiseTimeOut,
+                      promiseKilled
+                    );
+
+	{ TPromiseResult }
+    TPromiseExecFuncResult = class
+        theResult : NPromiseResult;
+        json      : TJSONObject;
+        constructor Create;
+        destructor Destroy; override;
+	end;
+
 {
 RTLEventCreate: Create a new RTL event
 RTLEventDestroy:  Destroy a RTL Event
@@ -101,14 +108,14 @@ RTLEventWaitFor: Wait for an event.
 
         // Don't call until object is being destroyed
         procedure destroyEvents;
-		function getStatus: TPromiseResult;
-		procedure setStatus(AValue: TPromiseResult);
+		function getStatus: NPromiseResult;
+		procedure setStatus(AValue: NPromiseResult);
         function isKilled: boolean;
 
     protected
         myOwnder : TPromise;
         myRunning: boolean;
-        myResult : TPromiseResult;
+        myResult : NPromiseResult;
 
     public
         constructor Create(constref _owner: TPromise);
@@ -116,14 +123,14 @@ RTLEventWaitFor: Wait for an event.
     public
         procedure run(constref _resolve: TPResolve; const _reject: TPReject; const ownObjects: boolean = true); overload; virtual; abstract;
         procedure run(const _reject: TPReject; const ownObjects: boolean = true); overload; virtual; abstract;
-        function wait(_timeOut: word = 2000): TPromiseResult;
-        function waitForever: TPromiseResult;
+        function wait(_timeOut: word = 2000): NPromiseResult;
+        function waitForever: NPromiseResult;
         function isRunning: boolean; virtual;
 
 
         procedure kill;
     published
-        property status: TPromiseResult read getStatus write setStatus;
+        property status: NPromiseResult read getStatus write setStatus;
 	end;
 
     RPromise = record
@@ -132,7 +139,7 @@ RTLEventWaitFor: Wait for an event.
         catch  : TPromiseError;
 	end;
 
-    TPromiseExecFunction    = function (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false): TPromiseResult of object;
+    TPromiseExecFunction    = function (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false): TPromiseExecFuncResult of object;
     TPromiseResolvedMeth    = procedure(constref _resolve: TPResolve) of object;
     TPromiseRejectedMeth    = procedure(constref _reject: TPReject) of object;
     TPromiseCatchMeth       = procedure(constref _catch:  TPromiseError) of object;
@@ -159,7 +166,7 @@ RTLEventWaitFor: Wait for an event.
         myExecFunc    : TPromiseExecFunction;
         myFinalMeth   : TNotifyEvent;
 
-        myPromiseResult : TPromiseResult;
+        myPromiseResult : NPromiseResult;
 
     protected
         procedure Init;
@@ -205,7 +212,7 @@ RTLEventWaitFor: Wait for an event.
         procedure runAsync;
         procedure runThread;
 
-        function promiseResult: TPromiseResult;
+        function promiseResult: NPromiseResult;
 
     public
         OnPromiseRunning    : TNotifyEvent;
@@ -253,13 +260,13 @@ begin
     //RTLEventDestroy(myEventException);
 end;
 
-function TPromiseAction.getStatus: TPromiseResult;
+function TPromiseAction.getStatus: NPromiseResult;
 begin
     Result := myResult;
 
 end;
 
-procedure TPromiseAction.setStatus(AValue: TPromiseResult);
+procedure TPromiseAction.setStatus(AValue: NPromiseResult);
 begin
     if myResult = AValue then exit;
 
@@ -295,7 +302,7 @@ begin
     myResult := promiseKilled;
 end;
 
-function TPromiseAction.wait(_timeOut: word): TPromiseResult;
+function TPromiseAction.wait(_timeOut: word): NPromiseResult;
 var
 	_start: QWord;
 begin
@@ -309,7 +316,7 @@ begin
     Result := myResult;
 end;
 
-function TPromiseAction.waitForever: TPromiseResult;
+function TPromiseAction.waitForever: NPromiseResult;
 begin
     while (myResult = promiseRunning) and not isKilled do sleep(__waitLoopSleep);
 end;
@@ -451,7 +458,7 @@ var
     _reject: TPReject;
     _catch , e: TPromiseError;
     _resolveCount: integer = 0;
-    _jsonResult: TJSONObject = nil; // store result.
+	_funcResult: TPromiseExecFuncResult = nil;
 
     function createErrorObject(constref _reject: TPReject): TPromiseError;
     begin
@@ -476,10 +483,12 @@ begin
 				else
 	                _resolve := TPResolve.Create(Self);
 
-                if assigned(_jsonResult) then begin
-                    _resolve.jsonData :=
-                        _jsonResult.Clone as TJSONObject;
-                    freeAndNil(_jsonResult);
+                if assigned(_funcResult) then begin
+                    if assigned(_funcResult.json) then begin
+                        _resolve.json :=
+                            _funcResult.json.Clone as TJSONObject;
+                        freeAndNil(_funcResult);
+                    end;
                 end;
 
                 {REJECT INSTANCE}
@@ -491,7 +500,8 @@ begin
                 {EXECUTE}
 	            try
 	    		    {Call the default action}
-	                case _execFuncCaller.execFunc(_resolve, _reject) of
+                    _funcResult := _execFuncCaller.execFunc(_resolve, _reject);
+	                case _funcResult.theResult of
 	                    promiseRunning:  begin // The action is still running
 	                        myPromiseResult := promiseException;
 	                        _catch := myErrorClass.Create(Self);
@@ -503,8 +513,6 @@ begin
 	                    promiseResolved: begin // The action is resolved
 	                        inc(_resolveCount);
 	                        _resolve.execute;
-                            if assigned(_resolve.jsonData) then
-                                _jsonResult := _resolve.jsonData.Clone as TJSONObject;
 	                        doPromiseResolved(_resolve);
 	                    end;
 
@@ -560,7 +568,7 @@ begin
 		end;// For loop
 	finally
         myStatus := psDone;
-        freeAndNil(_jsonResult);
+        freeAndNil(_funcResult);
 
         if _resolveCount = myExecFuncList.Count then
              myPromiseResult := promiseResolved;
@@ -588,7 +596,7 @@ begin
 
 end;
 
-function TPromise.promiseResult: TPromiseResult;
+function TPromise.promiseResult: NPromiseResult;
 begin
     Result := myPromiseResult;
 end;
@@ -696,16 +704,11 @@ end;
 
 { TPromiseCallBack }
 
-procedure TPromiseCallBack.setJSONData(AValue: TJSONObject);
-begin
-    if assigned(myJSONData) then myJSONData.Free;
-	myJSONOData:= AValue;
-end;
 
 constructor TPromiseCallBack.Create;
 begin
     inherited;
-    jsonData:= nil;
+    json:= nil;
 end;
 
 constructor TPromiseCallBack.Create(constref _owner: TPromise);
@@ -716,7 +719,7 @@ end;
 
 destructor TPromiseCallBack.Destroy;
 begin
-    myJSONData.Free;
+    json.Free;
 	inherited Destroy;
 end;
 
@@ -751,6 +754,20 @@ procedure TPromiseError.setReject(AValue: TPReject);
 begin
 	if myReject=AValue then Exit;
 	myReject:=AValue;
+end;
+
+{ TPromiseResult }
+
+constructor TPromiseExecFuncResult.Create;
+begin
+    inherited Create;
+    json := nil;
+end;
+
+destructor TPromiseExecFuncResult.Destroy;
+begin
+    json.Free;
+	inherited Destroy;
 end;
 
 end.

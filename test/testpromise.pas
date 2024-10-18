@@ -33,10 +33,10 @@ type
     private
 
     public
-        function loadAppointments   (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseResult;
-        function sortAppointments   (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseResult;
-        function filterAppointments (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseResult;
-        function displayAppointments(constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseResult;
+        function loadAppointments   (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
+        function sortAppointments   (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
+        function filterAppointments (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
+        function displayAppointments(constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
 
         procedure loadingFailed(const _error: TPromiseError);
         procedure doneLoadingAppointments(Sender: TObject);
@@ -105,39 +105,46 @@ begin
 end;
 
 function TForm3.loadAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
+	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('loadAppointments');
     _resolve.execute;
-    _resolve.jsonData := TJSONObject.Create(['appointments', TJSONArray.Create(['Amber', 'Amba', 'Aadira'])]);
-    Result := promiseResolved;
+
+    Result := TPromiseExecFuncResult.Create;
+    Result.theResult := promiseResolved;
+    Result.json      := TJSONObject.Create(['appointments', TJSONArray.Create(['Amber', 'Amba', 'Aadira'])]);
 end;
 
 function TForm3.sortAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
+	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('sortAppointments');
-    if assigned(_resolve.jsonData) then
-    Memo1.Lines.Add(_resolve.jsonData.AsJSON);
+    if assigned(_resolve.json) then
+    Memo1.Lines.Add(_resolve.json.AsJSON);
 
-    _resolve.jsonData := TJSONObject.Create(['sorted', TJSONArray.Create(['A', 'B', 'C', 'D', 'E'])]);
     _resolve.Execute;
-    Result := promiseResolved;
+
+    Result := TPromiseExecFuncResult.Create;
+    Result.theResult := promiseResolved;
+    Result.json      := TJSONObject.Create(['sorted_appointments', TJSONArray.Create(['A', 'AB', 'AC'])]);
+
 end;
 
 function TForm3.filterAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
+	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('filterAppointments');
-    if assigned(_resolve.jsonData) then
-    Memo1.Lines.Add(_resolve.jsonData.AsJSON);
+    if assigned(_resolve.json) then
+    Memo1.Lines.Add(_resolve.json.AsJSON);
     _reject.reason := 'Not in a mood';
     _reject.execute;
-    Result := promiseRejected;
+
+    Result := TPromiseExecFuncResult.Create;
+    Result.theResult := promiseRejected;
 end;
 
 function TForm3.displayAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseResult;
+	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('displayAppointments');
 end;
