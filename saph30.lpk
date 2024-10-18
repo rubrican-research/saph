@@ -86,6 +86,10 @@ SOFTWARE."/>
         <Filename Value="src\saph.undo.pas"/>
         <UnitName Value="saph.undo"/>
       </Item>
+      <Item>
+        <Filename Value="src\saph.promise.pas"/>
+        <UnitName Value="saph.promise"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>
