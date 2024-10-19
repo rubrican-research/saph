@@ -1,0 +1,166 @@
+object Form3: TForm3
+  Left = 379
+  Height = 516
+  Top = 120
+  Width = 790
+  Caption = 'Promise Tests'
+  ClientHeight = 516
+  ClientWidth = 790
+  Color = clWindow
+  Font.CharSet = ANSI_CHARSET
+  Font.Name = 'Segoe UI Semibold'
+  Font.Pitch = fpVariable
+  Font.Quality = fqDraft
+  Font.Style = [fsBold]
+  LCLVersion = '3.4.0.0'
+  object StaticText1: TStaticText
+    Left = 5
+    Height = 18
+    Top = 5
+    Width = 780
+    Align = alTop
+    Alignment = taCenter
+    AutoSize = True
+    BorderSpacing.Around = 5
+    Caption = 'Testing Promises'
+    TabOrder = 0
+  end
+  object Panel1: TPanel
+    Left = 615
+    Height = 483
+    Top = 28
+    Width = 170
+    Align = alRight
+    BorderSpacing.Around = 5
+    ChildSizing.VerticalSpacing = 7
+    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+    ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
+    ChildSizing.Layout = cclLeftToRightThenTopToBottom
+    ChildSizing.ControlsPerLine = 1
+    ClientHeight = 483
+    ClientWidth = 170
+    ParentBackground = False
+    TabOrder = 1
+    object Button1: TButton
+      Left = 6
+      Height = 27
+      Top = 6
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Test Promise Usage'
+      TabOrder = 0
+      OnClick = Button1Click
+    end
+    object Button2: TButton
+      Left = 6
+      Height = 27
+      Top = 40
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Test Raise Exception'
+      TabOrder = 1
+      OnClick = Button2Click
+    end
+    object Button3: TButton
+      Left = 6
+      Height = 27
+      Top = 74
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button3'
+      TabOrder = 2
+    end
+    object Button4: TButton
+      Left = 6
+      Height = 27
+      Top = 108
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button4'
+      TabOrder = 3
+    end
+    object Button5: TButton
+      Left = 6
+      Height = 27
+      Top = 142
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button5'
+      TabOrder = 4
+    end
+    object Button6: TButton
+      Left = 6
+      Height = 27
+      Top = 176
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button6'
+      TabOrder = 5
+    end
+    object Button7: TButton
+      Left = 6
+      Height = 27
+      Top = 210
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button7'
+      TabOrder = 6
+    end
+    object Button8: TButton
+      Left = 6
+      Height = 27
+      Top = 244
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button8'
+      TabOrder = 7
+    end
+    object Button9: TButton
+      Left = 6
+      Height = 27
+      Top = 278
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button9'
+      TabOrder = 8
+    end
+    object Button10: TButton
+      Left = 6
+      Height = 27
+      Top = 312
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button10'
+      TabOrder = 9
+    end
+    object Button11: TButton
+      Left = 6
+      Height = 27
+      Top = 346
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button11'
+      TabOrder = 10
+    end
+    object Button12: TButton
+      Left = 6
+      Height = 27
+      Top = 380
+      Width = 158
+      BorderSpacing.Around = 5
+      Caption = 'Button12'
+      TabOrder = 11
+    end
+  end
+  object Memo1: TMemo
+    Left = 0
+    Height = 488
+    Top = 28
+    Width = 610
+    Align = alClient
+    Lines.Strings = (
+      'Memo1'
+    )
+    TabOrder = 2
+  end
+end

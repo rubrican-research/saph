@@ -10,7 +10,7 @@ uses
     athreads,
     {$ENDIF}
     Interfaces, // this includes the LCL widgetset
-    Forms, main_multi, reactive, sugar.logger, threadtestform
+    Forms, main_multi, reactive, sugar.logger, threadtestform, testPromise
     { you can add units after this };
 
 {$R *.res}
@@ -24,8 +24,8 @@ begin
 	Application.Scaled:=True;
     Application.Initialize;
 	//Application.CreateForm(TForm1, Form1);
-	Application.CreateForm(TForm2, Form2);
-
+	//Application.CreateForm(TForm2, Form2);
+	Application.CreateForm(TForm3, Form3);
     Application.Run;
 
     log('');

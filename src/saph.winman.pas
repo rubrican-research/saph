@@ -18,9 +18,11 @@ type
 	end;
 
 function winManager: TWinManager;
-procedure registerWind(_FC: TFormClass);
+procedure registerWind(_FC: TFormClass; const _label: string = '');
 function isWindRegistered(_FC: TFormClass): boolean;
 function isWindRegistered(_className: string): boolean;
+function getFormClassCaption(_FC: TFormClass): string;
+function getFormClassCaption(_className: string): string;
 
 // If the Form Class has been registered, this function returns:
 //      if a form with with "_name" has not been instantiated before
@@ -36,13 +38,15 @@ implementation
 uses
     strutils, fgl, obj.listener, sugar.logger;
 type
+    TFormClassCaptionMap = class(specialize TFPGMap<string, string>);
     TFormClassMap = class(specialize TFPGMap<string, TFormClass>);
-    TFormMap  = class(specialize TFPGMap<string, TForm>);    // List by forms by Form.Name
-    TFormList = class(specialize TFPGMapObject<string, TFormMap>); // map of form.name=>form by ClassName
+    TFormMap  = class(specialize TFPGMap<string, TForm>);           // List by forms by Form.Name
+    TFormList = class(specialize TFPGMapObject<string, TFormMap>);  // map of form.name=>form by ClassName
 var
-    formClassMap    : TFormClassMap;
-    formList        : TFormList; //
-    myWinManager    : TWinManager;
+    formClassCaptionMap : TFormClassCaptionMap;
+    formClassMap        : TFormClassMap;
+    formList            : TFormList; //
+    myWinManager        : TWinManager;
 
 function pointerAsHex(_obj: pointer): string;
 begin
@@ -111,9 +115,10 @@ begin
     Result := myWinManager;
 end;
 
-procedure registerWind(_FC: TFormClass);
+procedure registerWind(_FC: TFormClass; const _label: string);
 begin
      formClassMap.Add(_FC.ClassName, _FC);
+     formClassCaptionMap.add(_FC.ClassName, _label);
 end;
 
 function isWindRegistered(_FC: TFormClass): boolean;
@@ -124,6 +129,20 @@ end;
 function isWindRegistered(_className: string): boolean;
 begin
     Result:= formClassMap.IndexOf(_className) > -1;
+end;
+
+function getFormClassCaption(_FC: TFormClass): string;
+begin
+    Result := getFormClassCaption(_FC.ClassName);
+end;
+
+function getFormClassCaption(_className: string): string;
+begin
+    if formClassCaptionMap.TryGetData(_className, Result) then begin
+        if Result.isEmpty then Result := _className;
+	end
+    else
+        Result := _className;
 end;
 
 function getForm(const _className: string; _name: string): TForm;
@@ -184,6 +203,10 @@ end;
 initialization
     myWinManager := TWinManager.Create(Application); // will be freed when application is freed
 
+    formClassCaptionMap := TFormClassCaption.Create;
+    formClassCaptionMap.sorted := true;
+    formClassCaptionMap.duplicates := duAccept;
+
     formClassMap := TFormClassMap.Create;
     formClassMap.sorted := true;
     formClassMap.duplicates := dupIgnore;
@@ -193,6 +216,7 @@ initialization
     formList.duplicates := dupIgnore;
 
 finalization
+    formClassCaptionMap.Free;
     formClassMap.Free;
     formList.Free;
 
