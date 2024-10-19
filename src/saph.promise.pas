@@ -16,13 +16,16 @@ type
     TPromiseCallBack = class
     private
         myOwner: TPromise;
+        myExecCount: integer;
     public
+        execOnce: boolean; // Will execute this only once in the lifecycle of this object
         json: TJSONObject;
         constructor Create;
         constructor Create(constref _owner: TPromise);
         destructor Destroy; override;
         procedure setData(_jsonData: TJSONObject);
-        procedure execute; virtual; abstract;
+        function shouldExecute: boolean;
+        procedure execute; virtual;
     public
         property Owner: TPromise read myOwner;
 
@@ -30,11 +33,13 @@ type
 	end;
 
 	{ TPResolve }
+
+	{ TPromiseError }
+
     TPromiseError = class;
     TPromiseErrorClass = class of TPromiseError;
 
     TPResolve = class(TPromiseCallBack)
-
 		procedure execute; override;
     end;
     TPResolveClass = class of TPResolve;
@@ -127,7 +132,6 @@ RTLEventWaitFor: Wait for an event.
         function waitForever: NPromiseResult;
         function isRunning: boolean; virtual;
 
-
         procedure kill;
     published
         property status: NPromiseResult read getStatus write setStatus;
@@ -169,75 +173,78 @@ RTLEventWaitFor: Wait for an event.
         myPromiseResult : NPromiseResult;
 
     protected
-        procedure Init;
-        {Call these functions within the action. Set results to }
-
-        function doResolve(): TPResolve;
-        function doReject() : TPReject;
-        function doCatch()  : TPromiseError;
-        function doFinally(): TPromise;
+        procedure doInit;
 
     public
-        class function all(constref _promises: TPromiseList)    : TPromise;overload;
-        class function all(const _promises: TPromiseArray)      : TPromise;overload;
+        {
+            This is a first draft. A copy of the static functions of the Javascript Promise class
+            Subject to change
+        }
+        class function all(constref _promises: TPromiseList)    : TPromise;overload; unimplemented;
+        class function all(const _promises: TPromiseArray)      : TPromise;overload; unimplemented;
         class function all(const _promises: TPromiseClassArray) : TPromise;overload;
 
-        class function allSettled(constref _promises: TPromiseList)   : TPromise;overload;
-        class function allSettled(const _promises: TPromiseArray)     : TPromise;overload;
-        class function allSettled(const _promises: TPromiseClassArray): TPromise;overload;
+        class function allSettled(constref _promises: TPromiseList)   : TPromise;overload; unimplemented;
+        class function allSettled(const _promises: TPromiseArray)     : TPromise;overload; unimplemented;
+        class function allSettled(const _promises: TPromiseClassArray): TPromise;overload; unimplemented;
 
-        class function any(constref _promises: TPromiseList)    : TPromise;overload;
-        class function any(const _promises: TPromiseArray)      : TPromise;overload;
-        class function any(const _promises: TPromiseClassArray) : TPromise;overload;
+        class function any(constref _promises: TPromiseList)    : TPromise;overload; unimplemented;
+        class function any(const _promises: TPromiseArray)      : TPromise;overload; unimplemented;
+        class function any(const _promises: TPromiseClassArray) : TPromise;overload; unimplemented;
 
-        class function race(constref _promises: TPromiseList)   : TPromise;overload;
-        class function race(const _promises: TPromiseArray)     : TPromise;overload;
-        class function race(const _promises: TPromiseClassArray): TPromise;overload;
+        class function race(constref _promises: TPromiseList)   : TPromise;overload; unimplemented;
+        class function race(const _promises: TPromiseArray)     : TPromise;overload; unimplemented;
+        class function race(const _promises: TPromiseClassArray): TPromise;overload; unimplemented;
 
-        class function withResolvers(): TPromise;
-        class function reject() : TPReject;
-        class function resolve(): TPResolve;
+        class function withResolvers(): TPromise; unimplemented;
+        class function reject() : TPReject; unimplemented;
+        class function resolve(): TPResolve; unimplemented;
 
     public
         constructor Create(_execFunc: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil); overload;
         destructor Destroy; override;
 
-    public
+    public { To use inside a ExecFunction}
+        function init  (_initFunc: TNotifyEvent): TPromise;
         function then_ (_action: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil): TPromise; overload;
         function catch_(_errClass: TPromiseErrorClass): TPromise; overload;
         function finally_(_finalMeth : TNotifyEvent): TPromise;
 
-    public
         procedure run;
-        procedure runAsync;
-        procedure runThread;
+        procedure runAsync; unimplemented; // to be implemented in Application.QueueAsyncCall();
+        procedure runThread;unimplemented; // to run inside a thread/threads?
 
         function promiseResult: NPromiseResult;
 
-    public
-        OnPromiseRunning    : TNotifyEvent;
-        OnPromiseResolved   : TPromiseResolvedMeth;
-        OnPromiseRejected   : TPromiseRejectedMeth;
-        OnPromiseException  : TPromiseCatchMeth;
-        OnPromiseTimeOut    : TPromiseCatchMeth;
-        OnPromiseKilled     : TPromiseCatchMeth;
-        OnPromiseFinally    : TNotifyEvent;
+    public {Event handlers}
+        OnInit       : TNotifyEvent;
+        OnResolved   : TPromiseResolvedMeth;
+        OnRejected   : TPromiseRejectedMeth;
+        OnException  : TPromiseCatchMeth;
+        OnTimeOut    : TPromiseCatchMeth;
+        OnKilled     : TPromiseCatchMeth;
+        OnFinally    : TNotifyEvent;            // Will called only if finally_() was not previously set.
 
     protected
-        procedure doPromiseRunning;
-        procedure doPromiseResolved(constref _resolve: TPResolve);
-        procedure doPromiseRejected(constref _reject: TPReject);
-        procedure doPromiseException(constref _catch:  TPromiseError);
-        procedure doPromiseTimeOut(constref _catch:  TPromiseError);
-        procedure doPromiseKilled(constref _catch:  TPromiseError);
-        procedure doPromiseFinally;
+        procedure doOnInit;
+        procedure doOnResolved(constref _resolve: TPResolve);
+        procedure doOnRejected(constref _reject: TPReject);
+        procedure doOnException(constref _catch:  TPromiseError);
+        procedure doOnTimeOut(constref _catch:  TPromiseError);
+        procedure doOnKilled(constref _catch:  TPromiseError);
+        procedure doOnFinally;
 
     end;
 
     {EXCEPTIONS}
-    EPromiseInProgress = class(Exception);
+    EPromiseInProgress = class(Exception); // Raised when you try to call run on a promise that is already running
+    EPromiseCallBack   = class(Exception); // Exception raised when a promise callback fails.
 
+    {factory function}
     function Promise(_action: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil): TPromise;
+
+    {Result helpers}
+    function PromiseResult(_result: NPromiseResult = promiseUnknown; _json: TJSONObject = nil): TPromiseExecFuncResult;
 
 
 implementation
@@ -246,6 +253,14 @@ function Promise(_action: TPromiseExecFunction; _resolveClass: TPResolveClass;
 	_rejectClass: TPRejectClass): TPromise;
 begin
     Result := TPromise.Create(_action, _resolveClass, _rejectClass);
+end;
+
+function PromiseResult(_result: NPromiseResult; _json: TJSONObject
+	): TPromiseExecFuncResult;
+begin
+    Result := TPromiseExecFuncResult.Create;
+    Result.theResult := _result;
+    Result.json := _json;
 end;
 
 
@@ -326,31 +341,11 @@ begin
     Result := (myResult = promiseRunning);
 end;
 
-function TPromise.doReject(): TPReject;
-begin
-
-end;
-
-procedure TPromise.Init;
+procedure TPromise.doInit;
 begin
     myExecFuncList  := TExecFuncList.Create(true);
     myStatus        := psCreated;
     myPromiseResult := promiseInit;
-end;
-
-function TPromise.doResolve(): TPResolve;
-begin
-
-end;
-
-function TPromise.doCatch(): TPromiseError;
-begin
-
-end;
-
-function TPromise.doFinally(): TPromise;
-begin
-
 end;
 
 class function TPromise.all(constref _promises: TPromiseList): TPromise;
@@ -428,7 +423,7 @@ constructor TPromise.Create(_execFunc: TPromiseExecFunction;
 	_resolveClass: TPResolveClass; _rejectClass: TPRejectClass);
 begin
     inherited Create;
-    init;
+    doInit;
 
     myExecFunc := _execFunc;
     if assigned(_resolveClass) then
@@ -471,7 +466,11 @@ var
 	end;
 
 begin
+
+    if myStatus = psRunning then raise EPromiseInProgress.Create('This promise is already running');
+
     try
+        doOnInit;
         myStatus := psRunning;
         c := myExecFuncList.Count;
 	   	for i := 0 to pred(myExecFuncList.Count) do begin
@@ -500,8 +499,17 @@ begin
                 {EXECUTE}
 	            try
 	    		    {Call the default action}
-                    _funcResult := _execFuncCaller.execFunc(_resolve, _reject);
-	                case _funcResult.theResult of
+                    try
+                        _funcResult := _execFuncCaller.execFunc(_resolve, _reject);
+                        if not assigned(_funcResult) then
+                            raise Exception.Create('Promise execFunction returned nil');
+					except
+                         _funcResult := TPromiseExecFuncResult.Create;
+                         _funcResult.theResult := promiseException;
+					end;
+                    {If you have an access violation here, it means that the execFunc()
+                     did not return a TPromiseExecFuncResult object. }
+					case _funcResult.theResult of
 	                    promiseRunning:  begin // The action is still running
 	                        myPromiseResult := promiseException;
 	                        _catch := myErrorClass.Create(Self);
@@ -513,34 +521,33 @@ begin
 	                    promiseResolved: begin // The action is resolved
 	                        inc(_resolveCount);
 	                        _resolve.execute;
-	                        doPromiseResolved(_resolve);
 	                    end;
 
 	                    promiseRejected: begin       // The action is rejected
 	                        myPromiseResult := promiseRejected;
+                            _reject.execute;
 	                        e := createErrorObject(_reject);
-	                        doPromiseRejected(_reject);
 	                        raise e;
 	    				end;
 
 	                    promiseException: begin
 	                        myPromiseResult := promiseException;
 	                        e := createErrorObject(_reject);
-	                        doPromiseException(e);
+                            doOnException(e);
 	                        raise e;
 	    				end;
 
 	                    promiseTimeOut: begin
 	                        myPromiseResult := promiseTimeOut;
 	                        e := createErrorObject(_reject);
-	                        doPromiseTimeOut(e);
+	                        doOnTimeOut(e);
 	                        raise e;
 	    				end;
 
 	                    promiseKilled: begin
 	                        myPromiseResult := promiseKilled;
 	                        e := createErrorObject(_reject);
-	                        doPromiseKilled(e);
+	                        doOnKilled(e);
 	                        raise e;
 	    				end;
 
@@ -568,6 +575,9 @@ begin
 		end;// For loop
 	finally
         myStatus := psDone;
+
+        {If you have an access violation here, it means that the execFunc()
+        did not return a TPromiseExecFuncResult object. }
         freeAndNil(_funcResult);
 
         if _resolveCount = myExecFuncList.Count then
@@ -575,8 +585,7 @@ begin
 
         {Call the finally}
         try
-            if assigned(myFinalMeth) then myFinalMeth(Self);
-            doPromiseFinally;
+            doOnFinally;
 		except
             ;
 		end;
@@ -601,39 +610,42 @@ begin
     Result := myPromiseResult;
 end;
 
-procedure TPromise.doPromiseRunning;
+procedure TPromise.doOnInit;
 begin
-    if assigned(OnPromiseRunning) then OnPromiseRunning(self);
+    if assigned(OnInit) then OnInit(Self);
 end;
 
-procedure TPromise.doPromiseResolved(constref _resolve: TPResolve);
+procedure TPromise.doOnResolved(constref _resolve: TPResolve);
 begin
-    if assigned(OnPromiseResolved) then OnPromiseResolved(_resolve);
+    if assigned(OnResolved) then OnResolved(_resolve);
 end;
 
-procedure TPromise.doPromiseRejected(constref _reject: TPReject);
+procedure TPromise.doOnRejected(constref _reject: TPReject);
 begin
-    if assigned(OnPromiseRejected) then OnPromiseRejected(_reject);
+    if assigned(OnRejected) then OnRejected(_reject);
 end;
 
-procedure TPromise.doPromiseException(constref _catch: TPromiseError);
+procedure TPromise.doOnException(constref _catch: TPromiseError);
 begin
-    if assigned(OnPromiseException) then OnPromiseException(_catch);
+    if assigned(OnException) then OnException(_catch);
 end;
 
-procedure TPromise.doPromiseTimeOut(constref _catch: TPromiseError);
+procedure TPromise.doOnTimeOut(constref _catch: TPromiseError);
 begin
-    if assigned(OnPromiseTimeOut) then OnPromiseTimeOut(_catch);
+    if assigned(OnTimeOut) then OnTimeOut(_catch);
 end;
 
-procedure TPromise.doPromiseKilled(constref _catch: TPromiseError);
+procedure TPromise.doOnKilled(constref _catch: TPromiseError);
 begin
-    if assigned(OnPromiseKilled) then OnPromiseKilled(_catch);
+    if assigned(OnKilled) then OnKilled(_catch);
 end;
 
-procedure TPromise.doPromiseFinally;
+procedure TPromise.doOnFinally;
 begin
-    if assigned(OnPromiseFinally) then OnPromiseFinally(Self)
+    if assigned(myFinalMeth) then
+        myFinalMeth(Self)
+    else if assigned(OnFinally) then
+        OnFinally(Self)
 end;
 
 class function TPromise.withResolvers(): TPromise;
@@ -646,6 +658,12 @@ destructor TPromise.Destroy;
 begin
     myExecFuncList.Free;
     inherited;
+end;
+
+function TPromise.init(_initFunc: TNotifyEvent): TPromise;
+begin
+    OnInit := _initFunc;
+    Result := self;
 end;
 
 function TPromise.then_(_action: TPromiseExecFunction;
@@ -709,6 +727,8 @@ constructor TPromiseCallBack.Create;
 begin
     inherited;
     json:= nil;
+    myExecCount := 0;
+    execOnce := true;
 end;
 
 constructor TPromiseCallBack.Create(constref _owner: TPromise);
@@ -725,7 +745,18 @@ end;
 
 procedure TPromiseCallBack.setData(_jsonData: TJSONObject);
 begin
+    if assigned(json) then json.Free;
+    json := _jsonData;
+end;
 
+function TPromiseCallBack.shouldExecute: boolean;
+begin
+    Result := execOnce and (myExecCount > 1);
+end;
+
+procedure TPromiseCallBack.execute;
+begin
+    inc(myExecCount);
 end;
 
 
@@ -733,6 +764,11 @@ end;
 
 procedure TPResolve.execute;
 begin
+    inherited;
+    if shouldExecute then
+        if assigned(Owner) then
+            if assigned(owner.OnResolved) then
+                owner.OnResolved(self);
 
 end;
 
@@ -740,14 +776,22 @@ end;
 
 procedure TPReject.execute;
 begin
-
+    inherited;
+    if shouldExecute then
+        if assigned(Owner) then
+            if assigned(owner.OnRejected) then
+                owner.OnRejected(self);
 end;
 
 { TPromiseError }
 
 procedure TPromiseError.execute;
 begin
-
+    inherited;
+    if shouldExecute then
+        if assigned(Owner) then
+            if assigned(owner.OnException) then
+                owner.OnException(self);
 end;
 
 procedure TPromiseError.setReject(AValue: TPReject);

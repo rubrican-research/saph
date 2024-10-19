@@ -38,7 +38,9 @@ type
         function filterAppointments (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
         function displayAppointments(constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
 
-        procedure loadingFailed(const _error: TPromiseError);
+        procedure OnResolved(constref _resolve: TPResolve);
+        procedure OnRejected(constref _reject: TPReject);
+        procedure loadingFailed(constref _error: TPromiseError);
         procedure doneLoadingAppointments(Sender: TObject);
         procedure errorLoadingAppointments(constref E: TPromiseError);
     end;
@@ -67,41 +69,21 @@ begin
             .catch_(TPromiseError)
             .finally_(@doneLoadingAppointments);
 
-    _promise.OnPromiseException:= @errorLoadingAppointments;
-    _promise.run;
-end;
+    _promise.OnResolved := @OnResolved;
+    _promise.OnRejected := @OnRejected;
+    _promise.OnException:= @loadingFailed;
 
-Type
-TResolve = class(TStringList);
-TReject = class(TStringList);
-TCatch = class(TStringList);
+    _promise.run;
+
+end;
 
 procedure TForm3.Button2Click(Sender: TObject);
 var
-	i: Integer;
+    _promise: TPromise;
 begin
-        for i := 0 to 30 do begin
-            try
-	            if i mod 3 = 0 then
-                    raise TResolve.Create
-	            else if i mod 5 = 0 then
-                     raise TReject.Create
-	            else if i mod 7 = 0 then
-                    raise TCatch.Create;
-            except
-                on a: TResolve do begin
-                    Memo1.Lines.Add('resolved ' + inttostr(i));
-				end;
-
-                on b: TReject do begin
-                    Memo1.Lines.Add('rejected ' + inttostr(i));
-				end;
-
-                on c: TCatch do begin
-                    Memo1.Lines.Add('error ' + inttostr(i));
-				end;
-			end;
-        end
+    {Tests all the different ways in which we can define a promise}
+    _promise := Promise(nil, nil, nil);
+    _promise.run;
 end;
 
 function TForm3.loadAppointments(constref _resolve: TPResolve;
@@ -121,7 +103,6 @@ begin
     Memo1.lines.add('sortAppointments');
     if assigned(_resolve.json) then
     Memo1.Lines.Add(_resolve.json.AsJSON);
-
     _resolve.Execute;
 
     Result := TPromiseExecFuncResult.Create;
@@ -134,13 +115,15 @@ function TForm3.filterAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('filterAppointments');
+
     if assigned(_resolve.json) then
     Memo1.Lines.Add(_resolve.json.AsJSON);
-    _reject.reason := 'Not in a mood';
+
+    _reject.reason := 'Not a good reason';
     _reject.execute;
 
     Result := TPromiseExecFuncResult.Create;
-    Result.theResult := promiseRejected;
+    Result.theResult := promiseResolved;
 end;
 
 function TForm3.displayAppointments(constref _resolve: TPResolve;
@@ -149,7 +132,17 @@ begin
     Memo1.lines.add('displayAppointments');
 end;
 
-procedure TForm3.loadingFailed(const _error: TPromiseError);
+procedure TForm3.OnResolved(constref _resolve: TPResolve);
+begin
+    Memo1.lines.add('OnPromiseResolved --');
+end;
+
+procedure TForm3.OnRejected(constref _reject: TPReject);
+begin
+    Memo1.lines.add('OnPromiseRejected --');
+end;
+
+procedure TForm3.loadingFailed(constref _error: TPromiseError);
 begin
     Memo1.lines.add('loadFailed');
 end;
