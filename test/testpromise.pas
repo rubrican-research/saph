@@ -45,6 +45,25 @@ type
         procedure errorLoadingAppointments(constref E: TPromiseError);
     end;
 
+    TFetchAppointments = class(TPromise)
+
+	end;
+
+	{ TAppointmentsResolve }
+
+    TAppointmentsResolve = class(TPResolve)
+        procedure execute; override;
+	end;
+
+    TAppointmentsReject = class(TPReject)
+
+	end;
+
+    TAppointmentError = class(TPromiseError)
+
+	end;
+
+
 var
     Form3: TForm3;
 
@@ -62,7 +81,7 @@ var
 begin
     {Tests all the different ways in which we can define a promise}
     _promise := Promise(@loadAppointments, TPResolve, TPReject);
-    _promise.then_(@sortAppointments)
+    _promise.then_(@sortAppointments, TAppointmentsResolve)
             .then_(@filterAppointments)
             .then_(@displayAppointments)
 
@@ -82,7 +101,7 @@ var
     _promise: TPromise;
 begin
     {Tests all the different ways in which we can define a promise}
-    _promise := Promise(nil, nil, nil);
+    _promise := Promise(@loadAppointments, TAppointmentsResolve, TAppointmentsReject);
     _promise.run;
 end;
 
@@ -92,9 +111,7 @@ begin
     Memo1.lines.add('loadAppointments');
     _resolve.execute;
 
-    Result := TPromiseExecFuncResult.Create;
-    Result.theResult := promiseResolved;
-    Result.json      := TJSONObject.Create(['appointments', TJSONArray.Create(['Amber', 'Amba', 'Aadira'])]);
+    Result := PromiseResult(promiseResolved, TJSONObject.Create(['appointments', TJSONArray.Create(['Amber', 'Amba', 'Aadira'])]));
 end;
 
 function TForm3.sortAppointments(constref _resolve: TPResolve;
@@ -105,9 +122,7 @@ begin
     Memo1.Lines.Add(_resolve.json.AsJSON);
     _resolve.Execute;
 
-    Result := TPromiseExecFuncResult.Create;
-    Result.theResult := promiseResolved;
-    Result.json      := TJSONObject.Create(['sorted_appointments', TJSONArray.Create(['A', 'AB', 'AC'])]);
+    Result := PromiseResult(promiseResolved, TJSONObject.Create(['sorted_appointments', TJSONArray.Create(['A', 'AB', 'AC'])]));
 
 end;
 
@@ -122,14 +137,14 @@ begin
     _reject.reason := 'Not a good reason';
     _reject.execute;
 
-    Result := TPromiseExecFuncResult.Create;
-    Result.theResult := promiseResolved;
+    Result := PromiseResult(promiseResolved, TJSONObject.Create(['testing', 'to see if the memory is freed properly']));
 end;
 
 function TForm3.displayAppointments(constref _resolve: TPResolve;
 	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('displayAppointments');
+    Result := PromiseResult(promiseResolved);
 end;
 
 procedure TForm3.OnResolved(constref _resolve: TPResolve);
@@ -165,6 +180,15 @@ end;
 procedure TForm3.errorLoadingAppointments(constref E: TPromiseError);
 begin
     Memo1.lines.add('errorLoadingAppointments because ' + E.reason);
+end;
+
+{ TAppointmentsResolve }
+
+procedure TAppointmentsResolve.execute;
+begin
+	inherited execute;
+    if shouldExecute then
+        form3.Memo1.lines.add('TAppointmentsResolve.execute;');
 end;
 
 end.

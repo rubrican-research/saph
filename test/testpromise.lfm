@@ -1,7 +1,7 @@
 object Form3: TForm3
-  Left = 379
+  Left = 589
   Height = 516
-  Top = 120
+  Top = 253
   Width = 790
   Caption = 'Promise Tests'
   ClientHeight = 516
@@ -15,20 +15,26 @@ object Form3: TForm3
   LCLVersion = '3.4.0.0'
   object StaticText1: TStaticText
     Left = 5
-    Height = 18
+    Height = 16
     Top = 5
     Width = 780
     Align = alTop
-    Alignment = taCenter
     AutoSize = True
     BorderSpacing.Around = 5
     Caption = 'Testing Promises'
+    Font.CharSet = ANSI_CHARSET
+    Font.Color = clBlue
+    Font.Height = -13
+    Font.Name = 'Arial Rounded MT Bold'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
     TabOrder = 0
   end
   object Panel1: TPanel
     Left = 615
-    Height = 483
-    Top = 28
+    Height = 485
+    Top = 26
     Width = 170
     Align = alRight
     BorderSpacing.Around = 5
@@ -37,7 +43,7 @@ object Form3: TForm3
     ChildSizing.ShrinkHorizontal = crsHomogenousChildResize
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 483
+    ClientHeight = 485
     ClientWidth = 170
     ParentBackground = False
     TabOrder = 1
@@ -47,7 +53,7 @@ object Form3: TForm3
       Top = 6
       Width = 158
       BorderSpacing.Around = 5
-      Caption = 'Test Promise Usage'
+      Caption = 'Promise with Defaults'
       TabOrder = 0
       OnClick = Button1Click
     end
@@ -57,7 +63,7 @@ object Form3: TForm3
       Top = 40
       Width = 158
       BorderSpacing.Around = 5
-      Caption = 'Test Raise Exception'
+      Caption = 'Promise child classes'
       TabOrder = 1
       OnClick = Button2Click
     end
@@ -153,11 +159,12 @@ object Form3: TForm3
     end
   end
   object Memo1: TMemo
-    Left = 0
-    Height = 488
-    Top = 28
-    Width = 610
+    Left = 5
+    Height = 485
+    Top = 26
+    Width = 605
     Align = alClient
+    BorderSpacing.Around = 5
     Lines.Strings = (
       'Memo1'
     )
