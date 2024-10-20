@@ -47,3 +47,8 @@ This library was built to hel build a multi-window app, similar to the Lazarus I
 
 Using the obj.listener library, you can use Application.addListener() to listen to signals anywhere in your app. And you can call Application.signal() from anywhere in your app to inform other listeners of an event in your form/logic. This allows you to be able to update a variable change (together with Reactive Store) across multiple windows in an asynchronous manner.
 
+### [Promise](https://github.com/rubrican-research/saph/wiki/Promises)
+This implementation of Promise in Object Pascal is an attempt to understand how the Javascript Promise object is a solution to the problem of managing async calls to the server. 
+
+The JavaScript implementation allows you to define callback functions as one pleases, with parameters that one can decide at will. However, I continued to find it hard to understand the  underlying mechanism - it is entirely possible that my difficulty stemmed from being a hard-core fan of "strict-typing", especially the Object Pascal flavor of it.
+
