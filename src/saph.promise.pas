@@ -111,7 +111,7 @@ RTLEventWaitFor: Wait for an event.
         catch  : TPromiseError;
 	end;
 
-    TPromiseExecFunction    = function (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false): TPromiseExecFuncResult of object;
+    TPromiseExecFunction    = function (constref _resolve: TPResolve; constref _reject: TPReject): TPromiseExecFuncResult of object;
     TPromiseResolvedMeth    = procedure(constref _resolve: TPResolve) of object;
     TPromiseRejectedMeth    = procedure(constref _reject: TPReject) of object;
     TPromiseCatchMeth       = procedure(constref _catch:  TPromiseError) of object;
@@ -201,7 +201,10 @@ RTLEventWaitFor: Wait for an event.
     public { To use inside a ExecFunction}
         function init  (_initFunc: TNotifyEvent): TPromise;
         function then_ (_execFunc: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil): TPromise; overload;
+        {default values are not provided in this then_() call in order to differencitate this call from the previous one. having all nil default parameters
+        makes it impossibel for the compiler to decide which overloaded then_() is being invoked.}
         function then_ (_execFunc: TPromiseExecFunction;_resolveFactory: TPResolveFactory; _rejectFactory: TPRejectFactory;_errorFactory: TPromiseErrorFactory): TPromise; overload;
+
         function catch_(_errClass: TPromiseErrorClass): TPromise; overload;
         function finally_(_finalMeth : TNotifyEvent): TPromise;
 
@@ -245,10 +248,12 @@ RTLEventWaitFor: Wait for an event.
     EPromiseInProgress = class(Exception); // Raised when you try to call run on a promise that is already running
     EPromiseCallBack   = class(Exception); // Exception raised when a promise callback fails.
 
-    {factory function}
-    function Promise(_action: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil): TPromise;
-    function createTPResolve(_owner: TPromise): TPResolve;
-    function createTPReject(_owner: TPromise): TPReject;
+    {factory functions}
+    function Promise(_execFunc: TPromiseExecFunction; _resolveClass : TPResolveClass = nil; _rejectClass  : TPRejectClass = nil): TPromise;
+    function Promise(_execFunc: TPromiseExecFunction; _resolveFactory : TPResolveFactory; _rejectFactory  : TPRejectFactory = nil; _errorFactory: TPromiseErrorFactory = nil): TPromise;
+
+    function createTPResolve (_owner: TPromise): TPResolve;
+    function createTPReject  (_owner: TPromise): TPReject;
     function createTPromiseError(_owner: TPromise): TPromiseError;
 
 
@@ -258,10 +263,17 @@ RTLEventWaitFor: Wait for an event.
 
 implementation
 
-function Promise(_action: TPromiseExecFunction; _resolveClass: TPResolveClass;
+function Promise(_execFunc: TPromiseExecFunction; _resolveClass: TPResolveClass;
 	_rejectClass: TPRejectClass): TPromise;
 begin
-    Result := TPromise.Create(_action, _resolveClass, _rejectClass);
+    Result := TPromise.Create(_execFunc, _resolveClass, _rejectClass);
+end;
+
+function Promise(_execFunc: TPromiseExecFunction;
+	_resolveFactory: TPResolveFactory; _rejectFactory: TPRejectFactory;
+	_errorFactory: TPromiseErrorFactory): TPromise;
+begin
+    Result := TPromise.Create(_execFunc, _resolveFactory, _rejectFactory, _errorFactory);
 end;
 
 function createTPResolve(_owner: TPromise): TPResolve;

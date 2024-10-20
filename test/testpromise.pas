@@ -33,10 +33,10 @@ type
     private
 
     public
-        function loadAppointments   (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
-        function sortAppointments   (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
-        function filterAppointments (constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
-        function displayAppointments(constref _resolve: TPResolve; _reject: TPReject; const ownObjects: boolean = false):TPromiseExecFuncResult;
+        function loadAppointments   (constref _resolve: TPResolve; constref _reject: TPReject):TPromiseExecFuncResult;
+        function sortAppointments   (constref _resolve: TPResolve; constref _reject: TPReject):TPromiseExecFuncResult;
+        function filterAppointments (constref _resolve: TPResolve; constref _reject: TPReject):TPromiseExecFuncResult;
+        function displayAppointments(constref _resolve: TPResolve; constref _reject: TPReject):TPromiseExecFuncResult;
 
         procedure OnResolved(constref _resolve: TPResolve);
         procedure OnRejected(constref _reject: TPReject);
@@ -105,8 +105,8 @@ begin
     _promise.run;
 end;
 
-function TForm3.loadAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
+function TForm3.loadAppointments(constref _resolve: TPResolve; constref
+	_reject: TPReject): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('loadAppointments');
     _resolve.execute;
@@ -114,20 +114,24 @@ begin
     Result := PromiseResult(promiseResolved, TJSONObject.Create(['appointments', TJSONArray.Create(['Amber', 'Amba', 'Aadira'])]));
 end;
 
-function TForm3.sortAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
+function TForm3.sortAppointments(constref _resolve: TPResolve; constref
+	_reject: TPReject): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('sortAppointments');
-    if assigned(_resolve.json) then
-    Memo1.Lines.Add(_resolve.json.AsJSON);
-    _resolve.Execute;
 
+    {Data available from previous Promise execute function}
+    if assigned(_resolve.json) then
+        Memo1.Lines.Add(_resolve.json.AsJSON);
+
+    _resolve.Execute; // explicite call to resolve. Can be omitted if you return the required result (below)
+
+    // Returning data as the second parameter
     Result := PromiseResult(promiseResolved, TJSONObject.Create(['sorted_appointments', TJSONArray.Create(['A', 'AB', 'AC'])]));
 
 end;
 
-function TForm3.filterAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
+function TForm3.filterAppointments(constref _resolve: TPResolve; constref
+	_reject: TPReject): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('filterAppointments');
 
@@ -140,8 +144,8 @@ begin
     Result := PromiseResult(promiseResolved, TJSONObject.Create(['testing', 'to see if the memory is freed properly']));
 end;
 
-function TForm3.displayAppointments(constref _resolve: TPResolve;
-	_reject: TPReject; const ownObjects: boolean): TPromiseExecFuncResult;
+function TForm3.displayAppointments(constref _resolve: TPResolve; constref
+	_reject: TPReject): TPromiseExecFuncResult;
 begin
     Memo1.lines.add('displayAppointments');
     Result := PromiseResult(promiseResolved);
