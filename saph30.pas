@@ -8,8 +8,8 @@ unit saph30;
 interface
 
 uses
-    Controls.Listener, saph.lists, Obj.Listener, saph.reactive, saph.undo, 
-    saph.promise;
+    Controls.Listener, saph.lists, Obj.Listener, saph.reactive, saph.winman, 
+    saph.undo, saph.promise;
 
 implementation
 

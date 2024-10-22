@@ -36,7 +36,7 @@ function getForm(const _className: string; _name: string): TForm;
 
 implementation
 uses
-    strutils, fgl, obj.listener, sugar.logger;
+    types, strutils, fgl, obj.listener, sugar.logger;
 type
     TFormClassCaptionMap = class(specialize TFPGMap<string, string>);
     TFormClassMap = class(specialize TFPGMap<string, TFormClass>);
@@ -205,7 +205,7 @@ initialization
 
     formClassCaptionMap := TFormClassCaptionMap.Create;
     formClassCaptionMap.sorted := true;
-    formClassCaptionMap.duplicates := duAccept;
+    formClassCaptionMap.duplicates := dupAccept;
 
     formClassMap := TFormClassMap.Create;
     formClassMap.sorted := true;

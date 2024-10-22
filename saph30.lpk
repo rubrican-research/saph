@@ -79,7 +79,6 @@ SOFTWARE."/>
       </Item>
       <Item>
         <Filename Value="src\saph.winman.pas"/>
-        <AddToUsesPkgSection Value="False"/>
         <UnitName Value="saph.winman"/>
       </Item>
       <Item>
