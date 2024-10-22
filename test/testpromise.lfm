@@ -73,8 +73,9 @@ object Form3: TForm3
       Top = 74
       Width = 158
       BorderSpacing.Around = 5
-      Caption = 'Button3'
+      Caption = 'Test RStore in Class'
       TabOrder = 2
+      OnClick = Button3Click
     end
     object Button4: TButton
       Left = 6

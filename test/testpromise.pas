@@ -6,7 +6,7 @@ interface
 
 uses
     Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-    saph.promise;
+    saph.promise, saph.reactive;
 
 type
 
@@ -30,6 +30,7 @@ type
 		StaticText1: TStaticText;
 		procedure Button1Click(Sender: TObject);
 		procedure Button2Click(Sender: TObject);
+		procedure Button3Click(Sender: TObject);
     private
 
     public
@@ -103,6 +104,57 @@ begin
     {Tests all the different ways in which we can define a promise}
     _promise := Promise(@loadAppointments, TAppointmentsResolve, TAppointmentsReject);
     _promise.run;
+end;
+
+type
+
+	{ TStudent }
+
+    TStudent = class
+        name: TRStr;
+        age : TRDWord;
+        addr: TRStr;
+        constructor Create;
+	end;
+
+{ TStudent }
+
+constructor TStudent.Create;
+begin
+    inherited;
+    name := RStr();
+    age  := RDWord();
+    addr := RStr();
+end;
+
+procedure TForm3.Button3Click(Sender: TObject);
+var
+    a, b, c : TStudent;
+	s: String;
+begin
+    a := TStudent.Create;
+    a.name.val := 'Stanley';
+
+    b := TStudent.Create;
+    b.name.val := 'Keertana';
+
+    c := TStudent.Create;
+    c.name.val := 'Arjav';
+
+    Memo1.Lines.Add(Format('A:%s; B:%s; C:%s', [a.name.val, b.name.val, c.name.val]));
+
+    a.name.val := 'Stephen';
+    b.name.val := 'S.';
+    c.name.val := 'Acharya';
+    Memo1.Lines.Add(Format('A:%s; B:%s; C:%s', [a.name.val, b.name.val, c.name.val]));
+
+    s := '';
+    s := a.name;
+
+    A.Free;
+    B.Free;
+    C.Free;
+
 end;
 
 function TForm3.loadAppointments(constref _resolve: TPResolve; constref

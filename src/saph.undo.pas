@@ -169,7 +169,10 @@ end;
 
 function GUndoHistory.currVal: T;
 begin
-    Result := myHistory[posToIndex(myHistCurr)].val;
+    if myHistCurr > -1 then
+        Result := myHistory[posToIndex(myHistCurr)].val
+    else
+        Result := default(T);
 end;
 
 function GUndoHistory.currPos: integer;
@@ -184,6 +187,7 @@ end;
 
 constructor GUndoHistory.Create;
 begin
+    inherited Create;
     // To init so that nextHeadPos points correctly
     myHistHead:=-1;
     myHistCurr:=-1;

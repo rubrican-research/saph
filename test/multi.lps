@@ -8,9 +8,10 @@
       <Unit>
         <Filename Value="multi.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="-1"/>
+        <EditorIndex Value="1"/>
         <CursorPos X="40" Y="28"/>
         <UsageCount Value="201"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="main_multi.pas"/>
@@ -51,9 +52,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="testPromise"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="9"/>
-        <CursorPos X="24" Y="29"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="130"/>
+        <CursorPos X="16" Y="152"/>
         <UsageCount Value="133"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -76,7 +78,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="6"/>
         <TopLine Value="261"/>
         <CursorPos X="14" Y="282"/>
         <UsageCount Value="49"/>
@@ -85,7 +87,7 @@
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\types.pp"/>
         <UnitName Value="Types"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="7"/>
         <TopLine Value="146"/>
         <CursorPos X="3" Y="167"/>
         <UsageCount Value="16"/>
@@ -142,7 +144,7 @@
       </Unit>
       <Unit>
         <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="9"/>
         <TopLine Value="43"/>
         <CursorPos X="3" Y="66"/>
         <UsageCount Value="60"/>
@@ -208,9 +210,9 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.reactive.pas"/>
-        <EditorIndex Value="5"/>
-        <TopLine Value="43"/>
-        <CursorPos X="10" Y="63"/>
+        <EditorIndex Value="8"/>
+        <TopLine Value="901"/>
+        <CursorPos X="5" Y="903"/>
         <UsageCount Value="40"/>
         <Bookmarks Count="1">
           <Item0 X="42" Y="1320" ID="1"/>
@@ -248,16 +250,15 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.undo.pas"/>
-        <EditorIndex Value="-1"/>
-        <WindowIndex Value="1"/>
-        <TopLine Value="143"/>
-        <CursorPos X="6" Y="160"/>
-        <UsageCount Value="9"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="152"/>
+        <CursorPos X="5" Y="181"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.winman.pas"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="5"/>
         <TopLine Value="182"/>
         <CursorPos X="42" Y="208"/>
         <UsageCount Value="27"/>
@@ -265,8 +266,8 @@
       </Unit>
       <Unit>
         <Filename Value="..\src\saph.promise.pas"/>
-        <TopLine Value="247"/>
-        <CursorPos Y="264"/>
+        <TopLine Value="223"/>
+        <CursorPos X="120" Y="261"/>
         <UsageCount Value="67"/>
         <Loaded Value="True"/>
       </Unit>
@@ -283,130 +284,138 @@
         <EditorIndex Value="-1"/>
         <UsageCount Value="7"/>
       </Unit>
+      <Unit>
+        <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\control.inc"/>
+        <EditorIndex Value="4"/>
+        <TopLine Value="2952"/>
+        <CursorPos Y="2974"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
     </Units>
     <Debugger>
       <Backend Value="{D5A566CB-3482-4C19-8CAB-B9963DD8A1E6}"/>
     </Debugger>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="250" Column="23" TopLine="237"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="26" Column="20"/>
       </Position>
       <Position>
         <Filename Value="testpromise.pas"/>
-        <Caret Line="90" TopLine="69"/>
+        <Caret Line="110" Column="9" TopLine="105"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="249" Column="31" TopLine="231"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="116" Column="28" TopLine="105"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="250" TopLine="231"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="128" Column="6" TopLine="105"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="204" Column="63" TopLine="199"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="153" Column="5" TopLine="110"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="237" Column="41" TopLine="222"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="148" Column="74" TopLine="121"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="648" Column="5" TopLine="645"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="172" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="242" Column="19" TopLine="217"/>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="135" TopLine="121"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="673" Column="5" TopLine="670"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="161" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="217" Column="27" TopLine="190"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="116" Column="5" TopLine="83"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="206" Column="45" TopLine="182"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="49" Column="39" TopLine="20"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="38" TopLine="17"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="9"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="38"/>
-      </Position>
-      <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="214" Column="34" TopLine="182"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="172" TopLine="143"/>
       </Position>
       <Position>
         <Filename Value="..\src\saph.reactive.pas"/>
-        <Caret Line="63" Column="11" TopLine="40"/>
+        <Caret Line="1350" TopLine="1328"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="203" Column="10" TopLine="182"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="161" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="208" Column="44" TopLine="174"/>
+        <Filename Value="R:\Apps\Lazarus\3.4\lcl\include\control.inc"/>
+        <Caret Line="2974" TopLine="2952"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="9" TopLine="25"/>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1350" TopLine="1328"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="217" TopLine="182"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="165" Column="26" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
-        <Caret Line="282" Column="14" TopLine="262"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="172" Column="18" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="217" TopLine="182"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="175" Column="19" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="39" Column="12"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="174" Column="9" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.winman.pas"/>
-        <Caret Line="208" Column="39" TopLine="182"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="172" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="R:\Apps\Lazarus\3.4\fpc\3.2.2\source\rtl\objpas\fgl.pp"/>
-        <Caret Line="282" Column="14" TopLine="261"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="161" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="557" Column="38"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="172" Column="9" TopLine="143"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="7"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="54" Column="23" TopLine="17"/>
       </Position>
       <Position>
-        <Filename Value="..\src\saph.promise.pas"/>
-        <Caret Line="264" TopLine="247"/>
+        <Filename Value="..\src\saph.undo.pas"/>
+        <Caret Line="190" Column="22" TopLine="152"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="1350" TopLine="1328"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="305" Column="36" TopLine="289"/>
+      </Position>
+      <Position>
+        <Filename Value="..\src\saph.reactive.pas"/>
+        <Caret Line="903" Column="5" TopLine="901"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="141" Column="27" TopLine="121"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="148" Column="87" TopLine="121"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="151" Column="6" TopLine="121"/>
+      </Position>
+      <Position>
+        <Filename Value="testpromise.pas"/>
+        <Caret Line="152" Column="12" TopLine="121"/>
       </Position>
     </JumpHistory>
     <RunParams>
@@ -415,6 +424,15 @@
     </RunParams>
   </ProjectSession>
   <Debugging>
+    <BreakPoints>
+      <Item>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="..\src\saph.reactive.pas"/>
+        <Line Value="903"/>
+      </Item>
+    </BreakPoints>
     <Watches>
       <Item>
         <Expression Value="LeaveCriticalSection"/>
