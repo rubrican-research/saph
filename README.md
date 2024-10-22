@@ -1,6 +1,6 @@
 ![saph-logo](https://github.com/user-attachments/assets/53aa2749-83ee-4c2e-847f-222cffe61fe4)
 
-**Note**: This library depends on "sugar" (https://github.com/stanley643212/sugar). You will need to clone this repository as well.
+**Note**: This library depends on "sugar" (https://github.com/rubrican-research/sugar). You will need to clone this repository as well.
 The plan is to remove the dependency before release.
 
 # Saph: Lazarus package for complex GUI
