@@ -203,7 +203,7 @@ end;
 initialization
     myWinManager := TWinManager.Create(Application); // will be freed when application is freed
 
-    formClassCaptionMap := TFormClassCaption.Create;
+    formClassCaptionMap := TFormClassCaptionMap.Create;
     formClassCaptionMap.sorted := true;
     formClassCaptionMap.duplicates := duAccept;
 

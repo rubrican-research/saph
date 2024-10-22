@@ -11,8 +11,13 @@
         <OtherUnitFiles Value="src"/>
         <UnitOutputDirectory Value="lib\2.0.12\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
+      <CodeGeneration>
+        <Optimizations>
+          <OptimizationLevel Value="2"/>
+        </Optimizations>
+      </CodeGeneration>
     </CompilerOptions>
-    <Files Count="6">
+    <Files Count="7">
       <Item1>
         <Filename Value="src\controls.listener.pas"/>
         <UnitName Value="Controls.Listener"/>
@@ -37,6 +42,10 @@
         <Filename Value="src\saph.undo.pas"/>
         <UnitName Value="saph.undo"/>
       </Item6>
+      <Item7>
+        <Filename Value="src\saph.promise.pas"/>
+        <UnitName Value="saph.promise"/>
+      </Item7>
     </Files>
     <RequiredPkgs Count="3">
       <Item1>
