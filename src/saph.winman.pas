@@ -18,7 +18,7 @@ type
 	end;
 
 function winManager: TWinManager;
-procedure registerWind(_FC: TFormClass; const _label: string = '');
+procedure registerWind(_FC: TFormClass; const _formCaption: string = '');
 function isWindRegistered(_FC: TFormClass): boolean;
 function isWindRegistered(_className: string): boolean;
 function getFormClassCaption(_FC: TFormClass): string;
@@ -32,7 +32,12 @@ function getFormClassCaption(_className: string): string;
 //
 //      If no name has been supplied, a name of the format
 //          "_" + 16 hex string of the forms address is used as the name
-function getForm(const _className: string; _name: string): TForm;
+function newForm(const _className: string) : TForm;                         // Creates a new form for _className
+function findForm(const _className: string; const _formName: string; out _found: boolean) : TForm;
+
+function sanitizeFormName(const _str: string): string;
+function genFormName(constref f: TForm; _name: string = '') : string;
+function genFormCaption(constref f: TForm) : string;
 
 implementation
 uses
@@ -77,17 +82,16 @@ begin
     else
         _name := sanitizeFormName(_name);
     Result := _name + pointerAsHex(f);
-
-    log('generated form name = %s', [Result]);
+    //log('generated form name = %s', [Result]);
 end;
 
-function genFormCaption(constref f: TForm; _name: string = '') : string;
+function genFormCaption(constref f: TForm): string;
 begin
-    if _name = '' then
+    Result := f.Caption;
+    if Result = '' then
     begin
-        _name := ReplaceStr(f.ClassName, 'T', '');
+        Result := ReplaceStr(f.ClassName, 'T', '');
 	end;
-	Result := _name;
 end;
 
 function createForm(_className: string): TForm;
@@ -115,10 +119,10 @@ begin
     Result := myWinManager;
 end;
 
-procedure registerWind(_FC: TFormClass; const _label: string);
+procedure registerWind(_FC: TFormClass; const _formCaption: string);
 begin
      formClassMap.Add(_FC.ClassName, _FC);
-     formClassCaptionMap.add(_FC.ClassName, _label);
+     formClassCaptionMap.add(_FC.ClassName, _formCaption);
 end;
 
 function isWindRegistered(_FC: TFormClass): boolean;
@@ -138,37 +142,41 @@ end;
 
 function getFormClassCaption(_className: string): string;
 begin
-    if formClassCaptionMap.TryGetData(_className, Result) then begin
-        if Result.isEmpty then Result := _className;
-	end
-    else
+    if not formClassCaptionMap.TryGetData(_className, Result) then
         Result := _className;
 end;
 
-function getForm(const _className: string; _name: string): TForm;
-var
-	_formMap: TFormMap;
-
-    procedure addNewFormToMap (constref _fm: TFormMap);
-    begin
-        Result := createForm(_className);
-        Result.Name := genFormName(Result, _name);
-        Result.Caption := genFormCaption(Result, _name) + ' ' + IntToStr(succ(_fm.Count));
-        _fm.Add(Result.Name, Result);
-    end;
-
+function addNewFormToMap (const _className: string; constref _fm: TFormMap): TForm;
 begin
-    Result := nil;
-    if formList.TryGetData(_className, _formMap) then begin
-        if not _formMap.TryGetData(_name, Result) then begin
-            addNewFormToMap(_formMap);
-        end
-    end
-    else begin
+    Result          := createForm(_className);
+    Result.Name     := genFormName(Result);
+    Result.Caption  := getFormClassCaption(_className);
+    _fm.Add(Result.Name, Result);
+    if _fm.Count > 1 then
+        Result.Caption := Result.Caption +  format('(%d)', [IntToStr(succ(_fm.Count))]);
+end;
+
+function newForm(const _className: string): TForm;
+var
+    _formMap: TFormMap;
+begin
+    if not formList.TryGetData(_className, _formMap) then begin
         _formMap := newFormMap();
         formList.Add(_className, _formMap);
-        addNewFormToMap(_formMap);
 	end;
+    Result := addNewFormToMap(_className, _formMap);
+end;
+
+
+function findForm(const _className: string; const _formName: string; out
+	_found: boolean): TForm;
+var
+	_formMap: TFormMap;
+begin
+    _found := false;
+    Result := nil;
+    if formList.TryGetData(_className, _formMap) then
+        _found := _formMap.TryGetData(_formName, Result);
 end;
 
 { TWinManager }

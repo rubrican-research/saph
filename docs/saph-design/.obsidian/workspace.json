@@ -48,18 +48,6 @@
               "icon": "lucide-file",
               "title": "Reactive Store"
             }
-          },
-          {
-            "id": "7b7b5cb2a74aca5c",
-            "type": "leaf",
-            "state": {
-              "type": "release-notes",
-              "state": {
-                "currentVersion": "1.7.4"
-              },
-              "icon": "lucide-file",
-              "title": "Release Notes 1.7.4"
-            }
           }
         ],
         "currentTab": 2
@@ -217,13 +205,14 @@
   "active": "b88f50ad6f069b19",
   "lastOpenFiles": [
     "classes/Promises.md",
-    "classes/Window Manager.md",
     "classes/Reactive Store.md",
+    "classes/Object listeners.md",
     "classes/Select List.md",
     "classes/Home.md",
     "Readme.md",
+    "README 1.md",
+    "classes/Window Manager.md",
     "classes/Window Manager Class diagram.canvas",
-    "classes/Object listeners.md",
     "classes/History List.md",
     "classes/classes.md",
     "Dashboard.md",

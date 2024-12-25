@@ -32,15 +32,11 @@ type
         function makeKey(): string;
     public
     const
-        SGNAME = 'sig_r_name';
-    const
-        SGREAD = 'sig_r_read';
-    const
+        SGNAME  = 'sig_r_name';
+        SGREAD  = 'sig_r_read';
         SGWRITE = 'sig_r_write';
-    const
-        SGUNDO = 'sig_r_undo';
-    const
-        SGREDO = 'sig_r_redo';
+        SGUNDO  = 'sig_r_undo';
+        SGREDO  = 'sig_r_redo';
     public
         constructor Create; virtual;
         destructor Destroy; override;
@@ -226,7 +222,25 @@ operator /(b: TRInt; a: integer): TRInt;
 // integer division. for normal division, use a.val / b.val
 operator /(a: integer; b: TRInt): TRInt;
 operator /(a: TRInt; b: TRInt): TRInt;
-
+{GREATER THAN}
+operator >(b: TRInt; a: integer): boolean;
+operator >(a: integer; b: TRInt): boolean;
+operator >(a: TRInt; b: TRInt): boolean;
+{GREATER THAN EQUAL}
+operator >=(b: TRInt; a: integer): boolean;
+operator >=(a: integer; b: TRInt): boolean;
+operator >=(a: TRInt; b: TRInt): boolean;
+{LESS THAN}
+operator <(b: TRInt; a: integer): boolean;
+operator <(a: integer; b: TRInt): boolean;
+operator <(a: TRInt; b: TRInt): boolean;
+{LESS THAN EQUAL}
+operator <=(b: TRInt; a: integer): boolean;
+operator <=(a: integer; b: TRInt): boolean;
+operator <=(a: TRInt; b: TRInt): boolean;
+{NOT EQUAL}
+operator <>(b: TRInt; a: integer): boolean;
+operator <>(a: integer; b: TRInt): boolean;
 
 {TRInt64    }
 operator := (v: TRInt64): int64;
@@ -250,6 +264,25 @@ operator /(b: TRInt64; a: int64): TRInt64;
 // integer division. for normal division, use a.val / b.val
 operator /(a: int64; b: TRInt64): TRInt64;
 operator /(a: TRInt64; b: TRInt64): TRInt64;
+{GREATER THAN}
+operator >(b: TRInt64; a: int64): boolean;
+operator >(a: int64; b: TRInt64): boolean;
+operator >(a: TRInt64; b: TRInt64): boolean;
+{GREATER THAN EQUAL}
+operator >=(b: TRInt64; a: int64): boolean;
+operator >=(a: int64; b: TRInt64): boolean;
+operator >=(a: TRInt64; b: TRInt64): boolean;
+{LESS THAN}
+operator <(b: TRInt64; a: int64): boolean;
+operator <(a: int64; b: TRInt64): boolean;
+operator <(a: TRInt64; b: TRInt64): boolean;
+{LESS THAN EQUAL}
+operator <=(b: TRInt64; a: int64): boolean;
+operator <=(a: int64; b: TRInt64): boolean;
+operator <=(a: TRInt64; b: TRInt64): boolean;
+{NOT EQUAL}
+operator <>(b: TRInt64; a: int64): boolean;
+operator <>(a: int64; b: TRInt64): boolean;
 
 {TRDWord    }
 operator := (v: TRDWord): DWord;
@@ -273,6 +306,25 @@ operator /(b: TRDWord; a: DWord): TRDWord;
 // integer division. for normal division, use a.val / b.val
 operator /(a: DWord; b: TRDWord): TRDWord;
 operator /(a: TRDWord; b: TRDWord): TRDWord;
+{GREATER THAN}
+operator >(b: TRDWord; a: DWord): boolean;
+operator >(a: DWord; b: TRDWord): boolean;
+operator >(a: TRDWord; b: TRDWord): boolean;
+{GREATER THAN EQUAL}
+operator >=(b: TRDWord; a: DWord): boolean;
+operator >=(a: DWord; b: TRDWord): boolean;
+operator >=(a: TRDWord; b: TRDWord): boolean;
+{LESS THAN}
+operator <(b: TRDWord; a: DWord): boolean;
+operator <(a: DWord; b: TRDWord): boolean;
+operator <(a: TRDWord; b: TRDWord): boolean;
+{LESS THAN EQUAL}
+operator <=(b: TRDWord; a: DWord): boolean;
+operator <=(a: DWord; b: TRDWord): boolean;
+operator <=(a: TRDWord; b: TRDWord): boolean;
+{NOT EQUAL}
+operator <>(b: TRDWord; a: DWord): boolean;
+operator <>(a: DWord; b: TRDWord): boolean;
 
 {TRQWord    }
 operator := (v: TRQWord): QWord;
@@ -295,6 +347,25 @@ operator /(b: TRQWord; a: QWord): TRQWord;
 // integer division. for normal division, use a.val / b.val
 operator /(a: QWord; b: TRQWord): TRQWord;
 operator /(a: TRQWord; b: TRQWord): TRQWord;
+{GREATER THAN}
+operator >(b: TRQWord; a: QWord): boolean;
+operator >(a: QWord; b: TRQWord): boolean;
+operator >(a: TRQWord; b: TRQWord): boolean;
+{GREATER THAN EQUAL}
+operator >=(b: TRQWord; a: QWord): boolean;
+operator >=(a: QWord; b: TRQWord): boolean;
+operator >=(a: TRQWord; b: TRQWord): boolean;
+{LESS THAN}
+operator <(b: TRQWord; a: QWord): boolean;
+operator <(a: QWord; b: TRQWord): boolean;
+operator <(a: TRQWord; b: TRQWord): boolean;
+{LESS THAN EQUAL}
+operator <=(b: TRQWord; a: QWord): boolean;
+operator <=(a: QWord; b: TRQWord): boolean;
+operator <=(a: TRQWord; b: TRQWord): boolean;
+{NOT EQUAL}
+operator <>(b: TRQWord; a: QWord): boolean;
+operator <>(a: QWord; b: TRQWord): boolean;
 
 {TRFloat    }
 operator := (v: TRFloat): double;
@@ -318,6 +389,25 @@ operator /(b: TRFloat; a: double): TRFloat;
 // integer division. for normal division, use a.val / b.val
 operator /(a: double; b: TRFloat): TRFloat;
 operator /(a: TRFloat; b: TRFloat): TRFloat;
+{GREATER THAN}
+operator >(b: TRFloat; a: double): boolean;
+operator >(a: double; b: TRFloat): boolean;
+operator >(a: TRFloat; b: TRFloat): boolean;
+{GREATER THAN EQUAL}
+operator >=(b: TRFloat; a: double): boolean;
+operator >=(a: double; b: TRFloat): boolean;
+operator >=(a: TRFloat; b: TRFloat): boolean;
+{LESS THAN}
+operator <(b: TRFloat; a: double): boolean;
+operator <(a: double; b: TRFloat): boolean;
+operator <(a: TRFloat; b: TRFloat): boolean;
+{LESS THAN EQUAL}
+operator <=(b: TRFloat; a: double): boolean;
+operator <=(a: double; b: TRFloat): boolean;
+operator <=(a: TRFloat; b: TRFloat): boolean;
+{NOT EQUAL}
+operator <>(b: TRFloat; a: double): boolean;
+operator <>(a: double; b: TRFloat): boolean;
 
 {TRStr}
 operator := (v: TRStr): string;
@@ -326,12 +416,17 @@ operator =(a: string; v: TRStr): boolean;
 operator +(b: TRStr; a: string): TRStr;
 operator +(a: string; b: TRStr): TRStr;
 operator +(a: TRStr; b: TRStr): TRStr;
+{NOT EQUAL}
+operator <>(b: TRStr; a: string): boolean;
+operator <>(a: string; b: TRStr): boolean;
 
 {TRBool}
 operator := (v: TRBool): boolean;
 operator =(v: TRBool; a: boolean): boolean;
 operator =(a: boolean; v: TRBool): boolean;
-
+{NOT EQUAL}
+operator <>(b: TRBool; a: boolean): boolean;
+operator <>(a: boolean; b: TRBool): boolean;
 {TRDateTime}
 operator := (v: TRDateTime): TDateTime;
 operator =(v: TRDateTime; a: TDateTime): boolean;
@@ -344,6 +439,26 @@ operator +(a: TRDateTime; b: TRDateTime): TRDateTime;
 operator -(b: TRDateTime; a: TDateTime): TRDateTime;
 operator -(a: TDateTime; b: TRDateTime): TRDateTime;
 operator -(a: TRDateTime; b: TRDateTime): TRDateTime;
+
+{GREATER THAN}
+operator >(b: TRDateTime; a: TDateTime): boolean;
+operator >(a: TDateTime; b: TRDateTime): boolean;
+operator >(a: TRDateTime; b: TRDateTime): boolean;
+{GREATER THAN EQUAL}
+operator >=(b: TRDateTime; a: TDateTime): boolean;
+operator >=(a: TDateTime; b: TRDateTime): boolean;
+operator >=(a: TRDateTime; b: TRDateTime): boolean;
+{LESS THAN}
+operator <(b: TRDateTime; a: TDateTime): boolean;
+operator <(a: TDateTime; b: TRDateTime): boolean;
+operator <(a: TRDateTime; b: TRDateTime): boolean;
+{LESS THAN EQUAL}
+operator <=(b: TRDateTime; a: TDateTime): boolean;
+operator <=(a: TDateTime; b: TRDateTime): boolean;
+operator <=(a: TRDateTime; b: TRDateTime): boolean;
+{NOT EQUAL}
+operator <>(b: TRDateTime; a: TDateTime): boolean;
+operator <>(a: TDateTime; b: TRDateTime): boolean;
 
 
 var
@@ -389,17 +504,22 @@ begin
         rStore.Delete(Result);
 end;
 
+procedure rCopyVars(constref _source: TReactive; constref _dest: TReactive);
+begin
+    _dest.myEnableHistory := _source.myEnableHistory;
+    _dest.myManaged := _source.myManaged;
+    _dest.myName := _source.myName;
+    _dest.myLockExclusive := _source.myLockExclusive;
+    _dest.myLockProcessID := _source.myLockProcessID;
+    _dest.myLockThreadID := _source.myLockThreadID;
+    _dest.myKey := _source.myKey;
+    _dest.mySilentLock := _source.mySilentLock;
+end;
+
 function rClone(var _r: TRInt): TRInt;
 begin
     Result := RInt();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
 end;
@@ -407,14 +527,7 @@ end;
 function rClone(var _r: TRInt64): TRInt64;
 begin
     Result := RInt64();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
 end;
@@ -422,97 +535,49 @@ end;
 function rClone(var _r: TRDWord): TRDWord;
 begin
     Result := RDWord();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
-
 end;
 
 function rClone(var _r: TRQWord): TRQWord;
 begin
     Result := RQWord();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
-
 end;
 
 function rClone(var _r: TRFloat): TRFloat;
 begin
     Result := RFloat();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
-
 end;
 
 function rClone(var _r: TRStr): TRStr;
 begin
     Result := RStr();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
-
 end;
 
 function rClone(var _r: TRBool): TRBool;
 begin
     Result := RBool();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
-
 end;
 
 function rClone(var _r: TRDateTime): TRDateTime;
 begin
     Result := RDateTime();
-    Result.myEnableHistory := _r.myEnableHistory;
-    Result.myManaged := _r.myManaged;
-    Result.myName := _r.myName;
-    Result.myLockExclusive := _r.myLockExclusive;
-    Result.myLockProcessID := _r.myLockProcessID;
-    Result.myLockThreadID := _r.myLockThreadID;
-    Result.myKey := _r.myKey;
-    Result.mySilentLock := _r.mySilentLock;
+    rCopyVars(_r, Result);
     Result.myValue := _r.myValue;
     Result.myHistory := _r.myHistory;
-
 end;
 
 operator := (v: TRInt): integer;
@@ -600,6 +665,75 @@ begin
     Result := RInt(a.val div b.val);
 end;
 
+operator>(b: TRInt; a: integer): boolean;
+begin
+    Result := b.val > a;
+end;
+
+operator>(a: integer; b: TRInt): boolean;
+begin
+    Result := a > b.val;
+end;
+
+operator>(a: TRInt; b: TRInt): boolean;
+begin
+    Result := a.val > b.val;
+end;
+
+operator>=(b: TRInt; a: integer): boolean;
+begin
+    Result := b.val >= a;
+end;
+
+operator>=(a: integer; b: TRInt): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator>=(a: TRInt; b: TRInt): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<(b: TRInt; a: integer): boolean;
+begin
+    Result := b.val < a;
+end;
+
+operator<(a: integer; b: TRInt): boolean;
+begin
+    Result := a < b.val;
+end;
+
+operator<(a: TRInt; b: TRInt): boolean;
+begin
+    Result := a.val < b.val;
+end;
+
+operator<=(b: TRInt; a: integer): boolean;
+begin
+    Result := b.val <= a;
+end;
+
+operator<=(a: integer; b: TRInt): boolean;
+begin
+    Result := a <= b.val;
+end;
+
+operator<=(a: TRInt; b: TRInt): boolean;
+begin
+    Result := a.val <= b.val;
+end;
+
+operator<>(b: TRInt; a: integer): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: integer; b: TRInt): boolean;
+begin
+    Result := a <> b.val;
+end;
 
 operator := (v: TRInt64): int64;
 begin
@@ -679,6 +813,76 @@ end;
 operator /(a: TRInt64; b: TRInt64): TRInt64;
 begin
     Result := RInt64(a.val div b.val);
+end;
+
+operator>(b: TRInt64; a: int64): boolean;
+begin
+    Result := b.val > a;
+end;
+
+operator>(a: int64; b: TRInt64): boolean;
+begin
+    Result := a <> b.val ;
+end;
+
+operator>(a: TRInt64; b: TRInt64): boolean;
+begin
+    Result := a.val <> b.val;
+end;
+
+operator>=(b: TRInt64; a: int64): boolean;
+begin
+    Result := b.val >= a;
+end;
+
+operator>=(a: int64; b: TRInt64): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator>=(a: TRInt64; b: TRInt64): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<(b: TRInt64; a: int64): boolean;
+begin
+    Result := b.val < a;
+end;
+
+operator<(a: int64; b: TRInt64): boolean;
+begin
+    Result := a < b.val;
+end;
+
+operator<(a: TRInt64; b: TRInt64): boolean;
+begin
+    Result := a.val < b.val;
+end;
+
+operator<=(b: TRInt64; a: int64): boolean;
+begin
+    Result := b.val <= a;
+end;
+
+operator<=(a: int64; b: TRInt64): boolean;
+begin
+    Result := a <= b.val;
+end;
+
+operator<=(a: TRInt64; b: TRInt64): boolean;
+begin
+    Result := a.val <= b.val;
+end;
+
+operator<>(b: TRInt64; a: int64): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: int64; b: TRInt64): boolean;
+begin
+    Result := a <> b.val;
 end;
 
 operator := (v: TRDWord): DWord;
@@ -761,6 +965,76 @@ begin
     Result := RDWord(a.val div b.val);
 end;
 
+operator>(b: TRDWord; a: DWord): boolean;
+begin
+    Result := b.val > a;
+end;
+
+operator>(a: DWord; b: TRDWord): boolean;
+begin
+    Result := a > b.val;
+end;
+
+operator>(a: TRDWord; b: TRDWord): boolean;
+begin
+    Result := a.val > b.val;
+end;
+
+operator>=(b: TRDWord; a: DWord): boolean;
+begin
+    Result := b.val >= a ;
+end;
+
+operator>=(a: DWord; b: TRDWord): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator>=(a: TRDWord; b: TRDWord): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<(b: TRDWord; a: DWord): boolean;
+begin
+    Result := b.val < a;
+end;
+
+operator<(a: DWord; b: TRDWord): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator<(a: TRDWord; b: TRDWord): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<=(b: TRDWord; a: DWord): boolean;
+begin
+    Result :=  b.val <= a;
+end;
+
+operator<=(a: DWord; b: TRDWord): boolean;
+begin
+    Result := a <= b.val;
+end;
+
+operator<=(a: TRDWord; b: TRDWord): boolean;
+begin
+    Result := a.val <= b.val;
+end;
+
+operator<>(b: TRDWord; a: DWord): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: DWord; b: TRDWord): boolean;
+begin
+    Result := a <> b.val;
+end;
+
 operator := (v: TRQWord): QWord;
 begin
     Result := v.Value;
@@ -835,6 +1109,76 @@ end;
 operator /(a: TRQWord; b: TRQWord): TRQWord;
 begin
     Result := RQWord(a.val div b.val);
+end;
+
+operator>(b: TRQWord; a: QWord): boolean;
+begin
+    Result := b.val > a;
+end;
+
+operator>(a: QWord; b: TRQWord): boolean;
+begin
+    Result := a > b.val;
+end;
+
+operator>(a: TRQWord; b: TRQWord): boolean;
+begin
+    Result := a.val > b.val;
+end;
+
+operator>=(b: TRQWord; a: QWord): boolean;
+begin
+    Result := b.val >= a ;
+end;
+
+operator>=(a: QWord; b: TRQWord): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator>=(a: TRQWord; b: TRQWord): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<(b: TRQWord; a: QWord): boolean;
+begin
+    Result := b.val < a;
+end;
+
+operator<(a: QWord; b: TRQWord): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator<(a: TRQWord; b: TRQWord): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<=(b: TRQWord; a: QWord): boolean;
+begin
+    Result :=  b.val <= a;
+end;
+
+operator<=(a: QWord; b: TRQWord): boolean;
+begin
+    Result := a <= b.val;
+end;
+
+operator<=(a: TRQWord; b: TRQWord): boolean;
+begin
+    Result := a.val <= b.val;
+end;
+
+operator<>(b: TRQWord; a: QWord): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: QWord; b: TRQWord): boolean;
+begin
+    Result := a <> b.val;
 end;
 
 operator := (v: TRFloat): double;
@@ -917,6 +1261,77 @@ begin
     Result := RFloat(a.val / b.val);
 end;
 
+operator>(b: TRFloat; a: double): boolean;
+begin
+    Result := b.val > a;
+end;
+
+operator>(a: double; b: TRFloat): boolean;
+begin
+    Result := a > b.val;
+end;
+
+operator>(a: TRFloat; b: TRFloat): boolean;
+begin
+    Result := a.val > b.val;
+end;
+
+operator>=(b: TRFloat; a: double): boolean;
+begin
+    Result := b.val >= a ;
+end;
+
+operator>=(a: double; b: TRFloat): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator>=(a: TRFloat; b: TRFloat): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<(b: TRFloat; a: double): boolean;
+begin
+    Result := b.val < a;
+end;
+
+operator<(a: double; b: TRFloat): boolean;
+begin
+    Result := a >= b.val;
+end;
+
+operator<(a: TRFloat; b: TRFloat): boolean;
+begin
+    Result := a.val >= b.val;
+end;
+
+operator<=(b: TRFloat; a: double): boolean;
+begin
+    Result :=  b.val <= a;
+end;
+
+operator<=(a: double; b: TRFloat): boolean;
+begin
+    Result := a <= b.val;
+end;
+
+operator<=(a: TRFloat; b: TRFloat): boolean;
+begin
+    Result := a.val <= b.val;
+end;
+
+operator<>(b: TRFloat; a: double): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: double; b: TRFloat): boolean;
+begin
+    Result := a <> b.val;
+end;
+
+
 operator := (v: TRStr): string;
 begin
     Result := v.val;
@@ -949,6 +1364,16 @@ begin
     Result := RStr(a.val + b.val);
 end;
 
+operator<>(b: TRStr; a: string): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: string; b: TRStr): boolean;
+begin
+    Result := a <> b.val;
+end;
+
 operator := (v: TRBool): boolean;
 begin
     Result := v.Value;
@@ -962,6 +1387,16 @@ end;
 operator =(a: boolean; v: TRBool): boolean;
 begin
     Result := a = v.Value;
+end;
+
+operator<>(b: TRBool; a: boolean): boolean;
+begin
+    Result := b.val <> a;
+end;
+
+operator<>(a: boolean; b: TRBool): boolean;
+begin
+    Result := a <> b.val;
 end;
 
 operator := (v: TRDateTime): TDateTime;
@@ -1008,6 +1443,78 @@ operator -(a: TRDateTime; b: TRDateTime): TRDateTime;
 begin
     Result := RDateTime(a.val - b.val);
 end;
+
+
+operator>(b: TRDateTime; a: TDateTime): boolean;
+begin
+
+end;
+
+operator>(a: TDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator>(a: TRDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator>=(b: TRDateTime; a: TDateTime): boolean;
+begin
+
+end;
+
+operator>=(a: TDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator>=(a: TRDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator<(b: TRDateTime; a: TDateTime): boolean;
+begin
+
+end;
+
+operator<(a: TDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator<(a: TRDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator<=(b: TRDateTime; a: TDateTime): boolean;
+begin
+
+end;
+
+operator<=(a: TDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator<=(a: TRDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
+operator<>(b: TRDateTime; a: TDateTime): boolean;
+begin
+
+end;
+
+operator<>(a: TDateTime; b: TRDateTime): boolean;
+begin
+
+end;
+
 
 function RInt: TRInt;
 begin
