@@ -931,15 +931,15 @@ var
     _i, _j: integer;
 begin
     if not objectAlive then exit;
-    begin
-        _j := listeners.indexOf(_event);
-        if _j > -1 then begin
-            listeners.Delete(_j);
-            //log('rmListeners(%s): deleted %d',[_event, _j])
-		end
-        else
-            //log('rmListeners(%s): event listener map not found',[_event]);
-	end;
+
+    _j := listeners.indexOf(_event);
+    if _j > -1 then begin
+        listeners.Delete(_j);
+        //log('rmListeners(%s): deleted %d',[_event, _j])
+	end
+    else
+        //log('rmListeners(%s): event listener map not found',[_event]);
+
 end;
 
 procedure TObjectListenerHelper.rmListeners(constref _subscriber: TObject);
@@ -1108,8 +1108,8 @@ end;
 procedure TObjectListenerHelper.beforeDestruction;
 begin
     //log('beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
-    stopListening;
     rmListeners;
+    stopListening;
     inherited beforeDestruction;
 end;
 
