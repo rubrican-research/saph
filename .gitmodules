@@ -1,0 +1,6 @@
+[submodule "use/sugar"]
+    path = use/sugar
+    url = git@github.com:rubrican-research/sugar.git
+[submodule "use/fpc-markdown"]
+    path = use/fpc-markdown
+    url = git@github.com:mriscoc/fpc-markdown.git
