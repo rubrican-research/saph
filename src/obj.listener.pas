@@ -111,8 +111,9 @@ type
     //      _params:    Parameters as a JSONObject. DO NOT free the object inside your listener procedure!!
     //                  The runner with free it after the procedure is called.
 
-    TListenerProc = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject);
+    TListenerProc   = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject);
     TListenerMethod = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject) of object;
+    TDoMethod       = function: integer of object;
 
     // Syntax sugar. To assign multiple listeners in one go.
     TArrayListenerProc = array of TListenerProc;
@@ -138,13 +139,13 @@ type
         proc: TListenerProc;
         meth: TListenerMethod;
         notify: TNotifyEvent;
-        params: TJSONObject;
-        freeParams: boolean;
         sigType: TInvokeType;
 
         function getAsString: string;
     public
+
         constructor Create;
+
         procedure add(constref _proc: TListenerProc;
             const _sigType: TInvokeType = qAsync); overload;
         procedure add(constref _subscriber: TObject; constref _meth: TListenerMethod;
@@ -155,8 +156,11 @@ type
         procedure do_(constref _sender: TObject; const _event: string;
             constref _params: TJSONObject; const _freeParams: boolean = True);
     public
-        beforeDo: function: integer of object;
-        afterDo: function: integer of object;
+
+        params: TJSONObject;
+        freeParams: boolean;
+        beforeDo: TDoMethod;
+        afterDo: TDoMethod;
         property Enabled: boolean read myEnabled write myEnabled;
         property AsString: string read getAsString;
 
@@ -171,11 +175,13 @@ type
     TListenerProcList = class(specialize TFPGObjectList<TListener>)
     public
         key: string;
-        beforeDo: function: integer of object;
-        afterDo: function: integer of object;
+        beforeDo: TDoMethod;
+        afterDo: TDoMethod;
 
         function Add(const Item: TListener): integer; inline;
+        constructor Create(_FreeObjects: Boolean=True);
         destructor Destroy; override;
+
     end;
 
     // Map of Event and List of listener procedures
@@ -322,7 +328,9 @@ type
 function isObjectAlive(constref _obj: TObject): boolean;
 
 // calls Application.ProcessMessages if _hold milliseconds have passed since last "breath"
-procedure Breathe(_hold : Qword = 0);
+procedure Breathe(_hold : Qword = 50);
+
+procedure asyncFreeObject(_obj: TObject);
 
 var
     //ListenerSignalMode: TListenerSignalMode = lmSingleton;
@@ -350,8 +358,8 @@ type
         procedure doRun;                        // Can be called in a thread as well.
         procedure doRunAsync(_param: PtrInt);   // For Application.QueueAsyncCall()
     public
-        beforeDo: function: integer of object;
-        afterDo: function: integer of object;
+        beforeDo: TDoMethod;
+        afterDo: TDoMethod;
         Enabled: boolean;
         procedure runAsync(constref  _listener: TListener);
         procedure runThread(constref _listener: TListener);
@@ -422,6 +430,7 @@ end;
 
 procedure clearObjectListener(_index: integer);
 begin
+    //log('Clearing Object Listener %d',[_index]);
     objectListeners.Delete(_index);
 end;
 
@@ -442,9 +451,9 @@ end;
 // The exception is unavoidable in this design
 function isObjectAlive(constref _obj: TObject): boolean;
 begin
-    try
-        if _obj is TObject then
-            Result := True;
+    Result := assigned(_obj);
+    if Result then try
+        Result := (_obj is TObject);
     except
         Result := False;
     end;
@@ -481,10 +490,10 @@ end;
 
 {================ BREATHE =====================================}
 var
-    lastBreath: QWord = 0;
-procedure Breathe(_hold : Qword = 0);
+    lastBreath: QWord = 0; // This is also reset in do_ (proc runner)
+
+procedure Breathe(_hold : Qword);
 begin
-    //log('Breath : %s', [ IntToStr(getTickCount64() - lastBreath)]);
     if (getTickCount64() - lastBreath) >= _hold then begin
         if ThreadID = MainThreadID then begin
             Application.ProcessMessages;
@@ -493,6 +502,24 @@ begin
 		//log('...... whew() .......');
 	end;
 end;
+
+type
+    TAsyncFreeObj = class
+        procedure FreeObject(_obj: PtrInt);
+	end;
+
+    procedure TAsyncFreeObj.FreeObject(_obj: PtrInt);
+    begin
+        FreeAndNil(TObject(_obj));
+        Free;// Destroy itself
+    end;
+
+procedure asyncFreeObject(_obj: TObject);
+begin
+    with TAsyncFreeObj.Create do
+        Application.QueueAsyncCall(@FreeObject, PtrInt(_obj));
+end;
+
 //============================================================
 
 function TListenerProcList.Add(const Item: TListener): integer;
@@ -505,6 +532,13 @@ begin
             key := key + ', ' + Item.Event;
     Item.beforeDo := Self.beforeDo;
     Item.afterDo := Self.afterDo;
+end;
+
+constructor TListenerProcList.Create(_FreeObjects: Boolean);
+begin
+	inherited Create(_FreeObjects);
+    beforeDo := nil;
+    afterDo := nil;
 end;
 
 destructor TListenerProcList.Destroy;
@@ -556,7 +590,7 @@ begin
     //log('TProcRunner.runAsync:: -->');
     myListener := _listener;
     Application.QueueAsyncCall(@doRunAsync, 0);
-    breathe;
+    // breathe;
 end;
 
 procedure TProcRunner.runThread(constref _listener: TListener);
@@ -564,7 +598,6 @@ begin
     //log3('TProcRunner.runThread:: -->');
     myListener := _listener;
     TThread.ExecuteInThread(@Self.doRun);
-
 end;
 
 procedure TProcRunner.runSerial(constref _listener: TListener);
@@ -579,7 +612,8 @@ begin
     inherited Create;
     myFreeOnDone := _freeOnDone;
     Enabled := True;
-
+    BeforeDo := nil;
+    AfterDo  := nil;
 end;
 
 destructor TProcRunner.Destroy;
@@ -602,19 +636,30 @@ begin
         which then causes the proc address to point to invalid memory
         catch the exception and then disable this myListener.
     }
-
     //log3('   TProcRunner.doRun:: -->');
     try
         if Enabled then
         begin
             if assigned(myListener) then
             begin
-                if isObjectAlive(myListener) then
+                if isObjectAlive(myListener.Subscriber) then
                 begin
                     with myListener do
                     begin
+                        //log('---------------------------------------');
+                        //log('RUNNING SIGNAL -> "%s"', [event]);
+                        //if isObjectAlive(sender) then log('       Sender: %s "%s"', [Sender.ClassName, pointerAsHex(Sender)]);
+                        //if isObjectAlive(subscriber) then log('       Subscriber: %s "%s"', [Subscriber.ClassName, pointerAsHex(Subscriber)]);
+                        //log('---------------------------------------');
                         try
-                            if assigned(beforeDo) then beforeDo();
+                            if assigned(beforeDo) then begin
+                                try
+                                    beforeDo();
+								except
+                                    //log('       beforeDo Exception');
+								end;
+							end;
+
 
                             if assigned(meth) then
 	                            try
@@ -642,15 +687,31 @@ begin
                             try
                                 if sigType = qThreads then
                                     EnterCriticalSection(runnerCS);
-                                if freeParams then params.Free;
-                            except
-                                //log('       params.Free Exception');;
-                            end;
-                            if sigType = qThreads then begin
-                                LeaveCriticalSection(runnerCS);
-                                sleep(300);
+
+                                try
+                                    if freeParams then
+                                        if isObjectAlive(params) then params.Free;
+
+                                except
+                                    //log('       params.Free Exception');;
+                                end;
+
+							finally
+                                if sigType = qThreads then begin
+                                    LeaveCriticalSection(runnerCS);
+                                    sleep(200);
+							    end;
 							end;
-							if assigned(AfterDo) then AfterDo();
+
+
+                            if assigned(AfterDo) then begin
+                                try
+                                    AfterDo();
+                                except
+                                    //log('       AfterDo Exception');
+                                end;
+
+							end;
 
                         except
                             on E: Exception do
@@ -661,7 +722,9 @@ begin
                                 //log3('   doRun: Exception');
                             end;
                         end;
-					end;
+                        //log('DONE SIGNAL -> "%s" ==================================', [event]);
+                        //log('');
+                    end;
                 end
                 else
                     //log('   isObjectAlive(listener) is false');
@@ -739,6 +802,7 @@ begin
         _L.add(_subscriber, _handler, _sigType);
         Listener(_event).Add(_L);
         addSubscriber(_subscriber, self);
+        //log('>> eventListener: [%s] %s."%s" --> [%s]%s', [_l.Sender.ClassName, pointerAsHex(_l.Sender), _event, _l.Subscriber.ClassName, pointerAsHex(_l.Subscriber)]);
     end;
     Result := Self;
 end;
@@ -852,9 +916,14 @@ procedure TObjectListenerHelper.rmListeners;
 var
     _i: integer;
 begin
+    //log('rmListeners() [%s] %s enter', [Self.ClassName, pointerAsHex(Self)]);
     if not objectAlive then exit;
     _i := objectListeners.IndexOf(pointerAsHex(Self));
-    if _i > -1 then clearObjectListener(_i);
+    if _i > -1 then begin
+        clearObjectListener(_i);
+        //log('rmListeners() %s [%s] done',[pointerAsHex(Self), Self.ClassName]);
+	end;
+    //log('rmListeners() exit');
 end;
 
 procedure TObjectListenerHelper.rmListeners(const _event: string);
@@ -948,11 +1017,15 @@ begin
                     LeaveCriticalSection(runnerCS);
 
                     //log('signal() params clone : %s', [_j.formatJSON(AsCompactJSON)]);
+                    //log('signal("%s"):: with JSON', [_event]);
 	                _l.Items[i].do_(self, _event, _j, True {free params because it will be cloned before next call});
+
 	            end
-                else
+                else begin
+                    //log('signal("%s"):: no JSON', [_event]);
                     _l.Items[i].do_(self, _event, nil, false);
-	        end;
+				end;
+			end;
 	    except
             On E:Exception do begin
                 //log('signal(): Exception ' + E.Message);
@@ -1034,7 +1107,9 @@ end;
 
 procedure TObjectListenerHelper.beforeDestruction;
 begin
+    //log('beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
     stopListening;
+    rmListeners;
     inherited beforeDestruction;
 end;
 
@@ -1084,6 +1159,9 @@ constructor TListener.Create;
 begin
     inherited Create;
     myEnabled := True;
+    beforeDo:= nil;
+    afterDo := nil;
+    params  := nil;
 end;
 
 procedure TListener.add(constref _proc: TListenerProc;
@@ -1154,6 +1232,7 @@ begin
         qSerial:    _runner.runSerial(self);
     end;
 
+    lastBreath := getTickCount64();
     //log3('<------- TObjectListenerHelper.do_:: -->');
 end;
 
