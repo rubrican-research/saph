@@ -134,7 +134,6 @@ type
         myEnabled: boolean;
         Sender: TObject;
         Subscriber: TObject;
-        //Subscriber: pointer;
         event: string;
         proc: TListenerProc;
         meth: TListenerMethod;
@@ -325,7 +324,7 @@ type
     TListenerSignalMode = (lmSingleton, lmDynamic);
 
 // Hack to check if an object address points to a valid object.
-function isObjectAlive(constref _obj: TObject): boolean;
+function isObjectAlive(_obj: TObject): boolean;
 
 // calls Application.ProcessMessages if _hold milliseconds have passed since last "breath"
 procedure Breathe(_hold : Qword = 50);
@@ -449,14 +448,18 @@ end;
 // cause no memory leaks. To be sure, please check memory leaks
 // with heaprtc turned on in the debugging options.
 // The exception is unavoidable in this design
-function isObjectAlive(constref _obj: TObject): boolean;
+function isObjectAlive(_obj: TObject): boolean;
 begin
     Result := assigned(_obj);
     if Result then try
         Result := (_obj is TObject);
     except
-        Result := False;
-    end;
+        on E: Exception do begin
+            Result := False;
+            //log('  ### isObjectAlive exception on %d [%s]', [PtrInt(_obj), pointerAsHex(_obj)]);
+            pointer(_obj) := nil;
+		end;
+	end;
 end;
 
 function addSubscriber(_subscriber: TObject; _signaler: TObject): integer;
@@ -642,15 +645,17 @@ begin
         begin
             if assigned(myListener) then
             begin
+
+                //log('---------------------------------------');
+                //log('RUNNING SIGNAL -> "%s"', [myListener.event]);
+                //if isObjectAlive(myListener.sender)     then log('       Sender: %s "%s"', [myListener.Sender.ClassName, pointerAsHex(myListener.Sender)]) else log('       Sender not alive');
+                //if isObjectAlive(myListener.subscriber) then log('       Subscriber: %s "%s"', [myListener.Subscriber.ClassName, pointerAsHex(myListener.Subscriber)]) else log('       Subscriber not alive');
+                //log('---------------------------------------');
+
                 if isObjectAlive(myListener.Subscriber) then
                 begin
                     with myListener do
                     begin
-                        //log('---------------------------------------');
-                        //log('RUNNING SIGNAL -> "%s"', [event]);
-                        //if isObjectAlive(sender) then log('       Sender: %s "%s"', [Sender.ClassName, pointerAsHex(Sender)]);
-                        //if isObjectAlive(subscriber) then log('       Subscriber: %s "%s"', [Subscriber.ClassName, pointerAsHex(Subscriber)]);
-                        //log('---------------------------------------');
                         try
                             if assigned(beforeDo) then begin
                                 try
@@ -733,7 +738,7 @@ begin
 
     finally
         decSignalCount;
-        if myFreeOnDone then Free; // Destroy itself
+        if myFreeOnDone then FreeAndNil(Self); // Destroy itself
     end;
 end;
 
@@ -921,7 +926,7 @@ begin
     _i := objectListeners.IndexOf(pointerAsHex(Self));
     if _i > -1 then begin
         clearObjectListener(_i);
-        //log('rmListeners() %s [%s] done',[pointerAsHex(Self), Self.ClassName]);
+        //log('rmListeners() index:%d  addr:%s [%s] done',[_i, pointerAsHex(Self), Self.ClassName]);
 	end;
     //log('rmListeners() exit');
 end;
@@ -949,13 +954,15 @@ var
 	_listenerMap: TEventListenerMap;
     _procList : TListenerProcList;
     _listener : TListener;
+    _listenerAlive: boolean;
+    _subscriberAlive: boolean;
 begin
     if not objectAlive then exit;
-    //log3('=============== TObjectListenerHelper.rmListeners() ================');
+    //log('rmListeners() self: %d, subscriber: %d ========================================', [ptrInt(Self), ptrInt(_subscriber)]);
     _y := subscriberObjectMap.IndexOf(pointerAsHex(_subscriber));
     if _y > -1 then
     begin
-        //log3('subscriber %s @%s', [_subscriber.ClassName, pointerAsHex(_subscriber)]);
+        //log('subscriber %s @%d', [_subscriber.ClassName, ptrInt(_subscriber)]);
 
         _signalerList :=subscriberObjectMap.Data[_y];
         for _i := 0 to pred(_signalerList.Count) do begin
@@ -964,14 +971,22 @@ begin
             if _x = -1 then continue;
 
 	        _listenerMap := objectListeners.Data[_x]; // TEventListenerMap(objectListeners.Items[_i]);
+
 	        for _j := 0 to pred(_listenerMap.Count) do begin
 	            _procList := _listenerMap.Data[_j];
 	            _k := 0;
 	            while _k < _procList.Count do begin
 	                _listener := _procList.Items[_k];
-                    if isObjectAlive(_listener) and isObjectAlive(_listener.subscriber)then begin
-                        if _listener.subscriber.equals(_subscriber) then begin
-                            //log3('   deleting %s, %s [%d]', [_listener.event, _listener.Subscriber.ClassName, _k]);
+//
+//                    _listenerAlive   := isObjectAlive(_listener);
+//                    _subscriberAlive := isObjectAlive(_listener.subscriber);
+
+                      _listenerAlive   := true;
+                      _subscriberAlive := true;
+
+                    if _listenerAlive  and _subscriberAlive then begin
+                        if _listener.subscriber = _subscriber then begin
+                            //log('   deleting %s, %s [%d]', [_listener.event, _listener.Subscriber.ClassName, _k]);
                             _procList.Delete(_k);
 					    end
                         else
@@ -984,7 +999,7 @@ begin
 
 		end;
 	end;
-    //log3('=============== DONE ================');
+    //log('DONE rmlisteners() ====================================');
 end;
 
 {---- thread safety hack -------- }
@@ -1091,25 +1106,39 @@ var
     _signaler : TObject;
     _i, _j: integer;
 begin
-    if Application.Terminated then exit;
-
+    //if Application.Terminated then exit;
+    //log('STOPLISTENING [%s]--------------------------', [ClassName]);
     _i := subscriberObjectMap.IndexOf(pointerAsHex(self));
-    if _i = -1 then exit;
+    if _i = -1 then begin
+        //log('       Did not find subscriber');
+        exit;
+	end;
 
     _signalerList := subscriberObjectMap.Data[_i];
     for _j := 0 to pred(_signalerList.Count) do
     begin
         _signaler := TObject(hexStrAsPointer(_signalerList.Keys[_j]));
+        //log('    removing listeners from signaler:: pointer %d [%s]' ,[ptrint(_signaler), _signaler.ClassName]);
         _signaler.rmListeners(self);
+        //log('    done.');
     end;
     subscriberObjectMap.delete(_i);
+
+    //log('DONE STOPLISTENING [%s]--------------------------', [ClassName]);
+    //log('');
 end;
 
 procedure TObjectListenerHelper.beforeDestruction;
 begin
-    //log('beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
+    //log('');
+    //log('======================================================================');
+    //log('>> beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
     rmListeners;
     stopListening;
+    //log('<< beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
+    //log('======================================================================');
+    //log('');
+
     inherited beforeDestruction;
 end;
 
