@@ -17,7 +17,7 @@ uses
 
 const
   Target: string = 'test';
-  Dependencies: array of string = ();
+  Dependencies: array of string = ('Rhl');
 
 type
   TLog = (audit, info, error);
