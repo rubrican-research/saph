@@ -176,7 +176,6 @@ type
         key: string;
         beforeDo: TDoMethod;
         afterDo: TDoMethod;
-
         function Add(const Item: TListener): integer; inline;
         constructor Create(_FreeObjects: Boolean=True);
         destructor Destroy; override;
@@ -450,13 +449,20 @@ end;
 // The exception is unavoidable in this design
 function isObjectAlive(_obj: TObject): boolean;
 begin
-    Result := assigned(_obj);
+
+    if Application.Terminated then begin
+        Result := false;
+        exit;
+	end;
+
+	Result := assigned(_obj);
+
     if Result then try
         Result := (_obj is TObject);
     except
         on E: Exception do begin
             Result := False;
-            //log('  ### isObjectAlive exception on %d [%s]', [PtrInt(_obj), pointerAsHex(_obj)]);
+            log('  ### isObjectAlive exception on %d [%s]', [PtrInt(_obj), pointerAsHex(_obj)]);
             pointer(_obj) := nil;
 		end;
 	end;
@@ -651,7 +657,6 @@ begin
                 //if isObjectAlive(myListener.sender)     then log('       Sender: %s "%s"', [myListener.Sender.ClassName, pointerAsHex(myListener.Sender)]) else log('       Sender not alive');
                 //if isObjectAlive(myListener.subscriber) then log('       Subscriber: %s "%s"', [myListener.Subscriber.ClassName, pointerAsHex(myListener.Subscriber)]) else log('       Subscriber not alive');
                 //log('---------------------------------------');
-
                 if isObjectAlive(myListener.Subscriber) then
                 begin
                     with myListener do
@@ -1019,7 +1024,10 @@ begin
 	    if not objectAlive then exit;  // Check if this object is still in scope.
 	    _l := Listener(_event);
 	    try
-	        //log3('TObjectListenerHelper.signal:: --> start (%s, %s)', [_event, _params.FormatJSON()]);
+	        log('TObjectListenerHelper.signal:: --> start (%s)', [_event]);
+            if assigned(_params) then
+	            log('TObjectListenerHelper.signal:: --> start (%s, %s)', [_event, _params.FormatJSON()]);
+
 	        for i := 0 to pred(_l.Count) do
 	        begin
 	            if assigned(_params) then
@@ -1032,7 +1040,7 @@ begin
                     LeaveCriticalSection(runnerCS);
 
                     //log('signal() params clone : %s', [_j.formatJSON(AsCompactJSON)]);
-                    //log('signal("%s"):: with JSON', [_event]);
+                    log('signal("%s"):: with JSON', [_event]);
 	                _l.Items[i].do_(self, _event, _j, True {free params because it will be cloned before next call});
 
 	            end
@@ -1106,7 +1114,7 @@ var
     _signaler : TObject;
     _i, _j: integer;
 begin
-    //if Application.Terminated then exit;
+    if Application.Terminated then exit;
     //log('STOPLISTENING [%s]--------------------------', [ClassName]);
     _i := subscriberObjectMap.IndexOf(pointerAsHex(self));
     if _i = -1 then begin
@@ -1118,10 +1126,15 @@ begin
     for _j := 0 to pred(_signalerList.Count) do
     begin
         _signaler := TObject(hexStrAsPointer(_signalerList.Keys[_j]));
-        //log('    removing listeners from signaler:: pointer %d [%s]' ,[ptrint(_signaler), _signaler.ClassName]);
-        _signaler.rmListeners(self);
-        //log('    done.');
-    end;
+        if isObjectAlive(_signaler) then begin
+            //log('    removing listeners from signaler:: pointer %d [%s]' ,[ptrint(_signaler), _signaler.ClassName]);
+            _signaler.rmListeners(self);
+            //log('    done.');
+		end
+        else begin
+            //log('    signaler [%d] not alive' ,[ptrint(_signaler)]);
+		end;
+	end;
     subscriberObjectMap.delete(_i);
 
     //log('DONE STOPLISTENING [%s]--------------------------', [ClassName]);
