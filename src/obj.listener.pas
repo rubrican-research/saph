@@ -328,6 +328,8 @@ function isObjectAlive(_obj: TObject): boolean;
 // calls Application.ProcessMessages if _hold milliseconds have passed since last "breath"
 procedure Breathe(_hold : Qword = 50);
 
+{Frees the object asynchronously.
+ Allows a procedure to finish tasks without holding up expensive free operations}
 procedure asyncFreeObject(_obj: TObject);
 
 var
