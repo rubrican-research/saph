@@ -8,9 +8,11 @@ uses
     Classes, SysUtils, Forms, fgl, saph.undo;
 
 type
-    { TReactive }
+    { TReactiveStore }
+    TReactiveStore = class;
+    TProcReactiveOpAllowed = function (_rstore: TReactiveStore): boolean;
 
-    TReactive = class
+    TReactiveStore = class
     private
         myEnableHistory: boolean;
         myManaged: boolean;
@@ -21,6 +23,10 @@ type
         myLockProcessID: SizeUInt;
         myLockThreadID: TThreadID;
         myKey: string;
+		myonCanread: TProcReactiveOpAllowed;
+		myonCanRedo: TProcReactiveOpAllowed;
+		myonCanUndo: TProcReactiveOpAllowed;
+		myonCanWrite: TProcReactiveOpAllowed;
         mySilentLock: boolean;
         function getName: string; overload;
         procedure setEnableHistory(AValue: boolean);
@@ -28,6 +34,10 @@ type
         function getLocked: boolean;
         function setLock: string;
         procedure clearLock;
+		procedure setonCanread(const _value: TProcReactiveOpAllowed);
+		procedure setonCanRedo(const _value: TProcReactiveOpAllowed);
+		procedure setonCanUndo(const _value: TProcReactiveOpAllowed);
+		procedure setonCanWrite(const _value: TProcReactiveOpAllowed);
     protected
         function makeKey(): string;
     public
@@ -41,13 +51,17 @@ type
         constructor Create; virtual;
         destructor Destroy; override;
     public
-        function listenRead(constref _subscriber: TObject; _e: TNotifyEvent): TReactive;
+        property onCanread: TProcReactiveOpAllowed read myonCanread write setonCanread;
+        property onCanWrite: TProcReactiveOpAllowed read myonCanWrite write setonCanWrite;
+        property onCanUndo: TProcReactiveOpAllowed read myonCanUndo write setonCanUndo;
+        property onCanRedo: TProcReactiveOpAllowed read myonCanRedo write setonCanRedo;
+        function onRead(constref _subscriber: TObject; _e: TNotifyEvent): TReactiveStore;
             virtual; // Adding read listener
-        function listenWrite(constref _subscriber: TObject; _e: TNotifyEvent): TReactive;
+        function onWrite(constref _subscriber: TObject; _e: TNotifyEvent): TReactiveStore;
             virtual; // Add write listener
-        function listenUndo(constref _subscriber: TObject; _e: TNotifyEvent): TReactive;
+        function onUndo(constref _subscriber: TObject; _e: TNotifyEvent): TReactiveStore;
             virtual; // Add Undo listener
-        function listenRedo(constref _subscriber: TObject; _e: TNotifyEvent): TReactive;
+        function onRedo(constref _subscriber: TObject; _e: TNotifyEvent): TReactiveStore;
             virtual; // Add Redo listener
 
         // Crtical section
@@ -60,8 +74,7 @@ type
             overload; virtual;// writes a value without unlocking
 
         {lock function}
-        function lock(): string;
-        // locks the value and returns a key. Returns empty string if already locked;
+        function lock(): string;   // locks the value and returns a key. Returns empty string if already locked;
         function lockEx(): string; // locks the value exclusively. cannot be borrowed.
         function unlock(_key: string): boolean;
         function borrow: string; // Forces change of lock
@@ -83,7 +96,7 @@ type
 
     { GReactive }
 
-    generic GReactive<T> = class(TReactive)
+    generic GReactiveStore <T> = class(TReactiveStore)
     private
     type SUndoHistory = class(specialize GUndoHistory<T>);
     private
@@ -112,38 +125,38 @@ type
 
     { TRInt }
 
-    TRInt = class(specialize GReactive<integer>);
+    TRInt = class(specialize GReactiveStore<integer>);
 
     { TRInt64 }
 
-    TRInt64 = class(specialize GReactive<int64>);
+    TRInt64 = class(specialize GReactiveStore<int64>);
 
     { TRDWord }
 
-    TRDWord = class(specialize GReactive<DWord>);
+    TRDWord = class(specialize GReactiveStore<DWord>);
 
     { TRQWord }
 
-    TRQWord = class(specialize GReactive<QWord>);
+    TRQWord = class(specialize GReactiveStore<QWord>);
 
 
     { TRFloat }
 
-    TRFloat = class(specialize GReactive<double>);
+    TRFloat = class(specialize GReactiveStore<double>);
 
-    { TRStr }
+    { TRString }
 
-    TRStr = class(specialize GReactive<string>)
+    TRString = class(specialize GReactiveStore<string>)
 
     end;
 
     { TRBool }
 
-    TRBool = class(specialize GReactive<boolean>);
+    TRBool = class(specialize GReactiveStore<boolean>);
 
     { TRDateTime }
 
-    TRDateTime = class(specialize GReactive<TDateTime>);
+    TRDateTime = class(specialize GReactiveStore<TDateTime>);
 
 
 // Factory functions
@@ -162,8 +175,8 @@ function RQWord(_default: QWord; _name: string = ''): TRQWord; overload;
 function RFloat: TRFloat; overload;
 function RFloat(_default: double; _name: string = ''): TRFloat; overload;
 
-function RStr: TRStr; overload;
-function RStr(_default: string; _name: string = ''): TRStr; overload;
+function RStr: TRString; overload;
+function RStr(_default: string; _name: string = ''): TRString; overload;
 
 function RBool: TRBool; overload;
 function RBool(_default: boolean; _name: string = ''): TRBool; overload;
@@ -172,19 +185,19 @@ function RDateTime: TRDateTime; overload;
 function RDateTime(_default: TDateTime; _name: string = ''): TRDateTime; overload;
 
 // Destructors
-function rFree(var _r: TReactive): integer; // syntax sugar for rmFromStore()
+function rFree(var _r: TReactiveStore): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRInt): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRInt64): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRDWord): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRQWord): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRFloat): integer; // syntax sugar for rmFromStore()
-function rFree(var _r: TRStr): integer; // syntax sugar for rmFromStore()
+function rFree(var _r: TRString): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRBool): integer; // syntax sugar for rmFromStore()
 function rFree(var _r: TRDateTime): integer; // syntax sugar for rmFromStore()
 
 // Manage
-function addToStore(_r: TReactive): TReactive;
-function rmFromStore(_r: TReactive): integer; // Index where it was located
+function addToStore(_r: TReactiveStore): TReactiveStore;
+function rmFromStore(_r: TReactiveStore): integer; // Index where it was located
 
 
 // Cloner
@@ -193,7 +206,7 @@ function rClone(var _r: TRInt64): TRInt64;
 function rClone(var _r: TRDWord): TRDWord;
 function rClone(var _r: TRQWord): TRQWord;
 function rClone(var _r: TRFloat): TRFloat;
-function rClone(var _r: TRStr): TRStr;
+function rClone(var _r: TRString): TRString;
 function rClone(var _r: TRBool): TRBool;
 function rClone(var _r: TRDateTime): TRDateTime;
 
@@ -410,15 +423,15 @@ operator <>(b: TRFloat; a: double): boolean;
 operator <>(a: double; b: TRFloat): boolean;
 
 {TRStr}
-operator := (v: TRStr): string;
-operator =(v: TRStr; a: string): boolean;
-operator =(a: string; v: TRStr): boolean;
-operator +(b: TRStr; a: string): TRStr;
-operator +(a: string; b: TRStr): TRStr;
-operator +(a: TRStr; b: TRStr): TRStr;
+operator := (v: TRString): string;
+operator =(v: TRString; a: string): boolean;
+operator =(a: string; v: TRString): boolean;
+operator +(b: TRString; a: string): TRString;
+operator +(a: string; b: TRString): TRString;
+operator +(a: TRString; b: TRString): TRString;
 {NOT EQUAL}
-operator <>(b: TRStr; a: string): boolean;
-operator <>(a: string; b: TRStr): boolean;
+operator <>(b: TRString; a: string): boolean;
+operator <>(a: string; b: TRString): boolean;
 
 {TRBool}
 operator := (v: TRBool): boolean;
@@ -471,7 +484,7 @@ uses
 
     {============ MANAGED VARIABLES =========================}
 type
-    TRStore = class(specialize TFPGMapObject<string, TReactive>);
+    TRStore = class(specialize TFPGMapObject<string, TReactiveStore>);
 
 var
     rStore: TRStore; // initialization, finalization
@@ -489,14 +502,14 @@ end;
 
 {=========================================================}
 
-function addToStore(_r: TReactive): TReactive;
+function addToStore(_r: TReactiveStore): TReactiveStore;
 begin
     Result := _r;
     Result.myManaged := True;
     rStore.Add(pointerAsHex(Result), Result);
 end;
 
-function rmFromStore(_r: TReactive): integer;
+function rmFromStore(_r: TReactiveStore): integer;
 begin
     log('rmFromStore of ' + _r.ClassName);
     Result := rStore.IndexOf(pointerAsHex(_r));
@@ -504,7 +517,7 @@ begin
         rStore.Delete(Result);
 end;
 
-procedure rCopyVars(constref _source: TReactive; constref _dest: TReactive);
+procedure rCopyVars(constref _source: TReactiveStore; constref _dest: TReactiveStore);
 begin
     _dest.myEnableHistory := _source.myEnableHistory;
     _dest.myManaged := _source.myManaged;
@@ -556,7 +569,7 @@ begin
     Result.myHistory := _r.myHistory;
 end;
 
-function rClone(var _r: TRStr): TRStr;
+function rClone(var _r: TRString): TRString;
 begin
     Result := RStr();
     rCopyVars(_r, Result);
@@ -1332,44 +1345,44 @@ begin
 end;
 
 
-operator := (v: TRStr): string;
+operator := (v: TRString): string;
 begin
     Result := v.val;
 end;
 
-operator =(v: TRStr; a: string): boolean;
+operator =(v: TRString; a: string): boolean;
 begin
     Result := (v.val = a);
 end;
 
-operator =(a: string; v: TRStr): boolean;
+operator =(a: string; v: TRString): boolean;
 begin
     Result := a = v.Value;
 end;
 
-operator +(b: TRStr; a: string): TRStr;
+operator +(b: TRString; a: string): TRString;
 begin
     Result := RStr();
     Result.Val := b.Val + a;
 end;
 
-operator +(a: string; b: TRStr): TRStr;
+operator +(a: string; b: TRString): TRString;
 begin
     Result := RStr();
     Result.Val := b.Val + a;
 end;
 
-operator +(a: TRStr; b: TRStr): TRStr;
+operator +(a: TRString; b: TRString): TRString;
 begin
     Result := RStr(a.val + b.val);
 end;
 
-operator<>(b: TRStr; a: string): boolean;
+operator<>(b: TRString; a: string): boolean;
 begin
     Result := b.val <> a;
 end;
 
-operator<>(a: string; b: TRStr): boolean;
+operator<>(a: string; b: TRString): boolean;
 begin
     Result := a <> b.val;
 end;
@@ -1582,13 +1595,13 @@ begin
     if not _name.isEmpty then Result.setName(_name);
 end;
 
-function RStr: TRStr;
+function RStr: TRString;
 begin
-    Result := TRStr.Create;
+    Result := TRString.Create;
     rStore.Add(pointerAsHex(Result), Result);
 end;
 
-function RStr(_default: string; _name: string): TRStr;
+function RStr(_default: string; _name: string): TRString;
 begin
     Result := RStr();
     Result.val := _default;
@@ -1621,7 +1634,7 @@ begin
     if not _name.isEmpty then Result.setName(_name);
 end;
 
-generic function rFree(var _r: TReactive): integer; // syntax sugar for rmFromStore()
+generic function rFree(var _r: TReactiveStore): integer; // syntax sugar for rmFromStore()
 begin
     Result := rmFromStore(_r);
     _r := nil;
@@ -1629,58 +1642,58 @@ end;
 
 function rFree(var _r: TRInt): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
 function rFree(var _r: TRInt64): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
 function rFree(var _r: TRDWord): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
 function rFree(var _r: TRQWord): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
 function rFree(var _r: TRFloat): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
-function rFree(var _r: TRStr): integer;
+function rFree(var _r: TRString): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
 function rFree(var _r: TRBool): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
 function rFree(var _r: TRDateTime): integer;
 begin
-    Result := rFree(TReactive(_r));
+    Result := rFree(TReactiveStore(_r));
 end;
 
-{ TReactive }
+{ TReactiveStore }
 
-function TReactive.getName: string;
+function TReactiveStore.getName: string;
 begin
     Result := myName;
 end;
 
-procedure TReactive.setEnableHistory(AValue: boolean);
+procedure TReactiveStore.setEnableHistory(AValue: boolean);
 begin
     if myEnableHistory = AValue then Exit;
     myEnableHistory := AValue;
 end;
 
-procedure TReactive.setName(const _n: string);
+procedure TReactiveStore.setName(const _n: string);
 begin
     if myName.isEmpty then
     begin
@@ -1692,12 +1705,12 @@ begin
             sLinebreak + 'Right now Name = "' + myName + '"');
 end;
 
-function TReactive.getLocked: boolean;
+function TReactiveStore.getLocked: boolean;
 begin
     Result := not myKey.IsEmpty;
 end;
 
-function TReactive.setLock: string;
+function TReactiveStore.setLock: string;
 begin
     EnterCriticalSection(rStoreCS);
     myLockProcessID := GetProcessID;
@@ -1708,7 +1721,7 @@ begin
     Result := myKey;
 end;
 
-procedure TReactive.clearLock;
+procedure TReactiveStore.clearLock;
 begin
     EnterCriticalSection(rStoreCS);
     myLockProcessID := 0;
@@ -1718,22 +1731,46 @@ begin
     LeaveCriticalSection(rStoreCS);
 end;
 
-procedure TReactive.enterCS;
+procedure TReactiveStore.setonCanread(const _value: TProcReactiveOpAllowed);
+begin
+	if myonCanread=_value then Exit;
+	myonCanread:=_value;
+end;
+
+procedure TReactiveStore.setonCanRedo(const _value: TProcReactiveOpAllowed);
+begin
+	if myonCanRedo=_value then Exit;
+	myonCanRedo:=_value;
+end;
+
+procedure TReactiveStore.setonCanUndo(const _value: TProcReactiveOpAllowed);
+begin
+	if myonCanUndo=_value then Exit;
+	myonCanUndo:=_value;
+end;
+
+procedure TReactiveStore.setonCanWrite(const _value: TProcReactiveOpAllowed);
+begin
+	if myonCanWrite=_value then Exit;
+	myonCanWrite:=_value;
+end;
+
+procedure TReactiveStore.enterCS;
 begin
     EnterCriticalSection(rStoreCS);
 end;
 
-procedure TReactive.leaveCS;
+procedure TReactiveStore.leaveCS;
 begin
     LeaveCriticalSection(rStoreCS);
 end;
 
-function TReactive.makeKey(): string;
+function TReactiveStore.makeKey(): string;
 begin
     Result := IntToStr(getTickCount64());
 end;
 
-constructor TReactive.Create;
+constructor TReactiveStore.Create;
 begin
     inherited;
     myName := '';
@@ -1742,40 +1779,40 @@ begin
     clearLock;
 end;
 
-destructor TReactive.Destroy;
+destructor TReactiveStore.Destroy;
 begin
     inherited Destroy;
 end;
 
-function TReactive.listenRead(constref _subscriber: TObject;
-    _e: TNotifyEvent): TReactive;
+function TReactiveStore.onRead(constref _subscriber: TObject;
+    _e: TNotifyEvent): TReactiveStore;
 begin
     Result := self;
     addListener(SGREAD, _subscriber, _e);
 end;
 
-function TReactive.listenWrite(constref _subscriber: TObject;
-    _e: TNotifyEvent): TReactive;
+function TReactiveStore.onWrite(constref _subscriber: TObject;
+    _e: TNotifyEvent): TReactiveStore;
 begin
     Result := self;
     addListener(SGWRITE, _subscriber, _e, qSerial);
 end;
 
-function TReactive.listenUndo(constref _subscriber: TObject;
-    _e: TNotifyEvent): TReactive;
+function TReactiveStore.onUndo(constref _subscriber: TObject;
+    _e: TNotifyEvent): TReactiveStore;
 begin
     Result := self;
     addListener(SGUNDO, _subscriber, _e, qSerial);
 end;
 
-function TReactive.listenRedo(constref _subscriber: TObject;
-    _e: TNotifyEvent): TReactive;
+function TReactiveStore.onRedo(constref _subscriber: TObject;
+    _e: TNotifyEvent): TReactiveStore;
 begin
     Result := self;
     addListener(SGREDO, _subscriber, _e, qSerial);
 end;
 
-function TReactive.lock: string;
+function TReactiveStore.lock: string;
 begin
     if myKey.isEmpty then
     begin
@@ -1785,7 +1822,7 @@ begin
         Result := '';
 end;
 
-function TReactive.lockEx(): string;
+function TReactiveStore.lockEx(): string;
 begin
     if myKey.isEmpty then
     begin
@@ -1799,7 +1836,7 @@ begin
         Result := '';
 end;
 
-function TReactive.unlock(_key: string): boolean;
+function TReactiveStore.unlock(_key: string): boolean;
 begin
     if (UnicodeSameStr(_key, myKey)) and
         (myLockProcessID = GetProcessID) and (myLockThreadID = ThreadID) then
@@ -1821,7 +1858,7 @@ begin
     end;
 end;
 
-function TReactive.borrow: string;
+function TReactiveStore.borrow: string;
 begin
     if not myLockExclusive then
     begin
@@ -1834,7 +1871,7 @@ begin
     end;
 end;
 
-function TReactive.canChangeValue: boolean;
+function TReactiveStore.canChangeValue: boolean;
 begin
     Result := myKey.isEmpty; // yes, change because it is not locked.
     if not Result then
@@ -1844,23 +1881,23 @@ begin
     end;
 end;
 
-function TReactive.isMyLock: boolean;
+function TReactiveStore.isMyLock: boolean;
 begin
     Result := (myLockProcessID = GetProcessID) and (myLockThreadID = ThreadID);
 end;
 
-function TReactive.Value: variant;
+function TReactiveStore.Value: variant;
 begin
     raise Exception.Create('TReactive:: Value should not be called from TReactive');
     Result := nil;
 end;
 
-procedure TReactive.Value(_v: variant);
+procedure TReactiveStore.Value(_v: variant);
 begin
     raise Exception.Create('TReactive:: Value(_v) should not be called from TReactive');
 end;
 
-procedure TReactive.Value(_v: variant; _req: string; _key: string);
+procedure TReactiveStore.Value(_v: variant; _req: string; _key: string);
 begin
     raise Exception.Create(
         'TReactive:: Value(_v, _req, _key) should not be called from TReactive');
@@ -1869,15 +1906,15 @@ end;
 
 
 
-{ GReactive }
+{ GReactiveStore }
 
 
-function GReactive.Value: T;
+function GReactiveStore.Value: T;
 begin
     Result := myValue;
 end;
 
-procedure GReactive.Value(_v: T);
+procedure GReactiveStore.Value(_v: T);
 begin
     if canChangeValue then
     begin
@@ -1896,22 +1933,22 @@ begin
             [ClassName, Name]));
 end;
 
-procedure GReactive.Value(_v: T; _req: string; _key: string);
+procedure GReactiveStore.Value(_v: T; _req: string; _key: string);
 begin
 
 end;
 
-function GReactive.memdump: string;
+function GReactiveStore.memdump: string;
 begin
     Result := '';
 end;
 
-function GReactive.histVal(_pos: integer): T;
+function GReactiveStore.histVal(_pos: integer): T;
 begin
     Result := myHistory.histVal(_pos);
 end;
 
-function GReactive.undo(_count: integer): T;
+function GReactiveStore.undo(_count: integer): T;
 begin
     EnterCS;
     myHistory.Undo(_count);
@@ -1922,7 +1959,7 @@ begin
     Result := myValue;
 end;
 
-function GReactive.redo(_count: integer): T;
+function GReactiveStore.redo(_count: integer): T;
 begin
     EnterCS;
     myHistory.redo(_count);
@@ -1934,13 +1971,13 @@ begin
 end;
 
 
-constructor GReactive.Create;
+constructor GReactiveStore.Create;
 begin
     inherited Create;
     myHistory := SUndoHistory.Create;
 end;
 
-destructor GReactive.Destroy;
+destructor GReactiveStore.Destroy;
 begin
     myHistory.Free;
     inherited Destroy;

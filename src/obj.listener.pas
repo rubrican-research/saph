@@ -170,7 +170,6 @@ type
 
     // List of listeners
     { TListenerProcList }
-
     TListenerProcList = class(specialize TFPGObjectList<TListener>)
     public
         key: string;
@@ -183,8 +182,7 @@ type
     end;
 
     // Map of Event and List of listener procedures
-    { TEventListenerMap }
-
+    { TEventListenerMap}
     TEventListenerMap = class(specialize TFPGMapObject<string, TListenerProcList>)
     public
         constructor Create(AFreeObjects: Boolean = true);
@@ -196,6 +194,7 @@ type
     // Map of Control ID and List of Event Listeners
     { TObjectEventList }
     TObjectEventList = class(specialize TFPGMapObject<string, TEventListenerMap>)
+
         destructor Destroy; override;
     end;
 
@@ -273,9 +272,9 @@ type
         {================================================================}
 
 
-        procedure rmListeners; // Removes all listeners on this object
-        procedure rmListeners(const _event: string); // Removes listeners on this event of this object
-        procedure rmListeners(constref _subscriber: TObject); // Removes listeners that belong to this subscriber
+        procedure rmListeners;                                  // Removes all listeners on this object
+        procedure rmListeners(const _event: string);            // Removes listeners on this event of this object
+        procedure rmListeners(constref _subscriber: TObject);   // Removes listeners that belong to this subscriber
 
         // Invokes listeners
         procedure signal(const _event: string; constref _params: TJSONObject = nil; _freeParams: boolean = True);
@@ -316,6 +315,9 @@ type
         procedure stopListening;
 
         // Implicitly hiding beforeDestruction so that we can hack into object destruction and remove listeners
+        // But this will NOT be called for Forms. We have to explicitly call rmListners and stopListening
+        // when forms and frames are destroyed.
+        // TODO: implement a hook to use IFPObserver
         procedure beforeDestruction;
 
     end;
@@ -345,7 +347,18 @@ uses
     ;
 
 type
+	{ TObjectWatcher }
 
+    TObjectWatcher = class(TPersistent, IFPObserver)
+	public
+		procedure FPOObservedChanged(ASender: TObject;
+			Operation: TFPObservedOperation; Data: Pointer);
+    end;
+var
+    objectWatcher: TObjectWatcher;
+
+
+type
     { TProcRunner }
 
     // IMPORTANT.
@@ -374,9 +387,9 @@ type
 
 var
     // See Initialization section
-    objectListeners: TObjectEventList;
-    procRunner: TProcRunner;
-    subscriberObjectMap: TSubscriberObjectMap;
+    objectListeners     : TObjectEventList;  // Map of Control ID -> List of Event Listeners
+    procRunner          : TProcRunner;
+    subscriberObjectMap : TSubscriberObjectMap;
 
 {================================================================================}
 {                       MANAGE SIGNAL PENDING                                    }
@@ -464,7 +477,7 @@ begin
     except
         on E: Exception do begin
             Result := False;
-            log('  ### isObjectAlive exception on %d [%s]', [PtrInt(_obj), pointerAsHex(_obj)]);
+            //log('  ### isObjectAlive exception on %d [%s]', [PtrInt(_obj), pointerAsHex(_obj)]);
             pointer(_obj) := nil;
 		end;
 	end;
@@ -472,23 +485,23 @@ end;
 
 function addSubscriber(_subscriber: TObject; _signaler: TObject): integer;
 var
-    _subscribers: THexstringMap;
+    _subscriberMap: THexstringMap;
 	_i: Integer;
 begin
 	// subscriber => object 1:many relationship
 	if subscriberObjectMap.Find(pointerAsHex(_subscriber), _i) then
 	begin
-	    _subscribers := subscriberObjectMap.Data[_i];
+	    _subscriberMap := subscriberObjectMap.Data[_i];
         Result := _i;
 	end
 	else
 	begin
-	    _subscribers := THexstringMap.Create;
-	    _subscribers.Duplicates:=dupIgnore;
-	    subscriberObjectMap.Add(pointerAsHex(_subscriber), _subscribers);
+	    _subscriberMap := THexstringMap.Create;
+	    _subscriberMap.Duplicates:=dupIgnore;
+	    subscriberObjectMap.Add(pointerAsHex(_subscriber), _subscriberMap);
         Result := pred(subscriberObjectMap.count)
 	end;
-	_subscribers.add(pointerAsHex(_signaler));
+	_subscriberMap.add(pointerAsHex(_signaler));
 end;
 
 procedure clearGlobalListenerToObjectMap;
@@ -519,16 +532,42 @@ type
         procedure FreeObject(_obj: PtrInt);
 	end;
 
+	{ TObjectWatcher }
+
+	procedure TObjectWatcher.FPOObservedChanged(ASender: TObject;
+		Operation: TFPObservedOperation; Data: Pointer);
+	begin
+        case Operation of
+        	ooChange: ;
+
+            ooFree: begin
+                ASender.stopListening;
+                ASender.rmListeners;
+                Free;
+			end;
+
+            ooAddItem: ;
+            ooDeleteItem: ;
+            ooCustom: ;
+        end;
+	end;
+
     procedure TAsyncFreeObj.FreeObject(_obj: PtrInt);
     begin
-        FreeAndNil(TObject(_obj));
-        Free;// Destroy itself
+        try
+            FreeAndNil(TObject(_obj));
+		finally
+            Free;// Destroy itself
+		end;
     end;
 
 procedure asyncFreeObject(_obj: TObject);
 begin
-    with TAsyncFreeObj.Create do
-        Application.QueueAsyncCall(@FreeObject, PtrInt(_obj));
+    if isObjectAlive(_obj) then
+        with TAsyncFreeObj.Create do begin
+            //log('asyncFreeObject [%s]', [pointerAsHex(_obj)]);
+            Application.QueueAsyncCall(@FreeObject, PtrInt(_obj));
+		end;
 end;
 
 //============================================================
@@ -542,7 +581,7 @@ begin
         if not key.Contains(Item.event) then
             key := key + ', ' + Item.Event;
     Item.beforeDo := Self.beforeDo;
-    Item.afterDo := Self.afterDo;
+    Item.afterDo  := Self.afterDo;
 end;
 
 constructor TListenerProcList.Create(_FreeObjects: Boolean);
@@ -663,80 +702,89 @@ begin
                 begin
                     with myListener do
                     begin
-                        try
-                            if assigned(beforeDo) then begin
-                                try
-                                    beforeDo();
-								except
-                                    //log('       beforeDo Exception');
-								end;
+                        // ==================================
+                        // =           BEFORE DO            =
+                        // ==================================
+                        if assigned(beforeDo) then begin
+                            try
+                                beforeDo();
+							except
+                                //log('       beforeDo Exception');
 							end;
+						end;
+
+                        // ==================================
+                        // =           RUN METHOD           =
+                        // ==================================
+                        if assigned(meth) then
+                            try
+                                if isObjectAlive(subscriber) then
+                                    meth(Sender, event, params)
+                            except
+                                //log('       meth Exception'); //meth := nil;
+                            end
+
+                        // ==================================
+                        // =         ELSE RUN PROC          =
+                        // ==================================
+
+                        else if assigned(proc) then
+                            try
+                                proc(Sender, event, params);
+                            except
+                                //log('       proc Exception'); // proc is nil
+                            end
+
+                        // ==================================
+                        // =    ELSE RUN NOTIFY EVENT       =
+                        // ==================================
+                        else if assigned(notify) then
+                            try
+                                if isObjectAlive(subscriber) then
+                                    notify(Sender);
+                            except
+                                //log('       notify Exception');
+                            end;
 
 
-                            if assigned(meth) then
-	                            try
-	                                if isObjectAlive(subscriber) then
-	                                    meth(Sender, event, params)
-	                            except
-	                                //log('       meth Exception'); //meth := nil;
-	                            end
+                        // ==================================
+                        // =      CLEANUP PARAMETERS        =
+                        // ==================================
 
-                            else if assigned(proc) then
-	                            try
-	                                proc(Sender, event, params);
-	                            except
-	                                //log('       proc Exception'); // proc is nil
-	                            end
-
-                            else if assigned(notify) then
-	                            try
-	                                if isObjectAlive(subscriber) then
-	                                    notify(Sender);
-	                            except
-	                                //log('       notify Exception');
-	                            end;
+                        try
+                            if sigType = qThreads then
+                                EnterCriticalSection(runnerCS);
 
                             try
-                                if sigType = qThreads then
-                                    EnterCriticalSection(runnerCS);
+                                if freeParams then
+                                    if isObjectAlive(params) then params.Free;
 
-                                try
-                                    if freeParams then
-                                        if isObjectAlive(params) then params.Free;
-
-                                except
-                                    //log('       params.Free Exception');;
-                                end;
-
-							finally
-                                if sigType = qThreads then begin
-                                    LeaveCriticalSection(runnerCS);
-                                    sleep(200);
-							    end;
-							end;
-
-
-                            if assigned(AfterDo) then begin
-                                try
-                                    AfterDo();
-                                except
-                                    //log('       AfterDo Exception');
-                                end;
-
-							end;
-
-                        except
-                            on E: Exception do
-                            begin
-                                // procedure is probably pointing to freed memory
-                                // Don't run this listener anymore.
-                                // Enabled := false;
-                                //log3('   doRun: Exception');
+                            except
+                                //log('       params.Free Exception');;
                             end;
-                        end;
-                        //log('DONE SIGNAL -> "%s" ==================================', [event]);
-                        //log('');
-                    end;
+
+						finally
+                            if sigType = qThreads then begin
+                                LeaveCriticalSection(runnerCS);
+                                sleep(50);
+						    end;
+						end;
+
+                        // ==================================
+                        // =         AFTER DO               =
+                        // ==================================
+
+                        if assigned(AfterDo) then begin
+                            try
+                                AfterDo();
+                            except
+                                //log('       AfterDo Exception');
+                            end;
+
+						end;
+					end;
+					//log('DONE SIGNAL -> "%s" ==================================', [event]);
+                    //log('');
                 end
                 else
                     //log('   isObjectAlive(listener) is false');
@@ -767,7 +815,6 @@ begin
         Key is the hex representation of the "self" pointer.
     }
 
-    // _i := objectListeners.IndexOf(Self.Name);
     _i := objectListeners.IndexOf(pointerAsHex(Self));
     if _i >= 0 then
         Result := objectListeners.Data[_i]
@@ -775,6 +822,20 @@ begin
     begin
         Result := TEventListenerMap.Create;
         objectListeners.Add(pointerAsHex(Self), Result);
+        {NOTE:
+            This is necessary to ensure that all objects will call
+            rmListeners and stopListening when the object is being freed.
+
+            Some classes like decendents of TForm and TFrame in the LCL
+            do not call BeforeDestruction; so this library cannot know
+            when an object has been freed without first calling rmListeners and stopListening.
+
+            TObjectWatcher will free itself when the object is freed, so you can
+            invoke FPOAttachedObserver with a new instance of TObjectWatcher that
+            only watches this object
+        }
+        if Self is TPersistent then
+            TPersistent(Self).FPOAttachObserver(TObjectWatcher.Create);
     end;
 end;
 
@@ -913,6 +974,7 @@ begin
 
     Result := Self;
 end;
+
 function TObjectListenerHelper.addListener(const _event: string; constref
 	_subscriber: TObject; constref _handlers: array of TNotifyEvent; constref
 	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
@@ -929,7 +991,7 @@ var
     _i: integer;
 begin
     //log('rmListeners() [%s] %s enter', [Self.ClassName, pointerAsHex(Self)]);
-    if not objectAlive then exit;
+    //if not objectAlive then exit;
     _i := objectListeners.IndexOf(pointerAsHex(Self));
     if _i > -1 then begin
         clearObjectListener(_i);
@@ -1026,9 +1088,9 @@ begin
 	    if not objectAlive then exit;  // Check if this object is still in scope.
 	    _l := Listener(_event);
 	    try
-	        log('TObjectListenerHelper.signal:: --> start (%s)', [_event]);
-            if assigned(_params) then
-	            log('TObjectListenerHelper.signal:: --> start (%s, %s)', [_event, _params.FormatJSON()]);
+	        //log('TObjectListenerHelper.signal:: --> start (%s) with %d runners', [_event, _l.Count]);
+            //if assigned(_params) then
+	           // log('TObjectListenerHelper.signal:: --> start (%s, %s)', [_event, _params.FormatJSON()]);
 
 	        for i := 0 to pred(_l.Count) do
 	        begin
@@ -1042,7 +1104,7 @@ begin
                     LeaveCriticalSection(runnerCS);
 
                     //log('signal() params clone : %s', [_j.formatJSON(AsCompactJSON)]);
-                    log('signal("%s"):: with JSON', [_event]);
+                    //log('signal("%s"):: with JSON', [_event]);
 	                _l.Items[i].do_(self, _event, _j, True {free params because it will be cloned before next call});
 
 	            end
@@ -1120,7 +1182,7 @@ begin
     //log('STOPLISTENING [%s]--------------------------', [ClassName]);
     _i := subscriberObjectMap.IndexOf(pointerAsHex(self));
     if _i = -1 then begin
-        //log('       Did not find subscriber');
+        //log('       Did not find subscribers for [%s]', [pointerAsHex(self)]);
         exit;
 	end;
 
@@ -1138,22 +1200,14 @@ begin
 		end;
 	end;
     subscriberObjectMap.delete(_i);
-
     //log('DONE STOPLISTENING [%s]--------------------------', [ClassName]);
     //log('');
 end;
 
 procedure TObjectListenerHelper.beforeDestruction;
 begin
-    //log('');
-    //log('======================================================================');
-    //log('>> beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
     rmListeners;
     stopListening;
-    //log('<< beforeDestruction():: [%s] %s', [Self.ClassName, pointerAsHex(Self)]);
-    //log('======================================================================');
-    //log('');
-
     inherited beforeDestruction;
 end;
 

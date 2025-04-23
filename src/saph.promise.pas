@@ -435,7 +435,6 @@ begin
 end;
 
 
-
 procedure TPromise.run;
 var
 	i, c: Integer;
