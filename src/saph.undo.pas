@@ -31,14 +31,17 @@ type
         myHistory : array[0..MAXUNDO] of RHistoryItem; // list of history values
 	    myHistHead: integer; // position to the latest value
 	    myHistCurr: integer; // position of the current pointer that changed during undo/redo
+        myDebounce:  QWord;   // debounce duration. if 0, no debounce.
+        myLastTickCount: QWord;
 	    function posToIndex (_step: integer): integer; // Maps the current position to the index array
+		procedure SetDebounce(const _value: QWord);
         function upperPos: integer; // Max position value possible
         function lowerPos: integer; // lowest position value possible
         function nextHeadPos: integer; // moves the head forward and returns the current position
 
 	public
 	    function histCount: integer; // count of history;
-	    function histVal(_pos: integer = 0): T; virtual;
+	    function histVal(_pos: integer = -1): T; virtual;
 
 	    function undo   (_count: integer = 1): integer; // returns the current position after undo
 	    function redo   (_count: integer = 1): integer; // returns the current position after redo
@@ -49,6 +52,8 @@ type
         function currVal    : T;
         function currPos    : integer;
         function currHead   : integer;
+
+        property debounce: QWord read myDebounce write SetDebounce;
 
     public
         constructor Create;
@@ -63,6 +68,13 @@ uses
 function GUndoHistory.posToIndex(_step: integer): integer;
 begin
     Result := _step mod UNDOSIZE;
+end;
+
+
+procedure GUndoHistory.SetDebounce(const _value: QWord);
+begin
+	if myDebounce=_value then Exit;
+	myDebounce:=_value;
 end;
 
 function GUndoHistory.upperPos: integer;
@@ -135,6 +147,7 @@ end;
 
 function GUndoHistory.histVal(_pos: integer): T;
 begin
+    if _pos = -1 then _pos := currPos;
     Result := myHistory[posToIndex(_pos)].val;
 end;
 
@@ -158,7 +171,12 @@ end;
 
 function GUndoHistory.add(_val: T): integer;
 begin
+    Result := currPos;
+
     if currVal = _val then exit;
+    if (getTickCount64 - myLastTickCount) < debounce then exit;
+
+    myLastTickCount := getTickCount64;
 
     Result := nextHeadPos;
     with myHistory[posToIndex(Result)] do begin
@@ -189,8 +207,10 @@ constructor GUndoHistory.Create;
 begin
     inherited Create;
     // To init so that nextHeadPos points correctly
-    myHistHead:=-1;
-    myHistCurr:=-1;
+    myHistHead := -1;
+    myHistCurr := -1;
+    myDebounce := 0;
+    myLastTickCount := 0;
 end;
 
 end.

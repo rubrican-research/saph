@@ -89,6 +89,10 @@ SOFTWARE."/>
         <Filename Value="src\saph.promise.pas"/>
         <UnitName Value="saph.promise"/>
       </Item>
+      <Item>
+        <Filename Value="src\saph.viewmanager.pas"/>
+        <UnitName Value="saph.viewmanager"/>
+      </Item>
     </Files>
     <RequiredPkgs>
       <Item>

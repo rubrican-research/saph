@@ -342,9 +342,8 @@ var
 implementation
 
 uses
-    StrUtils
-    , sugar.logger
-    ;
+    StrUtils,
+    sugar.logger;
 
 type
 	{ TObjectWatcher }
