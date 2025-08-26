@@ -111,6 +111,7 @@ type
     //      _params:    Parameters as a JSONObject. DO NOT free the object inside your listener procedure!!
     //                  The runner with free it after the procedure is called.
 
+
     TListenerProc   = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject);
     TListenerMethod = procedure(const _sender: TObject; const _event: string; constref _params: TJSONObject) of object;
     TDoMethod       = function: integer of object;
@@ -253,22 +254,22 @@ type
         function addListener(const _event: string;
             constref _subscriber: TObject;
             constref _handler: TNotifyEvent;
-            constref _sigType: TInvokeType = qAsync;
-            constref _ignoreduplicates: boolean = True): TObject; overload;
+            const _sigType: TInvokeType = qAsync;
+            const _ignoreduplicates: boolean = True): TObject; overload;
 
         {Array of events -> single listener Notify Event}
         function addListener(const _events: TStringArray;
             constref _subscriber: TObject;
             constref _handler: TNotifyEvent;
-            constref _sigType: TInvokeType = qAsync;
-            constref _ignoreduplicates: boolean = True): TObject; overload;
+            const _sigType: TInvokeType = qAsync;
+            const _ignoreduplicates: boolean = True): TObject; overload;
 
         {Array of Notify Events}
         function addListener(const _event: string;
             constref _subscriber: TObject;
             constref _handlers: array of TNotifyEvent;
-            constref _sigType: TInvokeType = qAsync;
-            constref _ignoreduplicates: boolean = True): TObject; overload;
+            const _sigType: TInvokeType = qAsync;
+            const _ignoreduplicates: boolean = True): TObject; overload;
         {================================================================}
 
 
@@ -947,8 +948,8 @@ end;
 {  TNotifyEvent                                                            }
 {==========================================================================}
 function TObjectListenerHelper.addListener(const _event: string; constref
-	_subscriber: TObject; constref _handler: TNotifyEvent; constref
-	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+	_subscriber: TObject; constref _handler: TNotifyEvent;
+	const _sigType: TInvokeType; const _ignoreduplicates: boolean): TObject;
 var
     _L: TListener;
 begin
@@ -963,8 +964,8 @@ begin
 end;
 
 function TObjectListenerHelper.addListener(const _events: TStringArray;
-	constref _subscriber: TObject; constref _handler: TNotifyEvent; constref
-	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+	constref _subscriber: TObject; constref _handler: TNotifyEvent;
+	const _sigType: TInvokeType; const _ignoreduplicates: boolean): TObject;
 var
     _event: string;
 begin
@@ -975,8 +976,8 @@ begin
 end;
 
 function TObjectListenerHelper.addListener(const _event: string; constref
-	_subscriber: TObject; constref _handlers: array of TNotifyEvent; constref
-	_sigType: TInvokeType; constref _ignoreduplicates: boolean): TObject;
+	_subscriber: TObject; constref _handlers: array of TNotifyEvent;
+	const _sigType: TInvokeType; const _ignoreduplicates: boolean): TObject;
 var
     _handler: TNotifyEvent;
 begin
