@@ -5,7 +5,7 @@ unit saph.reactive;
 interface
 
 uses
-    Classes, SysUtils, Forms, fgl, saph.undo;
+    Classes, SysUtils, Forms, fgl, sugar.undo;
 
 type
     { TReactiveStore }
@@ -1417,7 +1417,7 @@ begin
     Result := v.Value;
 end;
 
-operator =(v: TRDateTime; a: TDateTime): boolean;
+operator = (v: TRDateTime; a: TDateTime): boolean;
 begin
     Result := v.Value = a;
 end;
@@ -1458,74 +1458,74 @@ begin
 end;
 
 
-operator>(b: TRDateTime; a: TDateTime): boolean;
+operator >(b: TRDateTime; a: TDateTime): boolean;
 begin
-
+    Result := b.val > a;
 end;
 
-operator>(a: TDateTime; b: TRDateTime): boolean;
+operator >(a: TDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a > b.val;
 end;
 
 operator>(a: TRDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a.val > b.val;
 end;
 
 operator>=(b: TRDateTime; a: TDateTime): boolean;
 begin
-
+    Result := b.val >= a;
 end;
 
 operator>=(a: TDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a >= b.val;
 end;
 
 operator>=(a: TRDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a.val >= b.val;
 end;
 
 operator<(b: TRDateTime; a: TDateTime): boolean;
 begin
-
+    Result := b.val < a;
 end;
 
 operator<(a: TDateTime; b: TRDateTime): boolean;
 begin
-
+    Result :=  a < b.val;
 end;
 
 operator<(a: TRDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a.val < b;
 end;
 
 operator<=(b: TRDateTime; a: TDateTime): boolean;
 begin
-
+    Result := b.val <= a;
 end;
 
 operator<=(a: TDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a <= b.val;
 end;
 
 operator<=(a: TRDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a.val <= b.val;
 end;
 
 operator<>(b: TRDateTime; a: TDateTime): boolean;
 begin
-
+    Result := b.val <> a;
 end;
 
 operator<>(a: TDateTime; b: TRDateTime): boolean;
 begin
-
+    Result := a <> b.val;
 end;
 
 
